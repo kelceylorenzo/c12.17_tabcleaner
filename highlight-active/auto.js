@@ -1,3 +1,3 @@
 chrome.browserAction.onClicked.addListener(function(tab) {
-	chrome.tabs.create({ url: 'http://www.youtube.com' });
+	chrome.tabs.highlight({ tabs: [3, 5] });
 });
