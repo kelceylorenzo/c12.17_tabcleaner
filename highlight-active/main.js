@@ -1,6 +1,4 @@
 chrome.tabs.query({}, function(tabs) {
-	console.log(tabs);
-	debugger;
 	for (var index = 0; index < tabs.length; index++) {
 		var div = document.createElement('div');
 		div.setAttribute('class', 'site-title');
