@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var highlightButton = document.getElementById('button');
 	var titlesList = document.getElementsByClassName('site-title');
 	highlightButton.addEventListener('click', function() {
-		chrome.tabs.highlight({ tabs: [0, 3, 5] });
+		chrome.tabs.highlight({ tabs: [5, 3, 0] });
 		titlesList[0].setAttribute('style', 'color: red');
 		titlesList[3].setAttribute('style', 'color: red');
 		titlesList[5].setAttribute('style', 'color: red');

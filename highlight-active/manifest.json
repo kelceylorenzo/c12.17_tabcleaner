@@ -6,7 +6,7 @@
 	"version": "1.0",
 	"background": {
 		"persistent": false,
-		"scripts": ["./main.js"]
+		"scripts": ["./auto.js"]
 	},
 
 	"browser_action": {
