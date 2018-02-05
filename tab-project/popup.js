@@ -1,14 +1,15 @@
 chrome.runtime.sendMessage(
-    "content script to background.js ",
+    "popup",
     function (response) {
-        response.forEach(function(tabInfo){
-          var tabEl = document.createElement('p');
-          tabEl.className = "id" + tabInfo.id;
-          var addText = document.createTextNode(tabInfo.title);
-          tabEl.append(addText);
-          tabEl.addEventListener('click', clickEvent.bind(this, tabInfo.id))
-          document.body.appendChild(tabEl);
-        })
+      for(var item in response){
+        var tabInfo = response[item];
+        var tabEl = document.createElement('LI');
+        tabEl.className = "id" + tabInfo.id;
+        var addText = document.createTextNode(tabInfo.title);
+        tabEl.append(addText);
+        tabEl.addEventListener('click', clickEvent.bind(this, tabInfo.id))
+        document.getElementById('tag-titles').appendChild(tabEl);
+      }
     }
 );
 
