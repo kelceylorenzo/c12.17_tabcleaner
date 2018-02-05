@@ -4,13 +4,7 @@
 //   });
 
 
-// chrome.runtime.sendMessage(
-//     "tab",
-//     function (response) {
-//         console.log('contentscript.js')
-//         console.log(response)
-//     }
-// );
+chrome.runtime.sendMessage("tab");
 
 // chrome.tabs.onUpdated.addListener(function(tabid) {
 //     //sender returns an object with id, url,
