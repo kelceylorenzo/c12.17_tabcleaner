@@ -1,30 +1,19 @@
-let tabs = {};
+chrome.runtime.sendMessage(
+    "content script to background.js ",
+    function (response) {
+        response.forEach(function(tabInfo){
+          var tabEl = document.createElement('p');
+          tabEl.className = "id" + tabInfo.id;
+          var addText = document.createTextNode(tabInfo.title);
+          tabEl.append(addText);
+          tabEl.addEventListener('click', clickEvent.bind(this, tabInfo.id))
+          document.body.appendChild(tabEl);
+        })
+    }
+);
 
-var previousTabs = chrome.storage.local.get(null, function(items){
-  for(var item in items){
-    console.log(item);
-  }
-})
-
-chrome.tabs.query({}, function(tabs) {
-  tabs.forEach(function(tab){
-    setEventListener(tab);
-  })
-})
-
-function setEventListener(tab){
-
-  var tabEl = document.createElement('p');
-  var addText = document.createTextNode(tab.discarded);
-  tabEl.append(addText);
-  document.body.appendChild(tabEl);
-  setStorage(tab.title, tab );
+function clickEvent(id, event) {
+  chrome.tabs.remove(id);
+  var elem = document.querySelector('.id' + id);
+  elem.parentNode.removeChild(elem);
 }
-
-function setStorage(title, object){
-  console.log(title)
-  chrome.storage.local.set({title : object})
-}
-
-
-
