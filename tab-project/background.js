@@ -5,12 +5,11 @@
 
 var allTabs = {};
 
-
 function updateTabs(){
   chrome.tabs.query({}, function(tabs) {
     tabs.forEach(function(tab){
       let id = tab.id; 
-      allTabs[id] = tab; 
+      allTabs[id] = tab;
     })
   })
 }
@@ -20,33 +19,19 @@ chrome.tabs.onRemoved.addListener(function (id){
 })
 
 
-chrome.tabs.onUpdated.addListener(function(tabid) {
-  //sender returns an object with id, url,
- //request is the message send
-  chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-      updateTabs();
-      if(request === 'tab'){
-          sendResponse(allTabs);
-        } else if( request === 'popup'){
-          sendResponse(allTabs);
-        }
-    }
-  );
-});
-
-chrome.tabs.onCreated.addListener((function(tabid) {
-  //sender returns an object with id, url,
- //request is the message send
-  chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-      updateTabs();
-      if(request === 'tab'){
-          sendResponse(allTabs);
-        } else if( request === 'popup'){
-          sendResponse(allTabs);
-        }
-    }
-  )
+chrome.tabs.onUpdated.addListener((function(tabid) {
+  updateTabs();
 }))
 
+chrome.tabs.onCreated.addListener((function(tabid) {
+  updateTabs();
+}))
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if(request === 'popup'){
+      console.log('clicked popup')
+      sendResponse(allTabs);
+    }
+
+  });
