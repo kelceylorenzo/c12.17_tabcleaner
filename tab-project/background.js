@@ -3,34 +3,50 @@
 //set local storage
 //   // chrome.storage.local.set(obj);
 
+var allTabs = {};
 
-//gets info of current tab that was updated
-chrome.tabs.onUpdated.addListener(function(tabid) {
-  console.log('tab updated')
-});
-
-function getTabInfo(){
-  let allTabs = [];
-  chrome.tabs.query({}, function(tabs) {
-    tabs.forEach(function(tab){
-      allTabs.push(tab);
-    })
-  })
-  return allTabs;
-}
-
-var tabs = getTabInfo();
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        console.log("background.js got a message")
-        console.log(request);
-        console.log(sender);
-        updateTabs()
-        sendResponse(tabs);
-    }
-);
 
 function updateTabs(){
-  getTabInfo();
+  chrome.tabs.query({}, function(tabs) {
+    tabs.forEach(function(tab){
+      let id = tab.id; 
+      allTabs[id] = tab; 
+    })
+  })
 }
+
+chrome.tabs.onRemoved.addListener(function (id){
+  delete allTabs[id];
+})
+
+
+chrome.tabs.onUpdated.addListener(function(tabid) {
+  //sender returns an object with id, url,
+ //request is the message send
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      updateTabs();
+      if(request === 'tab'){
+          sendResponse(allTabs);
+        } else if( request === 'popup'){
+          sendResponse(allTabs);
+        }
+    }
+  );
+});
+
+chrome.tabs.onCreated.addListener((function(tabid) {
+  //sender returns an object with id, url,
+ //request is the message send
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      updateTabs();
+      if(request === 'tab'){
+          sendResponse(allTabs);
+        } else if( request === 'popup'){
+          sendResponse(allTabs);
+        }
+    }
+  )
+}))
+
