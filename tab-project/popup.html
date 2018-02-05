@@ -1,0 +1,42 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>Tab Manager</title>
+
+    <style type="text/css">
+      body {
+        margin: 10px;
+        white-space: nowrap;
+      }
+      ul{
+        list-style: none;
+        padding-left: 0; 
+      }
+      li{
+        margin: 5px;
+      }
+      span{
+        font-weight: 700;
+      }
+      li:hover, span:hover{
+        cursor: pointer; 
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div >
+      <h3>Manage Current Tabs</h3>
+      <ul id="tag-titles">
+
+      </ul>
+    </div>
+    <script src='popup.js'type="text/javascript"></script>
+  </body>
+</html>
