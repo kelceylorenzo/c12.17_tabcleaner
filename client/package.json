@@ -1,0 +1,41 @@
+{
+  "name": "react_starter",
+  "version": "1.0.0",
+  "description": "Starting setup for react redux project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dev_server.js",
+    "bundle": "node_modules/.bin/webpack --config webpack.deploy.config.js --progress --colors",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Scott Bowler",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Learning-Fuze/react_starter.git"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.5",
+    "eslint": "^4.5.0",
+    "file-loader": "^0.11.2",
+    "image-webpack-loader": "^3.3.1",
+    "postcss-loader": "^2.0.6",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
+  }
+}
