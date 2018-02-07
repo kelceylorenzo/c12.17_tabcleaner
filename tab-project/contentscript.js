@@ -3,9 +3,10 @@
 //     console.log(tabid + ': tab updated or created')
 //   });
 
-chrome.runtime.sendMessage("tab", function(tabId){
-    console.log('message reived')
-});
+// chrome.runtime.sendMessage('tab', function(tabId){
+//     console.log('message reived')
+// });
+
 
 // chrome.tabs.onUpdated.addListener(function(tabid) {
 //     //sender returns an object with id, url,
