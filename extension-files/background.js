@@ -4,12 +4,29 @@ var currentActiveTabId = null;
 var siteUsageTime = {}
 
 /**
+*Periodically checks elapsed deactivate time and updates the elapsed deactivated time
+* 
+*/
+function updatedElaspedDeactivation(){
+  var currentTime = new Date();
+  for(var tab in allTabs){
+    if(!allTabs[tab].active){
+      allTabs[tab].totalElapsedDeactivation = currentTime - allTabs[tab].timeOfDeactivation;
+    }
+  }
+}
+
+
+/**
 * Updates a Tab object
 *@param {object} 
 */
 function updateTab(tab, timeStamp){
   //if the site changed, get the elapsed time during active state and save to its url
   //set new activetime stamp for new site 
+  if(tab.active){
+    tab.timeOfActivation = timeStamp;
+  }
   allTabs[tab.id] = {...tab}
 }
 
@@ -21,9 +38,12 @@ function createNewTab(tab, currentTime){
   tab.timeOfSiteOpen = currentTime;
   if(tab.active){
     tab.timeOfActivation = currentTime;
+    tab.timeOfDeactivation = null;  
   } else {
     tab.timeOfActivation = null;
+    tab.timeOfDeactivation = currentTime;  
   }
+  tab.totalElapsedDeactivation = null; 
   allTabs[tab.id] = tab; 
 }
 
@@ -54,9 +74,10 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
   chrome.tabs.get(activeInfo.tabId, function(tab){
     if(currentActiveTabId){
       allTabs[currentActiveTabId].active = false;  
+      allTabs[currentActiveTabId].timeOfDeactivation = timeStamp;  
+      var timeElapsed = timeStamp - allTabs[currentActiveTabId].timeOfActivation;
     }
      if(allTabs[tab.id]){
-       var timeOfActivation = timeStamp;
        updateTab(tab, timeStamp);
        //find out how much time has passed that previous active tab was active and save to siteusagetime
        //get the accumulated time and save to url
@@ -76,8 +97,9 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 */
 function getAllTabs(){
   chrome.tabs.query({}, function(tabs) {
+    var timeStamp = new Date();
     tabs.forEach(function(tab){
-      createNewTab(tab);
+      createNewTab(tab, timeStamp);
     })
   })
 }
@@ -123,6 +145,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    updatedElaspedDeactivation();
     if(request === 'popup'){
       sendResponse(allTabs);
     } 

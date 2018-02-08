@@ -14,9 +14,13 @@ function createDomElement(tabObject){
     return; 
   }
   if(tabObject.active){
+    tabObject.color = 'green activetab';
+  } else if (tabObject.totalElapsedDeactivation < 10000) {
     tabObject.color = 'green';
+  } else if (tabObject.totalElapsedDeactivation < 25000) {
+    tabObject.color = 'blue';
   } else {
-    tabObject.color = 'black';
+    tabObject.color = 'red';
   }
   var tabEl = document.createElement('LI');
   var span = document.createElement('i');
