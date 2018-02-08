@@ -36,6 +36,8 @@ function updateTab(tab, timeStamp){
 */
 function createNewTab(tab, currentTime){
   tab.timeOfSiteOpen = currentTime;
+  tab.totalElapsedDeactivation = null; 
+  tab.screenShot = '';
   if(tab.active){
     tab.timeOfActivation = currentTime;
     tab.timeOfDeactivation = null;  
@@ -43,7 +45,6 @@ function createNewTab(tab, currentTime){
     tab.timeOfActivation = null;
     tab.timeOfDeactivation = currentTime;  
   }
-  tab.totalElapsedDeactivation = null; 
   allTabs[tab.id] = tab; 
 }
 
@@ -72,22 +73,25 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 
   //set newMostActivatedTab
   chrome.tabs.get(activeInfo.tabId, function(tab){
+    chrome.tabs.captureVisibleTab(function(dataUrl){    
+      tab.screenShot = dataUrl; 
+    })
     if(currentActiveTabId){
       allTabs[currentActiveTabId].active = false;  
       allTabs[currentActiveTabId].timeOfDeactivation = timeStamp;  
       var timeElapsed = timeStamp - allTabs[currentActiveTabId].timeOfActivation;
     }
-     if(allTabs[tab.id]){
-       updateTab(tab, timeStamp);
-       //find out how much time has passed that previous active tab was active and save to siteusagetime
-       //get the accumulated time and save to url
-       //reset timeSinceActive to current time 
-       //change the current active tab 
-       //set the most recent active tab to start timer for being inactive
-     } else {
+      if(allTabs[tab.id]){
+        updateTab(tab, timeStamp);
+        //find out how much time has passed that previous active tab was active and save to siteusagetime
+        //get the accumulated time and save to url
+        //reset timeSinceActive to current time 
+        //change the current active tab 
+        //set the most recent active tab to start timer for being inactive
+      } else {
       createNewTab(tab, timeStamp);
-     }
-     currentActiveTabId = tab.id; 
+      }
+      currentActiveTabId = tab.id; 
   });
 }); 
 

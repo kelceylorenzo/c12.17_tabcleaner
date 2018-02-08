@@ -3,7 +3,8 @@ chrome.runtime.sendMessage(
   function (response) {
     for(var item in response){
       var tabInfo = response[item];
-      createDomElement(tabInfo); 
+      var tabElement = createDomElement(tabInfo); 
+      document.getElementById('tag-titles').appendChild(tabElement);
     }
   }
 );
@@ -31,7 +32,7 @@ function createDomElement(tabObject){
   span.addEventListener('click', clickEvent.bind(this, tabObject.id));
   tabEl.addEventListener('click', highlightTab.bind(this, tabObject.index))
   tabEl.appendChild(span);
-  document.getElementById('tag-titles').appendChild(tabEl);
+  return tabEl;
 }
 
 function clickEvent(id, event) {
