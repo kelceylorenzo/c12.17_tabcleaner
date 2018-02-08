@@ -40,20 +40,25 @@ class EmailChange extends Component {
 		console.log(`oldEmail: ${oldEmail}, newEmail: ${newEmail}, confirmNewEmail: ${confirmNewEmail}`);
 
 		let newState =
-			newEmail === oldEmail
+			oldEmail === '' || newEmail === '' || confirmNewEmail === ''
 				? (newState = {
 						...this.state,
-						feedback: 'new email cannot match old email. please enter a new email.'
+						feedback: 'please fill out each section before saving your changes.'
 					})
-				: newEmail !== confirmNewEmail
+				: newEmail === oldEmail
 					? (newState = {
 							...this.state,
-							feedback: 'new email confirmation does not match. please check your spelling'
+							feedback: 'new email cannot match old email. please enter a new email.'
 						})
-					: (newState = {
-							...this.state,
-							feedback: 'email change successful!'
-						});
+					: newEmail !== confirmNewEmail
+						? (newState = {
+								...this.state,
+								feedback: 'new email confirmation does not match. please check your spelling'
+							})
+						: (newState = {
+								...this.state,
+								feedback: 'email change successful!'
+							});
 
 		this.setState(newState);
 	}
