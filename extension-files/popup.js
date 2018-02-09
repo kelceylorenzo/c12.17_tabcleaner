@@ -11,27 +11,34 @@ chrome.runtime.sendMessage(
 
 
 function createDomElement(tabObject){
+  console.log(tabObject.favicon)
+
   if(!tabObject.title){
     return; 
   }
-  if(tabObject.active){
+  if(tabObject.highlighted){
     tabObject.color = 'green activetab';
-  } else if (tabObject.totalElapsedDeactivation < 10000) {
+  } else if (tabObject.inactiveTimeElapsed < 10000) {
     tabObject.color = 'green';
-  } else if (tabObject.totalElapsedDeactivation < 25000) {
-    tabObject.color = 'blue';
+  } else if (tabObject.inactiveTimeElapsed < 25000) {
+    tabObject.color = 'orange';
   } else {
     tabObject.color = 'red';
   }
   var tabEl = document.createElement('LI');
-  var span = document.createElement('i');
-  span.className = "far fa-trash-alt";
+  var trashcan = document.createElement('i');
+  var favicon = document.createElement('span');
+  var faviconImage = document.createElement('img');
+  faviconImage.src = tabObject.favicon;
+  favicon.appendChild(faviconImage);
+  trashcan.className = "far fa-trash-alt";
   var addText = document.createTextNode(tabObject.title);
   tabEl.className = "id" + tabObject.id + " " + tabObject.color;
+  tabEl.appendChild(favicon)
   tabEl.append(addText);
-  span.addEventListener('click', clickEvent.bind(this, tabObject.id));
+  trashcan.addEventListener('click', clickEvent.bind(this, tabObject.id));
   tabEl.addEventListener('click', highlightTab.bind(this, tabObject.index))
-  tabEl.appendChild(span);
+  tabEl.appendChild(trashcan);
   return tabEl;
 }
 

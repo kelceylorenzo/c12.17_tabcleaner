@@ -1,6 +1,6 @@
 var allTabs = {};
 var closedTabs = {};
-var currentActiveTabId = null; 
+var currentHighlightTabId = null; 
 var siteUsageTime = {}
 
 /**
@@ -10,12 +10,12 @@ var siteUsageTime = {}
 function updatedElaspedDeactivation(){
   var currentTime = new Date();
   for(var tab in allTabs){
-    if(!allTabs[tab].active){
-      allTabs[tab].totalElapsedDeactivation = currentTime - allTabs[tab].timeOfDeactivation;
+    if(!allTabs[tab].highlighted){
+      allTabs[tab].inactiveTimeElapsed = currentTime - allTabs[tab].timeOfDeactivation;
     }
+    console.log(allTabs[tab])
   }
 }
-
 
 /**
 * Updates a Tab object
@@ -24,10 +24,25 @@ function updatedElaspedDeactivation(){
 function updateTab(tab, timeStamp){
   //if the site changed, get the elapsed time during active state and save to its url
   //set new activetime stamp for new site 
-  if(tab.active){
+  if(tab.highlighted){
     tab.timeOfActivation = timeStamp;
   }
-  allTabs[tab.id] = {...tab}
+  allTabs[tab.id] = {
+    id: tab.id,
+    windowId: tab.windowId,
+    sessionId: tab.sessionId,
+    favicon: tab.favIconUrl,
+    title: tab.title,
+    url: tab.url,
+    index: tab.index,
+    activeTimeElapsed: 0,
+    inactiveTimeElapsed: null,
+    timeOfDeactivation : null,
+    screenShotUrl: '',
+    highlighted: tab.highlighted
+  }
+  console.log(allTabs[tab.id].favicon)
+
 }
 
 /**
@@ -35,17 +50,28 @@ function updateTab(tab, timeStamp){
 *@param {object} 
 */
 function createNewTab(tab, currentTime){
-  tab.timeOfSiteOpen = currentTime;
-  tab.totalElapsedDeactivation = null; 
-  tab.screenShot = '';
-  if(tab.active){
-    tab.timeOfActivation = currentTime;
-    tab.timeOfDeactivation = null;  
-  } else {
-    tab.timeOfActivation = null;
-    tab.timeOfDeactivation = currentTime;  
+  var tabObject = {
+    id: tab.id,
+    windowId: tab.windowId,
+    sessionId: tab.sessionId,
+    favicon: tab.favIconUrl,
+    title: tab.title,
+    url: tab.url,
+    index: tab.index,
+    activeTimeElapsed: 0,
+    inactiveTimeElapsed: 0,
+    timeOfSiteOpen: currentTime,
+    screenShotUrl: '',
+    highlighted: tab.highlighted
   }
-  allTabs[tab.id] = tab; 
+  if(tabObject.highlighted){
+    tabObject.timeOfActivation = currentTime;
+    tabObject.timeOfDeactivation = null;  
+  } else {
+    tabObject.timeOfActivation = null;
+    tabObject.timeOfDeactivation = currentTime;  
+  }
+  allTabs[tab.id] = tabObject; 
 }
 
 
@@ -54,6 +80,9 @@ function createNewTab(tab, currentTime){
 *@param {id} 
 */
 chrome.tabs.onRemoved.addListener(function (id){
+  if(allTabs[id].highlighted){
+    currentHighlightTabId = null; 
+  }
   //get current time
   //get elapsed time for active 
   //save to site usage time 
@@ -68,32 +97,77 @@ chrome.tabs.onRemoved.addListener(function (id){
 *call setTime, createNewTab
 */
 chrome.tabs.onActivated.addListener(function(activeInfo) {
+  if(currentHighlightTabId === activeInfo.id ){
+    console.log('higlighted tab become in active')
+  }
+  // var timeStamp = new Date();
+  // //start time for most recent active tab
+
+  // //set newMostActivatedTab
+  // chrome.tabs.get(activeInfo.tabId, function(tab){
+  //   if(currentHighlightTabId){
+  //     allTabs[currentActiveTabId].highlighted = false;  
+  //     allTabs[currentActiveTabId].timeOfDeactivation = timeStamp;  
+  //     allTabs[currentActiveTabId].inactiveTimeElapsed = timeStamp - allTabs[currentActiveTabId].timeOfActivation;
+  //   }
+  //   if(allTabs[tab.id]){
+  //     updateTab(tab, timeStamp);
+  //     //find out how much time has passed that previous active tab was active and save to siteusagetime
+  //     //get the accumulated time and save to url
+  //     //reset timeSinceActive to current time 
+  //     //change the current active tab 
+  //     //set the most recent active tab to start timer for being inactive
+  //   } else {
+  //   createNewTab(tab, timeStamp);
+  //   }
+  //     currentActiveTabId = tab.id; 
+  // }); 
+})
+
+
+
+chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
+
+
+
   var timeStamp = new Date();
   //start time for most recent active tab
-
   //set newMostActivatedTab
-  chrome.tabs.get(activeInfo.tabId, function(tab){
-    chrome.tabs.captureVisibleTab(function(dataUrl){    
-      tab.screenShot = dataUrl; 
-    })
-    if(currentActiveTabId){
-      allTabs[currentActiveTabId].active = false;  
-      allTabs[currentActiveTabId].timeOfDeactivation = timeStamp;  
-      var timeElapsed = timeStamp - allTabs[currentActiveTabId].timeOfActivation;
+  chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
+    if(currentHighlightTabId){
+      allTabs[currentHighlightTabId].highlighted = false;  
+      allTabs[currentHighlightTabId].timeOfDeactivation = timeStamp;  
+      allTabs[currentHighlightTabId].inactiveTimeElapsed = timeStamp - allTabs[currentHighlightTabId].timeOfActivation;
     }
-      if(allTabs[tab.id]){
-        updateTab(tab, timeStamp);
-        //find out how much time has passed that previous active tab was active and save to siteusagetime
-        //get the accumulated time and save to url
-        //reset timeSinceActive to current time 
-        //change the current active tab 
-        //set the most recent active tab to start timer for being inactive
-      } else {
-      createNewTab(tab, timeStamp);
-      }
-      currentActiveTabId = tab.id; 
+    if(allTabs[tab.id]){
+      updateTab(tab, timeStamp);
+      //find out how much time has passed that previous active tab was active and save to siteusagetime
+      //get the accumulated time and save to url
+      //reset timeSinceActive to current time 
+      //change the current active tab 
+      //set the most recent active tab to start timer for being inactive
+    } else {
+    createNewTab(tab, timeStamp);
+    }
+      currentHighlightTabId = tab.id; 
   });
-}); 
+})
+
+
+
+function sendXMLRequest(){
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function(){
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      //Request was successful
+      var response = xhr.responseText;
+      console.log(response)
+     }
+  }; // Implemented elsewhere.
+  xhr.open("GET", chrome.extension.getURL('/data.js'), true);
+  xhr.send();
+  }
+
 
 /**
 * Gets all tabs currently in the browser
@@ -118,6 +192,7 @@ function getAllTabs(){
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
     var timeStamp = new Date();
+    console.log(tab.favIconUrl)
     updateTab(tab, timeStamp);
   }
 })
@@ -141,7 +216,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 })
 
 /**
-* Runs function when first installed
+* Runs function when receive a message
 *@param {string}
 *@param {object}
 *@param {object}
@@ -149,6 +224,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    sendXMLRequest();
     updatedElaspedDeactivation();
     if(request === 'popup'){
       sendResponse(allTabs);
