@@ -1,12 +1,19 @@
 import React from 'react';
 
 export default (props) => {
-	const tabData = props.tabData.map((item, index) => {
-		return (
-			<p className="tabURL" key={index}>
-				{item.url}
-			</p>
-		);
-	});
-	return <div className="tab-container">{tabData}</div>;
+	let style = {
+		backgroundColor: '',
+		color: ''
+	};
+
+	if (props.item.selected) {
+		style.backgroundColor = 'green';
+		style.color = 'white';
+	}
+
+	return (
+		<div className="tab-container" onClick={props.select} style={style}>
+			{props.item.url}
+		</div>
+	);
 };

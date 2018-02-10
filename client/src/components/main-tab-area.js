@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import Tab from './tab';
 
 class MainTabArea extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
 	render() {
-		return (
-			<div className="main-tab-area">
-				<Tab tabData={this.props.tabData} />
-			</div>
-		);
+		const tabList = this.props.tabData.map((item, index) => {
+			return <Tab key={index} item={item} select={() => this.props.select(item)} />;
+		});
+
+		return <div className="main-tab-area">{tabList}</div>;
 	}
 }
 
