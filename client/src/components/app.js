@@ -1,13 +1,10 @@
-import React from "react";
-import TopTenPage from "./topTen";
-import StatsPage from "./statsPage";
-
+import React from 'react';
+import MainPage from './main-page';
 
 const App = () => (
 	<div>
-		<div className="app">
-			<TopTenPage />
-			<StatsPage />
+		<div className="main-app">
+			<MainPage />
 		</div>
 	</div>
 );
