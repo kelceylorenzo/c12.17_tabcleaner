@@ -45,7 +45,7 @@ function createDomElement(tabObject){
   var trashcan = document.createElement('i');
   var favicon = document.createElement('span');
   var faviconImage = document.createElement('img');
-  faviconImage.src = tabObject.favicon || 'iconpurple.png';
+  faviconImage.src = tabObject.favicon || 'images/iconpurple.png';
   favicon.appendChild(faviconImage);
   trashcan.className = "far fa-trash-alt";
   var addText = document.createTextNode((tabObject.title).substring(0, lengthOfString));

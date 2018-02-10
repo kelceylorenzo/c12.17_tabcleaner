@@ -3,8 +3,6 @@ var closedTabs = {};
 var currentHighlightTabId = null; 
 var siteUsageTime = {}
 
-
-
 /**
 *Periodically checks elapsed deactivate time and updates the elapsed deactivated time
 * 
@@ -103,28 +101,6 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
   if(currentHighlightTabId === activeInfo.id ){
     console.log('higlighted tab become in active')
   }
-  // var timeStamp = new Date();
-  // //start time for most recent active tab
-
-  // //set newMostActivatedTab
-  // chrome.tabs.get(activeInfo.tabId, function(tab){
-  //   if(currentHighlightTabId){
-  //     allTabs[currentActiveTabId].highlighted = false;  
-  //     allTabs[currentActiveTabId].timeOfDeactivation = timeStamp;  
-  //     allTabs[currentActiveTabId].inactiveTimeElapsed = timeStamp - allTabs[currentActiveTabId].timeOfActivation;
-  //   }
-  //   if(allTabs[tab.id]){
-  //     updateTab(tab, timeStamp);
-  //     //find out how much time has passed that previous active tab was active and save to siteusagetime
-  //     //get the accumulated time and save to url
-  //     //reset timeSinceActive to current time 
-  //     //change the current active tab 
-  //     //set the most recent active tab to start timer for being inactive
-  //   } else {
-  //   createNewTab(tab, timeStamp);
-  //   }
-  //     currentActiveTabId = tab.id; 
-  // }); 
 })
 
 

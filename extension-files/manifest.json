@@ -6,19 +6,14 @@
     "version": "1.0",
 
     "browser_action": {
-      "default_icon": "iconpurple.png",
+      "default_icon": "images/iconpurple.png",
       "default_popup": "popup.html",
       "default_title": "Fan-TAB-ilous"
     },
     "permissions": [
       "storage",
       "tabs",
-      "<all_urls>",
-      "identity", 
-      "https://www.googleapis.com/plus/v1/people/me/openIdConnect",
-      "https://www.google.com/accounts/OAuthGetRequestToken",
-      "https://www.google.com/accounts/OAuthAuthorizeToken",
-      "https://www.google.com/accounts/OAuthGetAccessToken"
+      "<all_urls>"
     ],
     "background": {
         "scripts": ["background.js"]
