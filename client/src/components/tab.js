@@ -1,14 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import Data from "../assets/data/data";
+export default (props) => {
+	let style = {
+		backgroundColor: '',
+		color: ''
+	};
 
-export default props => {
-	const tabData = Data.map((item, index) => {
-		return (
-			<p className="tabURL" key={index}>
-				{item.url}
-			</p>
-		);
-	});
-	return <div className="tab-container">{tabData}</div>;
+	if (props.item.selected) {
+		style.backgroundColor = 'green';
+		style.color = 'white';
+	}
+
+	return (
+		<div className="tab-container" onClick={props.select} style={style}>
+			{props.item.url}
+		</div>
+	);
 };

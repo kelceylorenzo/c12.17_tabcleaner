@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import Tab from "./tab";
+import React, { Component } from 'react';
+import Tab from './tab';
 
 class MainTabArea extends Component {
 	render() {
-		return (
-			<div className="main-tab-area col-xs-11">
-				<Tab />
-			</div>
-		);
+		const tabList = this.props.tabData.map((item, index) => {
+			return <Tab key={index} item={item} select={() => this.props.select(item)} />;
+		});
+
+		return <div className="main-tab-area col-xs-11">{tabList}</div>;
+
 	}
 }
 
