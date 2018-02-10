@@ -1,12 +1,11 @@
 .sidebar-container {
 	border-right: 1px solid black;
 	height: 100vh;
-	width: 20vw;
 }
 
 .sidebar-container button {
-	display: flex;
-	width: 75%;
+	width: 100%;
 	margin: 5% auto;
-	height: 7%;
+	height: 8%;
+	text-align: center;
 }
