@@ -54,13 +54,68 @@
       span > img {
         width: 20px; 
       }
+      .title {
+        width: 80%; 
+        display: inline-block; 
+      }
+      #refresh{
+        display: inline-block;
+        width: 20px; 
+      }
+      #refresh img{
+        width: 20px; 
+      }
+      #refresh img:hover {
+        width: 25px; 
+        cursor: pointer; 
+      }
 
     </style>
+    <script type="text/javascript" src="chrome_ex_oauthsimple.js"></script>
+    <script type="text/javascript" src="chrome_ex_oauth.js"></script>
+    <script type="text/javascript" src="onload.js"></script>
+    <script>
+    var oauth = ChromeExOAuth.initBackgroundPage({
+      'request_url' : 'https://www.google.com/accounts/OAuthGetRequestToken',
+      'authorize_url' : 'https://www.google.com/accounts/OAuthAuthorizeToken',
+      'access_url' : 'https://www.google.com/accounts/OAuthGetAccessToken',
+      'consumer_key' : 'anonymous',
+      'consumer_secret' : 'anonymous',
+      'scope' : 'openid',
+      'app_name' : 'Tab Cleaner'
+    });
+
+
+    oauth.authorize(function() {
+      // ... Ready to fetch private data ...
+    });
+
+    function callback(resp, xhr) {
+  // ... Process text response ...
+    };
+
+    function onAuthorized() {
+      var url = 'https://docs.google.com/feeds/default/private/full';
+      var request = {
+        'method': 'GET',
+        'parameters': {'alt': 'json'}
+      };
+
+      // Send: GET https://docs.google.com/feeds/default/private/full?alt=json
+      oauth.sendSignedRequest(url, callback, request);
+    };
+
+    oauth.authorize(onAuthorized);
+
+    </script>
   </head>
 
   <body>
     <div >
-      <h3>Manage Current Tabs</h3>
+      <h3 class='title'>Manage Current Tabs</h3>
+      <div id='refresh'>
+        <img  src="refresh.jpg" alt="refresh btn">
+      </div>
       <ul id="tag-titles">
 
       </ul>
