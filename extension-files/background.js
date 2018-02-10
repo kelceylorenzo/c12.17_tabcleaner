@@ -3,12 +3,15 @@ var closedTabs = {};
 var currentHighlightTabId = null; 
 var siteUsageTime = {}
 
+
+
 /**
 *Periodically checks elapsed deactivate time and updates the elapsed deactivated time
 * 
 */
 function updatedElaspedDeactivation(){
-  var currentTime = new Date();
+  var date = new Date()
+  var currentTime = date.getTime();
   for(var tab in allTabs){
     if(!allTabs[tab].highlighted){
       allTabs[tab].inactiveTimeElapsed = currentTime - allTabs[tab].timeOfDeactivation;
@@ -175,7 +178,8 @@ function sendXMLRequest(){
 */
 function getAllTabs(){
   chrome.tabs.query({}, function(tabs) {
-    var timeStamp = new Date();
+    var date = new Date()
+    var timeStamp = date.getTime();
     tabs.forEach(function(tab){
       createNewTab(tab, timeStamp);
     })
@@ -191,7 +195,8 @@ function getAllTabs(){
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
-    var timeStamp = new Date();
+    var date = new Date()
+    var timeStamp = date.getTime();
     console.log(tab.favIconUrl)
     updateTab(tab, timeStamp);
   }

@@ -1,3 +1,5 @@
+var lengthOfString = 40; 
+
 chrome.runtime.sendMessage(
   "popup",
   function (response) {
@@ -8,6 +10,20 @@ chrome.runtime.sendMessage(
     }
   }
 );
+
+function refreshContent(){
+  document.getElementById('tag-titles').innerHTML = "";
+  chrome.runtime.sendMessage(
+    "popup",
+    function (response) {
+      for(var item in response){
+        var tabInfo = response[item];
+        var tabElement = createDomElement(tabInfo); 
+        document.getElementById('tag-titles').appendChild(tabElement);
+      }
+    }
+  );
+}
 
 
 function createDomElement(tabObject){
@@ -29,10 +45,10 @@ function createDomElement(tabObject){
   var trashcan = document.createElement('i');
   var favicon = document.createElement('span');
   var faviconImage = document.createElement('img');
-  faviconImage.src = tabObject.favicon;
+  faviconImage.src = tabObject.favicon || 'iconpurple.png';
   favicon.appendChild(faviconImage);
   trashcan.className = "far fa-trash-alt";
-  var addText = document.createTextNode(tabObject.title);
+  var addText = document.createTextNode((tabObject.title).substring(0, lengthOfString));
   tabEl.className = "id" + tabObject.id + " " + tabObject.color;
   tabEl.appendChild(favicon)
   tabEl.append(addText);
@@ -52,3 +68,5 @@ function clickEvent(id, event) {
 function highlightTab(index, event){
   chrome.tabs.highlight({'tabs': index})
 }
+
+document.getElementById('refresh').addEventListener('click', refreshContent);
