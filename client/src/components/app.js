@@ -1,3 +1,4 @@
+
 import React from "react";
 
 import SignUpPage from "./sign-up-page";
@@ -12,3 +13,4 @@ const App = () => (
 );
 
 export default App;
+
