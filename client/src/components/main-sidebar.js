@@ -9,9 +9,9 @@ class Sidebar extends Component {
 				<br />
 				<button>CLOSE</button>
 				<br />
-				<button>SELECT ALL</button>
+				<button onClick={this.props.selectAll}>SELECT ALL</button>
 				<br />
-				<button>DESELECT ALL</button>
+				<button onClick={this.props.deselectAll}>DESELECT ALL</button>
 			</div>
 		);
 	}

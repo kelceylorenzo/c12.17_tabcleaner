@@ -13,7 +13,9 @@ class MainPage extends Component {
 			selectedTabs: []
 		};
 
-		this.handleSelect = this.handleSelect.bind(this);
+		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
+		this.selectAll = this.selectAll.bind(this);
+		this.deselectAll = this.deselectAll.bind(this);
 	}
 
 	componentDidMount() {
@@ -33,7 +35,7 @@ class MainPage extends Component {
 		});
 	}
 
-	handleSelect(item) {
+	handleIndividualSelect(item) {
 		let { tabsList, selectedTabs } = this.state;
 
 		if (!item.selected) {
@@ -51,14 +53,47 @@ class MainPage extends Component {
 		});
 	}
 
+	selectAll() {
+		let { tabsList, selectedTabs } = this.state;
+
+		selectedTabs = [];
+
+		tabsList.map((index) => {
+			index.selected = true;
+			selectedTabs.push(index);
+		});
+
+		this.setState({
+			...this.state,
+			tabsList: tabsList,
+			selectedTabs: selectedTabs
+		});
+	}
+
+	deselectAll() {
+		let { tabsList, selectedTabs } = this.state;
+
+		selectedTabs = [];
+
+		tabsList.map((index) => {
+			index.selected = false;
+		});
+
+		this.setState({
+			...this.state,
+			tabsList: tabsList,
+			selectedTabs: selectedTabs
+		});
+	}
+
 	render() {
 		console.log(this.state);
 		return (
 			<div>
 				<h4>navbar will go here</h4>
 				<div className="main-page-container">
-					<MainSidebar />
-					<MainTabArea tabData={this.state.tabsList} select={this.handleSelect} />
+					<MainSidebar selectAll={this.selectAll} deselectAll={this.deselectAll} />
+					<MainTabArea tabData={this.state.tabsList} select={this.handleIndividualSelect} />
 				</div>
 			</div>
 		);
