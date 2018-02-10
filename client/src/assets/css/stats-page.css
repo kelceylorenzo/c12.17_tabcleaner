@@ -4,19 +4,18 @@ body {
 
 .stats-page-container {
 	height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 }
 
 .stats-page-header {
-    height: 10%;
+	height: 10%;
 }
 
 .stats-container {
-    height: 90%;
-    display: flex;
-    flex-direction: column;
+	height: 90%;
+	display: flex;
+	flex-direction: column;
 }

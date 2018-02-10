@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class EmailChange extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			oldEmail: '',
-			newEmail: '',
-			confirmNewEmail: '',
-			feedback: ''
+			oldEmail: "",
+			newEmail: "",
+			confirmNewEmail: "",
+			feedback: ""
 		};
 
 		this.updateInput = this.updateInput.bind(this);
@@ -27,10 +27,10 @@ class EmailChange extends Component {
 
 	cancel() {
 		this.setState({
-			oldEmail: '',
-			newEmail: '',
-			confirmNewEmail: '',
-			feedback: ''
+			oldEmail: "",
+			newEmail: "",
+			confirmNewEmail: "",
+			feedback: ""
 		});
 	}
 
@@ -40,24 +40,24 @@ class EmailChange extends Component {
 		console.log(`oldEmail: ${oldEmail}, newEmail: ${newEmail}, confirmNewEmail: ${confirmNewEmail}`);
 
 		let newState =
-			oldEmail === '' || newEmail === '' || confirmNewEmail === ''
+			oldEmail === "" || newEmail === "" || confirmNewEmail === ""
 				? (newState = {
 						...this.state,
-						feedback: 'please fill out each section before saving your changes.'
+						feedback: "please fill out each section before saving your changes."
 					})
 				: newEmail === oldEmail
 					? (newState = {
 							...this.state,
-							feedback: 'new email cannot match old email. please enter a new email.'
+							feedback: "new email cannot match old email. please enter a new email."
 						})
 					: newEmail !== confirmNewEmail
 						? (newState = {
 								...this.state,
-								feedback: 'new email confirmation does not match. please check your spelling'
+								feedback: "new email confirmation does not match. please check your spelling"
 							})
 						: (newState = {
 								...this.state,
-								feedback: 'email change successful!'
+								feedback: "email change successful!"
 							});
 
 		this.setState(newState);
@@ -66,7 +66,7 @@ class EmailChange extends Component {
 	render() {
 		const { oldEmail, newEmail, confirmNewEmail, feedback } = this.state;
 		return (
-			<div className="change-container col s5 offset-s1">
+			<div className="change-container col-xs-6">
 				<p>Change E-Mail</p>
 				<form>
 					<label>Old E-Mail</label>
@@ -74,12 +74,7 @@ class EmailChange extends Component {
 					<label>New E-Mail</label>
 					<input type="email" name="newEmail" value={newEmail} onChange={this.updateInput} />
 					<label>Confirm New E-Mail</label>
-					<input
-						type="email"
-						name="confirmNewEmail"
-						value={confirmNewEmail}
-						onChange={this.updateInput}
-					/>
+					<input type="email" name="confirmNewEmail" value={confirmNewEmail} onChange={this.updateInput} />
 					<button type="button" onClick={this.cancel}>
 						Cancel
 					</button>

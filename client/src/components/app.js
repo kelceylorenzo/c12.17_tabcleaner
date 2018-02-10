@@ -1,13 +1,13 @@
 import React from "react";
 import MainPage from "./main-page";
-import Footer from "./footer";
+import TopTen from "./topTen"
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => (
 	<div>
 		<div className="main-app">
-			<Footer />
-			{/* <MainPage /> */}
+			<TopTen/>
 		</div>
 	</div>
 );

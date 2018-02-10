@@ -67,7 +67,7 @@ class PasswordChange extends Component {
 	render() {
 		const { oldPassword, newPassword, confirmNewPassword, feedback } = this.state;
 		return (
-			<div className="change-container col s5 offset-s1">
+			<div className="change-container col-xs-6">
 				<p>Change Password</p>
 				<form>
 					<label>Old Password</label>
