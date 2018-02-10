@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import Tab from './tab';
 
 class MainTabArea extends Component {
 	render() {
 		return (
-			<div className="main-tab-area-container">
-				<p>main tab area</p>
+			<div className="main-tab-area col s10">
+				<Tab />
 			</div>
 		);
 	}

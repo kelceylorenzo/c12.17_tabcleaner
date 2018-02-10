@@ -5,7 +5,7 @@ import '../assets/css/main-page.css';
 
 export default (props) => {
 	return (
-		<div className="main-page">
+		<div>
 			<h4>navbar will go here</h4>
 			<div className="main-page-container">
 				<MainSidebar />
