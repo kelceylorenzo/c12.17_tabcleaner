@@ -1,0 +1,17 @@
+.nav-container {
+	height: 15%;
+	border-bottom: 2px solid black;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.navBar {
+	display: flex;
+	justify-content: space-between;
+	width: 75%;
+}
+
+.navLink {
+	display: flex;
+	margin: auto;
+}
