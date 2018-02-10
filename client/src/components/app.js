@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AboutContent from './about-content';
 import 'materialize-css/dist/css/materialize.min.css';
@@ -12,3 +13,4 @@ const App = () => (
 );
 
 export default App;
+
