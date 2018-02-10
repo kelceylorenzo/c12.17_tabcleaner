@@ -7,7 +7,8 @@ class MainTabArea extends Component {
 			return <Tab key={index} item={item} select={() => this.props.select(item)} />;
 		});
 
-		return <div className="main-tab-area">{tabList}</div>;
+		return <div className="main-tab-area col-xs-11">{tabList}</div>;
+
 	}
 }
 
