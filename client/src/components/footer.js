@@ -1,7 +1,8 @@
-import React from 'react';
+import React from "react";
+import FooterData from "./footer-data";
 
-export default (props) => {
-	const footerLinks = props.footerData.map((item, index) => {
+export default props => {
+	const footerLinks = FooterData.map((item, index) => {
 		return (
 			<li key={index} className="footerLink">
 				{item.title}
