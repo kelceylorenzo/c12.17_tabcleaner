@@ -1,3 +1,19 @@
+
+
+.about-content-container {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	vertical-align: middle;
+}
+
 .about-main-image {
 	width: 60%;
+}
+
+.row {
+	margin: auto;
+	display: flex; 
+	justify-content: center;
 }
