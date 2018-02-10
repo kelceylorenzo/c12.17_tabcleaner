@@ -1,12 +1,13 @@
 import React from 'react';
 import MainSidebar from './main-sidebar';
 import MainTabArea from './main-tab-area';
+import '../assets/css/main-page.css';
 
 export default (props) => {
 	return (
-		<div className="main-page-container">
+		<div className="main-page">
 			<h4>navbar will go here</h4>
-			<div className="row">
+			<div className="main-page-container">
 				<MainSidebar />
 				<MainTabArea />
 			</div>

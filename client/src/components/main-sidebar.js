@@ -4,7 +4,7 @@ import '../assets/css/main-sidebar.css';
 class Sidebar extends Component {
 	render() {
 		return (
-			<div className="sidebar-container col s2">
+			<div className="sidebar-container">
 				<button>OPEN</button>
 				<br />
 				<button>CLOSE</button>

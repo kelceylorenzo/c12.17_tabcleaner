@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class MainTabArea extends Component {
 	render() {
 		return (
-			<div className="main-tab-area col s10">
+			<div className="main-tab-area-container">
 				<p>main tab area</p>
 			</div>
 		);
