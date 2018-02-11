@@ -1,16 +1,19 @@
 {
-  "name": "nodeTest",
+  "name": "storybook",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "App to share public or write private stories",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
+  "author": "James Kirsch",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "mongoose": "^5.0.4",
+    "node": "^9.5.0",
+    "npm": "^5.6.0",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0"
   }
 }
