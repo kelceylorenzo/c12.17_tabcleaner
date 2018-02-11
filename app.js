@@ -7,7 +7,7 @@ console.log("path",__dirname);
 require('./models/User');
 
 // Passport Config
-require('./config/passport')(passport);
+require('/config/passport')(passport);
 
 // Load Routes
 const auth = require('./routes/auth');
