@@ -1,18 +1,6 @@
 var lengthOfString = 40; 
 
-chrome.runtime.sendMessage(
-  "popup",
-  function (response) {
-    for(var item in response){
-      var tabInfo = response[item];
-      var tabElement = createDomElement(tabInfo); 
-      document.getElementById('tag-titles').appendChild(tabElement);
-    }
-  }
-);
-
-function refreshContent(){
-  document.getElementById('tag-titles').innerHTML = "";
+function sendMessageToGetTabInfo(){
   chrome.runtime.sendMessage(
     "popup",
     function (response) {
@@ -25,10 +13,13 @@ function refreshContent(){
   );
 }
 
+function refreshContent(){
+  document.getElementById('tag-titles').innerHTML = "";
+  sendMessageToGetTabInfo();
+}
+
 
 function createDomElement(tabObject){
-  console.log(tabObject.favicon)
-
   if(!tabObject.title){
     return; 
   }
@@ -70,3 +61,4 @@ function highlightTab(index, event){
 }
 
 document.getElementById('refresh').addEventListener('click', refreshContent);
+sendMessageToGetTabInfo();

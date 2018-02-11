@@ -8,13 +8,12 @@ var siteUsageTime = {}
 * 
 */
 function updatedElaspedDeactivation(){
-  var date = new Date()
+  var date = new Date();
   var currentTime = date.getTime();
   for(var tab in allTabs){
     if(!allTabs[tab].highlighted){
       allTabs[tab].inactiveTimeElapsed = currentTime - allTabs[tab].timeOfDeactivation;
     }
-    console.log(allTabs[tab])
   }
 }
 
@@ -24,10 +23,6 @@ function updatedElaspedDeactivation(){
 */
 function updateTab(tab, timeStamp){
   //if the site changed, get the elapsed time during active state and save to its url
-  //set new activetime stamp for new site 
-  if(tab.highlighted){
-    tab.timeOfActivation = timeStamp;
-  }
   allTabs[tab.id] = {
     id: tab.id,
     windowId: tab.windowId,
@@ -35,15 +30,10 @@ function updateTab(tab, timeStamp){
     favicon: tab.favIconUrl,
     title: tab.title,
     url: tab.url,
-    index: tab.index,
-    activeTimeElapsed: 0,
-    inactiveTimeElapsed: null,
-    timeOfDeactivation : null,
+    index: tab.index, 
     screenShotUrl: '',
     highlighted: tab.highlighted
-  }
-  console.log(allTabs[tab.id].favicon)
-
+    }
 }
 
 /**
@@ -67,9 +57,9 @@ function createNewTab(tab, currentTime){
   }
   if(tabObject.highlighted){
     tabObject.timeOfActivation = currentTime;
-    tabObject.timeOfDeactivation = null;  
+    tabObject.timeOfDeactivation = 0;  
   } else {
-    tabObject.timeOfActivation = null;
+    tabObject.timeOfActivation = 0;
     tabObject.timeOfDeactivation = currentTime;  
   }
   allTabs[tab.id] = tabObject; 
@@ -106,17 +96,16 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 
 
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
-
-
-
-  var timeStamp = new Date();
+  var time = new Date();
+  var timeStamp = time.getTime();
   //start time for most recent active tab
   //set newMostActivatedTab
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
     if(currentHighlightTabId){
       allTabs[currentHighlightTabId].highlighted = false;  
       allTabs[currentHighlightTabId].timeOfDeactivation = timeStamp;  
-      allTabs[currentHighlightTabId].inactiveTimeElapsed = timeStamp - allTabs[currentHighlightTabId].timeOfActivation;
+      allTabs[currentHighlightTabId].activeTimeElapsed = allTabs[currentHighlightTabId].activeTimeElapsed + (timeStamp - allTabs[currentHighlightTabId].timeOfActivation);
+      allTabs[currentHighlightTabId].inactiveTimeElapsed = 0;
     }
     if(allTabs[tab.id]){
       updateTab(tab, timeStamp);
@@ -173,7 +162,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
     var date = new Date()
     var timeStamp = date.getTime();
-    console.log(tab.favIconUrl)
     updateTab(tab, timeStamp);
   }
 })
@@ -181,8 +169,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 
 /**
 * Runs function when first browser loads
+*@param {object}
+*calls getAllTabs
 */
-chrome.runtime.onStartup.addListener(function(){
+chrome.runtime.onStartup.addListener(function(details){
   console.log('browser open')
   getAllTabs();
 })
@@ -190,6 +180,7 @@ chrome.runtime.onStartup.addListener(function(){
 /**
 * Runs function when first installed
 *@param {object}
+*calls getAllTabs
 */
 chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
