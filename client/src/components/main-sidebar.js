@@ -7,9 +7,9 @@ class Sidebar extends Component {
 
 			<div className="sidebar-container col-xs-1">
 
-				<button>OPEN</button>
+				<button onClick={this.props.openTab}>OPEN</button>
 
-				<button>CLOSE</button>
+				<button onClick={this.props.closeTab}>CLOSE</button>
 				
 				<button onClick={this.props.selectAll}>SELECT ALL</button>
 			
