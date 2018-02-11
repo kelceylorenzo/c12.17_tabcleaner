@@ -1,10 +1,9 @@
-
-import React, { Component } from 'react';
-import MainSidebar from './main-sidebar';
-import MainTabArea from './main-tab-area';
-import data from '../assets/data/data';
-import '../assets/css/main-page.css';
-import tab from './tab';
+import React, { Component } from "react";
+import MainSidebar from "./main-sidebar";
+import MainTabArea from "./main-tab-area";
+import data from "../assets/data/data";
+import "../assets/css/main-page.css";
+import tab from "./tab";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -17,6 +16,8 @@ class MainPage extends Component {
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
 		this.selectAll = this.selectAll.bind(this);
 		this.deselectAll = this.deselectAll.bind(this);
+		this.openTab = this.openTab.bind(this);
+		this.closeTab = this.closeTab.bind(this);
 	}
 
 	componentDidMount() {
@@ -26,7 +27,7 @@ class MainPage extends Component {
 
 	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call)
 	getData(resp) {
-		resp.map((currentItem) => {
+		resp.map(currentItem => {
 			return (currentItem.selected = false);
 		});
 
@@ -54,12 +55,39 @@ class MainPage extends Component {
 		});
 	}
 
+	openTab() {
+		let { selectedTabs } = this.state;
+
+		for (let tab of selectedTabs) {
+			let newTab = window.open(tab.url, "_blank");
+			newTab.focus();
+		}
+	}
+
+	closeTab() {
+		let { selectedTabs, tabsList } = this.state;
+		let selectedIDs = [];
+
+		for (let tab of selectedTabs) {
+			selectedIDs.push(tab.id);
+		}
+
+		tabsList = tabsList.filter(function(tab){
+			if (selectedIDs.indexOf(tab.id) === -1) {
+				return true
+			} return false
+		})
+		this.setState({
+			tabsList: tabsList
+		})
+	}
+
 	selectAll() {
 		let { tabsList, selectedTabs } = this.state;
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = true;
 			selectedTabs.push(index);
 		});
@@ -76,7 +104,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = false;
 		});
 
@@ -93,7 +121,12 @@ class MainPage extends Component {
 			<div>
 				<h4>navbar will go here</h4>
 				<div className="main-page-container">
-					<MainSidebar selectAll={this.selectAll} deselectAll={this.deselectAll} />
+					<MainSidebar
+						closeTab={this.closeTab}
+						openTab={this.openTab}
+						selectAll={this.selectAll}
+						deselectAll={this.deselectAll}
+					/>
 					<MainTabArea tabData={this.state.tabsList} select={this.handleIndividualSelect} />
 				</div>
 			</div>
