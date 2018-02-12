@@ -64,15 +64,6 @@ function highlightTab(index, windowId,event){
 document.getElementById('refresh').addEventListener('click', refreshContent);
 sendMessageToGetTabInfo();
 
-
-// setTimeout(() => {
-//   const style = document.querySelector('#container').style;
-//   style.display = 'block';
-//   setTimeout(() => {
-//     style.opacity = 1;
-//   });
-// }, 100);
-
 document.body.style.opacity = 0;
 document.body.style.transition = 'opacity ease-out .4s';
 requestAnimationFrame(function() {
