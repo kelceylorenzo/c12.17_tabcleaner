@@ -67,12 +67,17 @@
       .screenshot {
         width: 200px; 
       }
+      #container {
+        display: none;
+        opacity: 0;
+        transition: opacity 200ms ease;
+      }
 
     </style>
   </head>
 
   <body>
-    <div >
+    <div id="container">
       <h3 class='title'>Manage Current Tabs</h3>
       <div id='refresh'>
         <img  src="images/refresh.jpg" alt="refresh btn">

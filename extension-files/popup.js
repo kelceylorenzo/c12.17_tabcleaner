@@ -1,5 +1,4 @@
-(function() {
-  var lengthOfString = 40; 
+var lengthOfString = 40; 
 
 function sendMessageToGetTabInfo(){
   chrome.runtime.sendMessage(
@@ -66,5 +65,10 @@ document.getElementById('refresh').addEventListener('click', refreshContent);
 sendMessageToGetTabInfo();
 
 
-})();
-
+setTimeout(() => {
+  const style = document.querySelector('#container').style;
+  style.display = 'block';
+  setTimeout(() => {
+    style.opacity = 1;
+  });
+}, 100);
