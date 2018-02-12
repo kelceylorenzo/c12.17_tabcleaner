@@ -34,10 +34,6 @@ function updateTab(tab, timeStamp){
     screenshot: '',
     highlighted: tab.highlighted
     }
-  // chrome.tabs.captureVisibleTab(tab.windowId, function (dataUrl){
-  //   allTabs[tab.id].screenshot = dataUrl; 
-  // })
-  
 }
 
 /**
@@ -67,12 +63,6 @@ function createNewTab(tab, currentTime){
     tabObject.timeOfDeactivation = currentTime;  
   }
   allTabs[tab.id] = tabObject; 
-  // if(tab.highlighted){
-  //   chrome.tabs.captureVisibleTab(tab.windowId, function (dataUrl){
-  //     allTabs[tab.id].screenshot = dataUrl; 
-  //   })
-  // }
-
 }
 
 
@@ -103,25 +93,6 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
   }
 })
 
-// /**
-// * Creates a promise to capture the screenshot when page is loaded
-// *@param {integer} tabid 
-// */
-// function screenshotTab(tabId, windowId){
-//   var promise = new Promise(function(resolve, reject){
-//     resolve(windowId)
-//   })
-
-//   promise.then(function(id){
-//     chrome.tabs.captureVisibleTab(windowId, function(dataUrl){
-//       console.log(dataUrl)
-//     })
-
-//   })
-           
-// }
-
-
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   var time = new Date();
   var timeStamp = time.getTime();
@@ -147,22 +118,6 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       currentHighlightTabId = tab.id; 
   });
 })
-
-
-
-function sendXMLRequest(){
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function(){
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      //Request was successful
-      var response = xhr.responseText;
-      console.log(response)
-     }
-  }; // Implemented elsewhere.
-  xhr.open("GET", chrome.extension.getURL('/data.js'), true);
-  xhr.send();
-  }
-
 
 /**
 * Gets all tabs currently in the browser

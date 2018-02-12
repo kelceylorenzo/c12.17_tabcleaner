@@ -37,9 +37,6 @@ function createDomElement(tabObject){
   var trashcan = document.createElement('i');
   var favicon = document.createElement('span');
   var faviconImage = document.createElement('img');
-  var screenshot = document.createElement('img');
-  screenshot.className = 'screenshot';
-  screenshot.src = tabObject.screenshot ||'images/iconpurple.png';
   faviconImage.src = tabObject.favicon || 'images/iconpurple.png';
   favicon.appendChild(faviconImage);
   trashcan.className = "far fa-trash-alt";
@@ -50,7 +47,6 @@ function createDomElement(tabObject){
   trashcan.addEventListener('click', clickEvent.bind(this, tabObject.id));
   tabEl.addEventListener('click', highlightTab.bind(this, tabObject.index, tabObject.windowId))
   tabEl.appendChild(trashcan);
-  // tabEl.appendChild(screenshot);
   return tabEl;
 }
 
