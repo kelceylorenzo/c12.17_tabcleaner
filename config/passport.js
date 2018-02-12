@@ -17,8 +17,8 @@ module.exports = function (passport) {
       // console.log(profile);
 
       const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
-      
-      const newUser ={
+
+      const newUser = {
         googleID: profile.id,
         firstName: profile.name.givenName,
         lastName: profile.name.familyName,
@@ -29,19 +29,27 @@ module.exports = function (passport) {
       // Check for existing user
       User.findOne({
         googleID: profile.id
-      }).then(user =>{
-        if(user){
+      }).then(user => {
+        if (user) {
           // Return User
+          console.log(user);
           return done(null, user);
         } else {
           // Create User
           new User(newUser)
             .save()
-            .then(user=> done(null, user));
+            .then(user => done(null, user));
+          console.log(newUser);
         }
       })
-
     })
-  )
+  );
+
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  })
+  passport.deserializeUser((user, done) => {
+    User.findById(id).then(user => done(null, user));
+  })
 };
 
