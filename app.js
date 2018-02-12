@@ -30,6 +30,8 @@ app.get('/', (req, res) => {
   res.send('It Works!');
 });
 
+
+// Authentication Middleware
 app.use(cookieParser());
 app.use(session({
   secret: 'secret',
@@ -40,6 +42,12 @@ app.use(session({
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Set Global Vars
+app.use((req, res, next)=>{
+  res.locals.user = req.user || null;
+  next();
+});
 
 // Use Routes
 app.use('/auth', auth);

@@ -32,14 +32,12 @@ module.exports = function (passport) {
       }).then(user => {
         if (user) {
           // Return User
-          console.log(user);
           return done(null, user);
         } else {
           // Create User
           new User(newUser)
             .save()
             .then(user => done(null, user));
-          console.log(newUser);
         }
       })
     })
@@ -48,7 +46,7 @@ module.exports = function (passport) {
   passport.serializeUser((user, done) => {
     done(null, user.id);
   })
-  passport.deserializeUser((user, done) => {
+  passport.deserializeUser((id, done) => {
     User.findById(id).then(user => done(null, user));
   })
 };
