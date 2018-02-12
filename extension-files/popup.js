@@ -1,4 +1,5 @@
-var lengthOfString = 40; 
+(function() {
+  var lengthOfString = 40; 
 
 function sendMessageToGetTabInfo(){
   chrome.runtime.sendMessage(
@@ -36,6 +37,9 @@ function createDomElement(tabObject){
   var trashcan = document.createElement('i');
   var favicon = document.createElement('span');
   var faviconImage = document.createElement('img');
+  var screenshot = document.createElement('img');
+  screenshot.className = 'screenshot';
+  screenshot.src = tabObject.screenshot ||'images/iconpurple.png';
   faviconImage.src = tabObject.favicon || 'images/iconpurple.png';
   favicon.appendChild(faviconImage);
   trashcan.className = "far fa-trash-alt";
@@ -44,8 +48,9 @@ function createDomElement(tabObject){
   tabEl.appendChild(favicon)
   tabEl.append(addText);
   trashcan.addEventListener('click', clickEvent.bind(this, tabObject.id));
-  tabEl.addEventListener('click', highlightTab.bind(this, tabObject.index))
+  tabEl.addEventListener('click', highlightTab.bind(this, tabObject.index, tabObject.windowId))
   tabEl.appendChild(trashcan);
+  // tabEl.appendChild(screenshot);
   return tabEl;
 }
 
@@ -55,10 +60,15 @@ function clickEvent(id, event) {
   elem.parentNode.removeChild(elem);
 }
 
-
-function highlightTab(index, event){
-  chrome.tabs.highlight({'tabs': index})
+//try adding window id
+function highlightTab(index, windowId,event){
+  chrome.tabs.highlight({'tabs': index, 'windowId': windowId})
+  chrome.windows.update(windowId, {focused: true})
 }
 
 document.getElementById('refresh').addEventListener('click', refreshContent);
 sendMessageToGetTabInfo();
+
+
+})();
+

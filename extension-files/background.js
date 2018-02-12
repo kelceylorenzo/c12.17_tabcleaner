@@ -31,9 +31,13 @@ function updateTab(tab, timeStamp){
     title: tab.title,
     url: tab.url,
     index: tab.index, 
-    screenShotUrl: '',
+    screenshot: '',
     highlighted: tab.highlighted
     }
+  // chrome.tabs.captureVisibleTab(tab.windowId, function (dataUrl){
+  //   allTabs[tab.id].screenshot = dataUrl; 
+  // })
+  
 }
 
 /**
@@ -52,7 +56,7 @@ function createNewTab(tab, currentTime){
     activeTimeElapsed: 0,
     inactiveTimeElapsed: 0,
     timeOfSiteOpen: currentTime,
-    screenShotUrl: '',
+    screenshot: '', 
     highlighted: tab.highlighted
   }
   if(tabObject.highlighted){
@@ -63,6 +67,12 @@ function createNewTab(tab, currentTime){
     tabObject.timeOfDeactivation = currentTime;  
   }
   allTabs[tab.id] = tabObject; 
+  // if(tab.highlighted){
+  //   chrome.tabs.captureVisibleTab(tab.windowId, function (dataUrl){
+  //     allTabs[tab.id].screenshot = dataUrl; 
+  //   })
+  // }
+
 }
 
 
@@ -93,6 +103,23 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
   }
 })
 
+// /**
+// * Creates a promise to capture the screenshot when page is loaded
+// *@param {integer} tabid 
+// */
+// function screenshotTab(tabId, windowId){
+//   var promise = new Promise(function(resolve, reject){
+//     resolve(windowId)
+//   })
+
+//   promise.then(function(id){
+//     chrome.tabs.captureVisibleTab(windowId, function(dataUrl){
+//       console.log(dataUrl)
+//     })
+
+//   })
+           
+// }
 
 
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
@@ -115,7 +142,7 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       //change the current active tab 
       //set the most recent active tab to start timer for being inactive
     } else {
-    createNewTab(tab, timeStamp);
+      createNewTab(tab, timeStamp);
     }
       currentHighlightTabId = tab.id; 
   });
@@ -196,7 +223,6 @@ chrome.runtime.onInstalled.addListener(function(details){
 */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    sendXMLRequest();
     updatedElaspedDeactivation();
     if(request === 'popup'){
       sendResponse(allTabs);
