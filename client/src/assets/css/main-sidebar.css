@@ -1,0 +1,11 @@
+.sidebar-container {
+	border-right: 1px solid black;
+	height: 100vh;
+}
+
+.sidebar-container button {
+	width: 100%;
+	margin: 5% auto;
+	height: 8%;
+	text-align: center;
+}
