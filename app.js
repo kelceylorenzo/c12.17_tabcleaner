@@ -12,7 +12,8 @@ require('./models/GoogleUser');
 require('./config/googlePassport')(passport);
 
 // Load Routes
-const auth = require('./routes/auth');
+const googleAuth = require('./routes/googleAuth');
+// const localAuth = require('./routes/localAuth');
 
 // Load Keys
 const keys = require('./config/keys');
@@ -27,10 +28,6 @@ mongoose.connect(keys.mongoURI)
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, 'client', 'dist')));
-
-// app.get('/', (req, res) => {
-//   res.send('It Works!');
-// });
 
 // Authentication Middleware
 app.use(cookieParser());
@@ -51,7 +48,8 @@ app.use((req, res, next)=>{
 });
 
 // Use Routes
-app.use('/auth', auth);
+app.use('/auth/google', googleAuth);
+// app.use('/auth/local', localAuth);
 
 app.get('*', (req, res)=>{
   res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
