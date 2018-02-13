@@ -4,7 +4,7 @@
   "description": "App to share public or write private stories",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon app.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
@@ -13,7 +13,9 @@
   "author": "James Kirsch",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bundle": "^2.1.0",
+    "concurrently": "^3.5.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
