@@ -26,6 +26,8 @@ mongoose.connect(keys.mongoURI)
 
 const app = express();
 
+app.use(express.static(path.resolve(__dirname, 'client', 'dist')));
+
 // app.get('/', (req, res) => {
 //   res.send('It Works!');
 // });
@@ -48,12 +50,14 @@ app.use((req, res, next)=>{
   next();
 });
 
-app.get('*', (req, res)=>{
-  res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
-})
-
 // Use Routes
 app.use('/auth', auth);
+
+app.get('*', (req, res)=>{
+  res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
+});
+
+
 
 const port = process.env.PORT || 5000;
 
