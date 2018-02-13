@@ -4,7 +4,7 @@ import "../assets/css/about.css";
 
 export default props => {
 	return (
-		<div className="about-content-container container-fluid">
+		<div className="about-content-container col-xs-12">
 			<div className="row">
 				<div className="col-xs-12 text-center">
 					<img src={teamPicture} className="about-main-image" />
