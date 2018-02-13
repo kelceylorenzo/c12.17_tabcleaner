@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+
 import MainSidebar from "./main-sidebar";
 import MainTabArea from "./main-tab-area";
+
 import data from "../assets/data/data";
-import "../assets/css/main-page.css";
 import tab from "./tab";
+
+import "../assets/css/main-page.css";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -18,6 +21,7 @@ class MainPage extends Component {
 		this.deselectAll = this.deselectAll.bind(this);
 		this.openTab = this.openTab.bind(this);
 		this.closeTab = this.closeTab.bind(this);
+		this.handleSort = this.handleSort.bind(this);
 	}
 
 	componentDidMount() {
@@ -25,7 +29,7 @@ class MainPage extends Component {
 		this.getData(data);
 	}
 
-	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call)
+	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call
 	getData(resp) {
 		resp.map(currentItem => {
 			return (currentItem.selected = false);
@@ -55,6 +59,77 @@ class MainPage extends Component {
 		});
 	}
 
+	handleSort(event) {
+		const { tabsList } = this.state;
+		const sortType = event.target.getAttribute("data-sorttype");
+
+		switch (sortType) {
+			case "A-Z":
+				tabsList.sort((a, b) => {
+					let titleA = a.title;
+					let titleB = b.title;
+
+					if (titleA < titleB) {
+						return -1;
+					}
+					if (titleA > titleB) {
+						return 1;
+					}
+					return 0;
+				});
+				break;
+			case "Z-A":
+				tabsList.sort((a, b) => {
+					let titleA = a.title;
+					let titleB = b.title;
+
+					if (titleA > titleB) {
+						return -1;
+					}
+					if (titleA < titleB) {
+						return 1;
+					}
+					return 0;
+				});
+				break;
+			case "Time":
+				//currently sorted from oldest >>> newest in terms of activationTime
+				tabsList.sort((a, b) => {
+					let timeA = a.timeofActivation;
+					let timeB = b.timeofActivation;
+
+					if (timeA > timeB) {
+						return -1;
+					}
+					if (timeA < timeB) {
+						return 1;
+					}
+					return 0;
+				});
+				break;
+			case "Window":
+				//currently sorted by tab index but not taking into account separating tabs based on window ID
+				tabsList.sort((a, b) => {
+					let indexA = a.index;
+					let indexB = b.index;
+
+					if (indexA < indexB) {
+						return -1;
+					}
+					if (indexA > indexB) {
+						return 1;
+					}
+					return 0;
+				});
+				break;
+		}
+
+		this.setState({
+			...this.state,
+			tabsList: tabsList
+		});
+	}
+
 	openTab() {
 		let { selectedTabs } = this.state;
 
@@ -72,14 +147,15 @@ class MainPage extends Component {
 			selectedIDs.push(tab.id);
 		}
 
-		tabsList = tabsList.filter(function(tab){
+		tabsList = tabsList.filter(function(tab) {
 			if (selectedIDs.indexOf(tab.id) === -1) {
-				return true
-			} return false
-		})
+				return true;
+			}
+			return false;
+		});
 		this.setState({
 			tabsList: tabsList
-		})
+		});
 	}
 
 	selectAll() {
@@ -116,19 +192,17 @@ class MainPage extends Component {
 	}
 
 	render() {
-		console.log(this.state);
+		console.log(this.state.tabsList);
 		return (
-			<div>
-				<h4>navbar will go here</h4>
-				<div className="main-page-container">
-					<MainSidebar
-						closeTab={this.closeTab}
-						openTab={this.openTab}
-						selectAll={this.selectAll}
-						deselectAll={this.deselectAll}
-					/>
-					<MainTabArea tabData={this.state.tabsList} select={this.handleIndividualSelect} />
-				</div>
+			<div className="main-page-container col-xs-12">
+				<MainSidebar
+					closeTab={this.closeTab}
+					openTab={this.openTab}
+					selectAll={this.selectAll}
+					deselectAll={this.deselectAll}
+					sort={this.handleSort}
+				/>
+				<MainTabArea tabData={this.state.tabsList} select={this.handleIndividualSelect} />
 			</div>
 		);
 	}
