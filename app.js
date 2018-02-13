@@ -4,7 +4,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 
-
 // Load User Model
 require('./models/User');
 
@@ -26,10 +25,9 @@ mongoose.connect(keys.mongoURI)
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('It Works!');
-});
-
+// app.get('/', (req, res) => {
+//   res.send('It Works!');
+// });
 
 // Authentication Middleware
 app.use(cookieParser());
@@ -48,6 +46,10 @@ app.use((req, res, next)=>{
   res.locals.user = req.user || null;
   next();
 });
+
+app.get('*', (req, res)=>{
+  res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
+})
 
 // Use Routes
 app.use('/auth', auth);

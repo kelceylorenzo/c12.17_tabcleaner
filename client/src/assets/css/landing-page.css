@@ -1,0 +1,21 @@
+.landing-page-container {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.landing-page {
+	margin: auto;
+}
+
+.button-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.button {
+	width: 15rem;
+	margin: 5%;
+}
