@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const keys = require('./keys');
 
 // Load User Model
-const User = mongoose.model('users');
+const User = mongoose.model('googleUsers');
 
 module.exports = function (passport) {
   passport.use(

@@ -6,10 +6,10 @@ const passport = require('passport');
 const path = require('path');
 
 // Load User Model
-require('./models/User');
+require('./models/GoogleUser');
 
-// Passport Config
-require('./config/passport')(passport);
+// Google Passport Config
+require('./config/googlePassport')(passport);
 
 // Load Routes
 const auth = require('./routes/auth');
@@ -56,8 +56,6 @@ app.use('/auth', auth);
 app.get('*', (req, res)=>{
   res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
 });
-
-
 
 const port = process.env.PORT || 5000;
 
