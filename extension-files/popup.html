@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tab Manager</title>
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        box-sizing: border-box;
+        margin: 10px;
+        white-space: nowrap;
+      }
+      ul{
+        list-style: none;
+        padding-left: 0; 
+      }
+      li{
+        margin: 10px;
+        font-size: 18px;
+      }
+      li:hover{
+        text-decoration: underline;
+      }
+      i{
+        color: black;
+      }
+      li:hover, span:hover{
+        cursor: pointer; 
+      }
+      .fa-trash-alt{
+        margin: 0 10px; 
+      }
+      .green {
+        color: green; 
+      }
+
+      .orange{
+        color: orange;
+      }
+
+      .red {
+        color: red; 
+      }
+
+      .activetab {
+        font-weight: bold; 
+        border: 2px solid black; 
+        padding: 5px;
+      }
+      span > img {
+        width: 20px; 
+      }
+      .title {
+        width: 80%; 
+        display: inline-block; 
+      }
+      #refresh{
+        display: inline-block;
+        width: 20px; 
+      }
+      #refresh img{
+        width: 20px; 
+      }
+      #refresh img:hover {
+        width: 25px; 
+        cursor: pointer; 
+      }
+      .screenshot {
+        width: 200px; 
+      } 
+
+    </style>
+  </head>
+
+  <body>
+    <div id="container">
+      <h3 class='title'>Manage Current Tabs</h3>
+      <div id='refresh'>
+        <img  src="images/refresh.jpg" alt="refresh btn">
+      </div>
+      <ul id="tag-titles">
+
+      </ul>
+      <button>Open Webpage</button>
+      <button>Login </button>
+      <button>Sign Up</button>
+
+    </div>
+    <script src='popup.js'type="text/javascript"></script>
+  </body>
+</html>
