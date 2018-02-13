@@ -1,0 +1,5 @@
+module.exports = {
+  mongoURI: 'MongoDB URI',
+  googleClientID: 'Google Client ID',
+  googleClientSecret: 'Client Secret'
+}

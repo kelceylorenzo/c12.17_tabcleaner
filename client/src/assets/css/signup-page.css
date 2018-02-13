@@ -1,0 +1,15 @@
+.container-fluid {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.sign-up-page-container {
+	display: flex;
+}
+
+
+button {
+	width: 25rem;
+	text-align: center;
+}
