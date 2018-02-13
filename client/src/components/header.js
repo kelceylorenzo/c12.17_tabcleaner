@@ -1,20 +1,21 @@
-import React from 'react';
-import headerData from "./header-data"
+import React from "react";
 
-export default (props) => {
-	console.log(headerData);
+import { Link } from "react-router-dom";
 
-	const navLinks = headerData.map((item, index) => {
+import "../assets/css/header.css";
+
+export default props => {
+	const navLinks = props.routes.map((item, index) => {
 		return (
-			<li key={index} className="navLink">
-				{item.title}
+			<li key={index} className="nav-link">
+				<Link to={item.to}>{item.name}</Link>
 			</li>
 		);
 	});
 
 	return (
 		<div className="nav-container">
-			<ul className="navBar">{navLinks}</ul>
+			<ul className="nav-bar">{navLinks}</ul>
 		</div>
 	);
 };
