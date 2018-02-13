@@ -1,7 +1,22 @@
 export default [
-	{ title: 'HOME' },
-	{ title: 'TOP 10' },
-	{ title: 'STATS PAGE' },
-	{ title: 'ABOUT' },
-	{ title: 'SETTINGS' }
+	{
+		name: "Home",
+		to: "/"
+	},
+	{
+		name: "Top Ten",
+		to: "/top-ten"
+	},
+	{
+		name: "Stats Page",
+		to: "/stats-page"
+	},
+	{
+		name: "About",
+		to: "/about"
+	},
+	{
+		name: "Settings",
+		to: "/settings"
+	}
 ];

@@ -1,7 +1,4 @@
-
-
 .about-content-container {
-	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -9,11 +6,11 @@
 }
 
 .about-main-image {
-	width: 60%;
+	width: 50%;
 }
 
 .row {
 	margin: auto;
-	display: flex; 
+	display: flex;
 	justify-content: center;
 }
