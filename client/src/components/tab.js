@@ -13,7 +13,7 @@ export default (props) => {
 
 	return (
 		<div className="tab-container" onClick={props.select} style={style}>
-			{props.item.url}
+			{props.item.title}
 		</div>
 	);
 };
