@@ -13,6 +13,7 @@
   "author": "James Kirsch",
   "license": "ISC",
   "dependencies": {
+    "bundle": "^2.1.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
