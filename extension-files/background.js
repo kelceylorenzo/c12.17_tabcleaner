@@ -85,13 +85,19 @@ chrome.tabs.onRemoved.addListener(function (id){
 /**
 * Listens for when a tab becomes active by user clicking on the tab
 *@param {object} activeInfo includes props about the tab clicked
-*call setTime, createNewTab
+
 */
 chrome.tabs.onActivated.addListener(function(activeInfo) {
   if(currentHighlightTabId === activeInfo.id ){
     console.log('higlighted tab become in active')
   }
 })
+
+/**
+* Listens for when a tab becomes higlighted, when the person clicks on it and gets info about the tab
+*@param {object} hightlightInfo includes props about the tab clicked
+*call updateTab, createNewTab, 
+*/
 
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   var time = new Date();
@@ -139,6 +145,7 @@ function getAllTabs(){
 *@param {integer} tab tab id
 *@param {object} changeInfo changed info of the tab
 *@param {object} tab  object containing props about the tab
+*calls updateTab()
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
@@ -170,11 +177,11 @@ chrome.runtime.onInstalled.addListener(function(details){
 })
 
 /**
-* Runs function when receive a message
+* Runs function when receive a message, sends response back to the caller
 *@param {string}
 *@param {object}
 *@param {object}
-* sends response back to the caller
+* Calls updatedElaspedDeactivation
 */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -183,3 +190,12 @@ chrome.runtime.onMessage.addListener(
       sendResponse(allTabs);
     } 
   });
+
+
+  //JSDOCS Template
+  /**
+*describe what the function does
+*@param {type} name include all the parametersm type first then name
+*@return {type} include what is returned if returns anything
+* @calls <function name> include all the functions it calls
+*/
