@@ -194,7 +194,7 @@ class MainPage extends Component {
 	render() {
 		console.log(this.state.tabsList);
 		return (
-			<div className="main-page-container">
+			<div className="main-page-container col-xs-12">
 				<MainSidebar
 					closeTab={this.closeTab}
 					openTab={this.openTab}
