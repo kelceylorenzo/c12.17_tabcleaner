@@ -1,5 +1,8 @@
 import React from "react";
+import { Route, Link } from "react-router-dom";
 import "../assets/css/landing-page.css";
+
+import SignUpPage from "./sign-up-page";
 
 export default props => {
 	return (
@@ -13,7 +16,9 @@ export default props => {
 
 					<div className="button-container">
 						<div className="row">
-							<button className="button btn-default btn bt-lg"> SIGN UP </button>
+							<Link to="/sign-up">
+								<button className="button btn-default btn bt-lg"> SIGN UP </button>
+							</Link>
 						</div>
 						<div className="row">
 							<button className="button btn-default btn bt-lg"> LOG IN </button>
@@ -21,6 +26,7 @@ export default props => {
 					</div>
 				</div>
 			</div>
+			
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 .sidebar-container {
 	border-right: 1px solid black;
-	height: 100vh;
+	height: 100%;
 }
 
 .sidebar-container button {
