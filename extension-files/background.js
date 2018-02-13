@@ -21,7 +21,7 @@ function updatedElaspedDeactivation(){
 * Updates a Tab object
 *@param {object} 
 */
-function updateTab(tab, timeStamp){
+function updateTab(tab, currentTime){
   //if the site changed, get the elapsed time during active state and save to its url
   allTabs[tab.id] = {
     id: tab.id,
@@ -30,14 +30,23 @@ function updateTab(tab, timeStamp){
     favicon: tab.favIconUrl,
     title: tab.title,
     url: tab.url,
-    index: tab.index, 
-    screenshot: '',
-    highlighted: tab.highlighted
-    }
+    index: tab.index,
+    activeTimeElapsed: 0,
+    inactiveTimeElapsed: 0,
+    timeOfSiteOpen: allTabs[tab.id].timeOfSiteOpen,
+    screenshot: '', 
+    highlighted: tab.highlighted,
+    timeOfActivation: 0, 
+    timeOfDeactivation: allTabs[tab.id].timeOfDeactivation,
+    active: tab.active
+  }
+  if(tab.highlighted){
+    allTabs[tab.id].timeOfActivation = currentTime;   
+  } 
 }
 
 /**
-* Creates a Tab object, sets timestamp for initial open
+* Creates a Tab object, sets currentTime for initial open
 *@param {object} 
 */
 function createNewTab(tab, currentTime){
@@ -53,7 +62,9 @@ function createNewTab(tab, currentTime){
     inactiveTimeElapsed: 0,
     timeOfSiteOpen: currentTime,
     screenshot: '', 
-    highlighted: tab.highlighted
+    highlighted: tab.highlighted,
+    active: tab.active
+
   }
   if(tabObject.highlighted){
     tabObject.timeOfActivation = currentTime;
@@ -102,8 +113,14 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     if(currentHighlightTabId){
       allTabs[currentHighlightTabId].highlighted = false;  
       allTabs[currentHighlightTabId].timeOfDeactivation = timeStamp;  
-      allTabs[currentHighlightTabId].activeTimeElapsed = allTabs[currentHighlightTabId].activeTimeElapsed + (timeStamp - allTabs[currentHighlightTabId].timeOfActivation);
+      allTabs[currentHighlightTabId].activeTimeElapsed = timeStamp - allTabs[currentHighlightTabId].timeOfActivation;
       allTabs[currentHighlightTabId].inactiveTimeElapsed = 0;
+      var domain = (allTabs[currentHighlightTabId].url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g);
+      if( siteUsageTime[domain[0]]){
+        siteUsageTime[domain[0]] += allTabs[currentHighlightTabId].activeTimeElapsed; 
+      } else {
+        siteUsageTime[domain[0]] = allTabs[currentHighlightTabId].activeTimeElapsed; 
+      }
     }
     if(allTabs[tab.id]){
       updateTab(tab, timeStamp);
