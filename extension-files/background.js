@@ -183,3 +183,28 @@ chrome.runtime.onMessage.addListener(
       sendResponse(allTabs);
     } 
   });
+
+/**
+* XMLHTTPRequest to server
+*@param {string} method types of request, ex. get, post, etc
+*@param {string} action the target route on the server
+*@param {object} data the data that will be sent 
+*/
+
+function serverRequest(method, action, data=null){
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, "http://localhost:9000/" + action, true);
+  if(method === 'POST'){
+    data = JSON.stringify(data);
+    http.setRequestHeader('Content-type','application/json; charset=utf-8');
+  }
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == "200") {
+      // JSON.parse does not evaluate the attacker's scripts.
+      var resp = JSON.parse(xhr.responseText);
+    } else {
+      console.error(message)
+    }
+  }
+  xhr.send(data);
+}

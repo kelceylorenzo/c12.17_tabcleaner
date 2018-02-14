@@ -13,7 +13,8 @@
     "permissions": [
       "storage",
       "tabs",
-      "<all_urls>"
+      "<all_urls>",
+      "http://localhost:9000"
     ],
     "background": {
         "scripts": ["background.js"]
