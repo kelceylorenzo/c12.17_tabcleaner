@@ -2,24 +2,28 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // Create Schema
-const LocalUserSchema = new Schema({
-  name: {
+const UrlSchema = new Schema({
+  elapsedActiveTime: {
+    type: Number,
+    required: true
+  },
+  url: {
     type: String,
     required: true
   },
-  email: {
+  webSiteID: {
     type: String,
     required: true
   },
-  password: {
+  userID: {
     type: String,
     required: true
   },
-  date: {
-    type: Date,
-    default: Date.now
-  }
+  favicon: {
+    type: String,
+    required: true
+  },
 });
 
 // Create collection and add schema
-mongoose.model('localUsers', LocalUserSchema);
+mongoose.model('Urls', UrlSchema);

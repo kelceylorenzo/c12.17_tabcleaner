@@ -13,7 +13,6 @@ require('./config/googlePassport')(passport);
 
 // Load Routes
 const googleAuth = require('./routes/googleAuth');
-// const localAuth = require('./routes/localAuth');
 
 // Load Keys
 const keys = require('./config/keys');
