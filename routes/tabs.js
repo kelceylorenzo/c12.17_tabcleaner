@@ -14,6 +14,7 @@ db.connect(function(err) {
 router.use(express.static(path.join(__dirname, 'html')));
 
 router.get('/', (req, res)=>{
+
     console.log('hi');
     let query = 'SELECT * FROM tabs ';
     db.connect(function(){
@@ -30,18 +31,14 @@ router.get('/', (req, res)=>{
 });
 
 router.post('/', (req, res)=>{
-
     const {windowID, tabTitle, activeTimeElapsed, inactiveTimeElapsed, googleTabIndex, url} = req.body;
-
     router.get('/auth/google/verify', (req, res)=>{
         const {googleID} = req.user;
-
     }).then((googleID)=>{
         let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?)';
         let inserts = ['tabs','windowID', 'tabTitle', 'activeTimeElapsed', 'inactiveTimeElapsed', 'googleTabIndex', 'googleID', 'url', , last, email, username, password, status];
     });
     /// FINISH QUERY
-    
 });
 
 router.delete('/', function(){
@@ -56,9 +53,9 @@ router.delete('/', function(){
     })
 });
 
+
 router.put('/', (req, res)=>{
     const {databaseTabID} = req.body;
-
 });
 
 module.exports = router;
