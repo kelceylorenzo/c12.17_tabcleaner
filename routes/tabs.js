@@ -6,59 +6,88 @@ const mysqlCredentials = require('../mysqlCredentials.js');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
-db.connect(function(err) {
+db.connect(function (err) {
     if (err) throw err;
     console.log("Connected to remote DB");
 });
 
 router.use(express.static(path.join(__dirname, 'html')));
 
-router.get('/', (req, res)=>{
-    console.log('hi');
+router.get('/', (req, res) => {
     let query = 'SELECT * FROM tabs ';
-    db.connect(function(){
-        db.query(query, function(err, reults, fields){
+    db.connect(function () {
+        db.query(query, function (err, reults, fields) {
             const output = {
                 success: true,
                 data: rows
             }
-            console.log(fields);
-            const json_output = JSON.stringify( output );
+            const json_output = JSON.stringify(output);
             res.send(json_output);
         });
     });
 });
 
-router.post('/', (req, res)=>{
+router.post('/', (req, res) => {
+    const { windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url } = req.body;
 
-    const {windowID, tabTitle, activeTimeElapsed, inactiveTimeElapsed, googleTabIndex, url} = req.body;
+    let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?. ?)';
+    let inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'googleTabIndex', 'googleID', 'url',
+        windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url];
 
-    router.get('/auth/google/verify', (req, res)=>{
-        const {googleID} = req.user;
+    let sql = mysql.format(query, inserts);
 
-    }).then((googleID)=>{
-        let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?)';
-        let inserts = ['tabs','windowID', 'tabTitle', 'activeTimeElapsed', 'inactiveTimeElapsed', 'googleTabIndex', 'googleID', 'url', , last, email, username, password, status];
-    });
+    db.query(sql, (err, results, fields) => {
+        if (err) throw err;
+        const output = {
+            success: true,
+            data: results
+        }
+        console.log(output);
+        res.json(output);
+    })
     /// FINISH QUERY
-    
 });
 
-router.delete('/', function(){
-    let query = 'DELETE * FROM tabs WHERE googleID='+req.body.id;
-    db.connect(function(){
-        db.query(query, function(err, results, fields){
-            if(err) throw err;
+router.delete('/', function () {
+    let query = 'DELETE * FROM tabs WHERE googleID=' + req.body.id;
+    db.connect(function () {
+        db.query(query, function (err, results, fields) {
+            if (err) throw err;
             console.log(fields);
-            const json_output = JSON.stringify( output );
+            const json_output = JSON.stringify(output);
             res.send(json_output);
         })
     })
 });
 
-router.put('/', (req, res)=>{
-    const {databaseTabID} = req.body;
+router.put('/', (req, res) => {
+    const { databaseTabID } = req.body;
+
+});
+
+router.put('/activated', (req, res) => {
+    const time = new Date();
+    time = time.getTime();
+
+    let query = 'DELETE * FROM tabs WHERE googleID=' + req.body.id;
+    db.connect(function () {
+        db.query(query, function (err, results, fields) {
+            if (err) throw err;
+            console.log(fields);
+            const json_output = JSON.stringify(output);
+            res.send(json_output);
+        })
+    })
+
+});
+
+router.put('/deactivated', (req, res) => {
+    const time = new Date();
+    time = time.getTime();
+
 
 });
 
 module.exports = router;
+
+
