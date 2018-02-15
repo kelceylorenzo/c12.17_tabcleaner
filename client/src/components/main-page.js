@@ -1,12 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
 
-import MainSidebar from './main-sidebar';
-import MainTabArea from './main-tab-area';
+import AboutPage from "./about-content";
+import Header from "./header";
+import StatsPage from "./stats-page";
+import TopTenPage from "./top-ten-page";
 
-import data from '../assets/data/data';
-import tab from './tab';
+import MainSidebar from "./main-sidebar";
+import MainTabArea from "./main-tab-area";
 
-import '../assets/css/main-page.css';
+import headerData from "./header-data";
+import data from "../assets/data/data";
+import tab from "./tab";
+
+import "../assets/css/main-page.css";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -14,7 +21,7 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: 'Default'
+			sortType: "Default"
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -32,7 +39,7 @@ class MainPage extends Component {
 
 	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call
 	getData(resp) {
-		resp.map((currentItem) => {
+		resp.map(currentItem => {
 			return (currentItem.selected = false);
 		});
 
@@ -61,13 +68,12 @@ class MainPage extends Component {
 	}
 
 	handleSort(event) {
-
 		let { tabsList } = this.state;
 
-		const sortType = event.target.getAttribute('data-sorttype');
+		const sortType = event.target.getAttribute("data-sorttype");
 
 		switch (sortType) {
-			case 'A-Z':
+			case "A-Z":
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -81,7 +87,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'Z-A':
+			case "Z-A":
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -95,7 +101,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'Time':
+			case "Time":
 				//currently sorted from oldest >>> newest in terms of activationTime
 				//glitches out sometimes
 				tabsList.sort((a, b) => {
@@ -111,8 +117,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'Window':
-
+			case "Window":
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
 					if (output[tabsList[i].windowId]) {
@@ -120,7 +125,6 @@ class MainPage extends Component {
 					} else {
 						output[tabsList[i].windowId] = [];
 						output[tabsList[i].windowId].push(tabsList[i]);
-
 					}
 				}
 
@@ -157,7 +161,7 @@ class MainPage extends Component {
 		let { selectedTabs } = this.state;
 
 		for (let tab of selectedTabs) {
-			let newTab = window.open(tab.url, '_blank');
+			let newTab = window.open(tab.url, "_blank");
 			newTab.focus();
 		}
 	}
@@ -186,7 +190,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = true;
 			selectedTabs.push(index);
 		});
@@ -203,7 +207,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = false;
 		});
 
@@ -215,9 +219,12 @@ class MainPage extends Component {
 	}
 
 	render() {
-		console.log('sort type: ', this.state.sortType);
+		console.log("sort type: ", this.state.sortType);
 		return (
 			<div className="main-page-container col-xs-12">
+				<div className="header-container row">
+					<Header routes={headerData} />
+				</div>
 				<MainSidebar
 					closeTab={this.closeTab}
 					openTab={this.openTab}
