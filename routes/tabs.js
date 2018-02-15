@@ -42,7 +42,8 @@ router.post('/', (req, res) => {
         if (err) throw err;
         const output = {
             success: true,
-            data: results
+            data: results,
+            fields: fields
         }
         console.log(output);
         res.json(output);
