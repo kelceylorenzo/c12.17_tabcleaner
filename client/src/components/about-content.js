@@ -1,5 +1,4 @@
 import React from "react";
-
 import Header from "./header";
 import headerData from "./header-data";
 
@@ -10,7 +9,7 @@ import "../assets/css/about.css";
 export default props => {
 	return (
 		<div>
-			<div className="nav-container">
+			<div>
 				<Header routes={headerData} />
 			</div>
 			<div className="about-content-container col-xs-12">

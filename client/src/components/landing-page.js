@@ -14,7 +14,7 @@ export default props => {
 					</div>
 					<div className="button-container">
 						<div className="row">
-							<Link to="/dashboard" className="button btn-default btn bt-lg">
+							<Link to="/dashboard" className="button btn-default btn bt lg">
 								LOG IN
 							</Link>
 						</div>
