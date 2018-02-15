@@ -27,7 +27,9 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, err) => {
+    console.log("post, hi");
+
     const { windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url } = req.body;
 
     let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?. ?)';
@@ -36,7 +38,10 @@ router.post('/', (req, res) => {
 
     let sql = mysql.format(query, inserts);
 
+    console.log(err);
+
     db.query(sql, (err, results, fields) => {
+        console.log("err: ", err);
         if (err) throw err;
         const output = {
             success: true,
