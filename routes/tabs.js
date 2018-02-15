@@ -13,13 +13,7 @@ db.connect(function (err) {
 
 router.use(express.static(path.join(__dirname, 'html')));
 
-<<<<<<< HEAD
 router.get('/', (req, res) => {
-=======
-router.get('/', (req, res)=>{
-
-    console.log('hi');
->>>>>>> a0af37e8e5322a4f5ed3193e0d811e193f846f89
     let query = 'SELECT * FROM tabs ';
     db.connect(function () {
         db.query(query, function (err, reults, fields) {
@@ -33,7 +27,6 @@ router.get('/', (req, res)=>{
     });
 });
 
-<<<<<<< HEAD
 router.post('/', (req, res) => {
     const { windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url } = req.body;
 
@@ -51,18 +44,8 @@ router.post('/', (req, res) => {
         }
         console.log(output);
         res.json(output);
-    })
-=======
-router.post('/', (req, res)=>{
-    const {windowID, tabTitle, activeTimeElapsed, inactiveTimeElapsed, googleTabIndex, url} = req.body;
-    router.get('/auth/google/verify', (req, res)=>{
-        const {googleID} = req.user;
-    }).then((googleID)=>{
-        let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?)';
-        let inserts = ['tabs','windowID', 'tabTitle', 'activeTimeElapsed', 'inactiveTimeElapsed', 'googleTabIndex', 'googleID', 'url', , last, email, username, password, status];
     });
->>>>>>> a0af37e8e5322a4f5ed3193e0d811e193f846f89
-    /// FINISH QUERY
+
 });
 
 router.delete('/', function () {
@@ -77,7 +60,6 @@ router.delete('/', function () {
     })
 });
 
-<<<<<<< HEAD
 router.put('/', (req, res) => {
     const { databaseTabID } = req.body;
 
@@ -107,13 +89,3 @@ router.put('/deactivated', (req, res) => {
 });
 
 module.exports = router;
-
-
-=======
-
-router.put('/', (req, res)=>{
-    const {databaseTabID} = req.body;
-});
-
-module.exports = router;
->>>>>>> a0af37e8e5322a4f5ed3193e0d811e193f846f89
