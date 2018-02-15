@@ -13,7 +13,7 @@ db.connect(function (err) {
 
 router.use(express.static(path.join(__dirname, 'html')));
 
-router.get('/', (req, res) => {
+router.get('/', (req, res)=>{
     let query = 'SELECT * FROM tabs ';
     db.connect(function () {
         db.query(query, function (err, reults, fields) {
@@ -27,9 +27,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/', (req, res, err) => {
-    console.log("post, hi");
-
+router.post('/', (req, res) => {
     const { windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url } = req.body;
 
     let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?. ?)';
@@ -50,7 +48,6 @@ router.post('/', (req, res, err) => {
         console.log(output);
         res.json(output);
     });
-
 });
 
 router.delete('/', function () {
