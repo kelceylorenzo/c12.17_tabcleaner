@@ -4,16 +4,16 @@ import '../assets/css/main-sidebar.css';
 class Sidebar extends Component {
 	render() {
 
-		function sendTheData(){
-			$.ajax({
-				url: 'users',
-				method: 'get',
-				dataType: 'json',
-				success: function(data){
-					console.log(data);
-				}
-			})
-		}
+		// function sendTheData(){
+		// 	$.ajax({
+		// 		url: 'users',
+		// 		method: 'get',
+		// 		dataType: 'json',
+		// 		success: function(data){
+		// 			console.log(data);
+		// 		}
+		// 	})
+		// }
 
 		return (
 			<div className="sidebar-container col-xs-2">
@@ -39,9 +39,9 @@ class Sidebar extends Component {
 					<button data-sortType="Window" onClick={this.props.sort}>
 						Window
 					</button>
-					<button onClick={sendTheData()}>
+					{/* <button onClick={sendTheData()}>
 						SEND DAT DATA
-					</button>
+					</button> */}
 				</div>
 			
 			</div>

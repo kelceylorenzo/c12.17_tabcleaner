@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 
@@ -14,35 +13,7 @@ import headerData from "./header-data.js";
 import data from "../assets/data/data";
 import tab from "./tab";
 
-
-import headerData from "./header-data";
-import data from "../assets/data/data";
-import tab from "./tab";
-
 import "../assets/css/main-page.css";
-
-// const routes = [
-// 	{
-// 		name: "Home",
-// 		to: "/"
-// 	},
-// 	{
-// 		name: "Top Ten",
-// 		to: "/top-ten"
-// 	},
-// 	{
-// 		name: "Stats Page",
-// 		to: "/stats-page"
-// 	},
-// 	{
-// 		name: "About",
-// 		to: "/about"
-// 	},
-// 	{
-// 		name: "Settings",
-// 		to: "/settings"
-// 	}
-// ];
 
 class MainPage extends Component {
 	constructor(props) {
@@ -250,57 +221,27 @@ class MainPage extends Component {
 	render() {
 		console.log("sort type: ", this.state.sortType);
 		return (
-<<<<<<< HEAD
-			<div className="main-page-container col-xs-12">
-				<div className="header-container row">
+			<div className="main-page-container">
+				<div className="row">
 					<Header routes={headerData} />
 				</div>
-				<MainSidebar
-					closeTab={this.closeTab}
-					openTab={this.openTab}
-					selectAll={this.selectAll}
-					deselectAll={this.deselectAll}
-					sort={this.handleSort}
-				/>
-				<MainTabArea
-					sortType={this.state.sortType}
-					tabData={this.state.tabsList}
-					select={this.handleIndividualSelect}
-				/>
-=======
-			<div>
-				<div className="app-container container-fluid">
-					<div className="header-container row">
-						<Header routes={headerData} />
-					</div>
-					<div className="main-app row">
-						<div className="main-page-container col-xs-12">
-							<MainSidebar
-								closeTab={this.closeTab}
-								openTab={this.openTab}
-								selectAll={this.selectAll}
-								deselectAll={this.deselectAll}
-								sort={this.handleSort}
-							/>
-							<MainTabArea sortType={this.state.sortType}tabData={this.state.tabsList} select={this.handleIndividualSelect} />
-						</div>
+				<div className="app-container row">
+					<div className="col-xs-12">
+						<MainSidebar
+							closeTab={this.closeTab}
+							openTab={this.openTab}
+							selectAll={this.selectAll}
+							deselectAll={this.deselectAll}
+							sort={this.handleSort}
+						/>
+						<MainTabArea
+							sortType={this.state.sortType}
+							tabData={this.state.tabsList}
+							select={this.handleIndividualSelect}
+						/>
 					</div>
 				</div>
-
->>>>>>> 639a0c0442688c1c02c08778c68cdc815c226390
 			</div>
-			// <div className="app-container container-fluid">
-			// 	<div className="header-container row">
-			// 		<Header routes={headerData} />
-			// 	</div>
-			// 	<div className="main-app row">
-			// 		<Route exact path="/" component={MainPage} />
-			// <Route path="/about" component={AboutPage} />
-			// <Route path="/stats-page" component={StatsPage} />
-			// <Route path="/settings" component={SettingsPage} />
-			// <Route path="/top-ten" component={TopTenPage} />
-			// 	</div>
-			// </div>
 		);
 	}
 }
