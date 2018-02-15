@@ -192,32 +192,31 @@ chrome.runtime.onMessage.addListener(
 *@param {object} data the data that will be sent 
 */
 
-function serverRequest(method, action, data=null){
-  var xhr = new XMLHttpRequest();
-  xhr.open(method, "http://localhost:9000/" + action, true);
-  if(method === 'POST'){
-    data = JSON.stringify(data);
-    http.setRequestHeader('Content-type','application/json; charset=utf-8');
-  }
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == "200") {
-      // JSON.parse does not evaluate the attacker's scripts.
-      var resp = JSON.parse(xhr.responseText);
-    } else {
-      console.error(message)
-    }
-  }
-  xhr.send(data);
-}
+// function serverRequest(method, action, data=null){
+//   var xhr = new XMLHttpRequest();
+//   xhr.open(method, "http://localhost:9000/" + action, true);
+//   if(method === 'POST'){
+//     data = JSON.stringify(data);
+//     http.setRequestHeader('Content-type','application/json; charset=utf-8');
+//   }
+//   xhr.onreadystatechange = function() {
+//     if (xhr.readyState == 4 && xhr.status == "200") {
+//       // JSON.parse does not evaluate the attacker's scripts.
+//       var resp = JSON.parse(xhr.responseText);
+//     } else {
+//       console.error(message)
+//     }
+//   }
+//   xhr.send(data);
+// }
 
 function testServerRequest(){
   var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://www.closeyourtabs.com/tabs", true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4 && xhr.status == "200") {
-      // JSON.parse does not evaluate the attacker's scripts.
       console.log(xhr.responseText)
     } 
   }
-  xhr.open("GET", "http://www.closeyourtabs.com/tabs", true);
   xhr.send()
 }
