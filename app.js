@@ -28,6 +28,15 @@ mongoose.connect(keys.mongoURI)
 
 const app = express();
 
+app.use((req, res)=>{
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  next();
+})
+
+
+
+
 app.use(express.static(path.resolve(__dirname, 'client', 'dist')));
 
 // Authentication Middleware
