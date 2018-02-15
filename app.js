@@ -22,9 +22,9 @@ const keys = require('./config/keys');
 // Map global promises
 mongoose.Promise = global.Promise;
 // Mongoose Connect
-// mongoose.connect(keys.mongoURI)
-//   .then(() => console.log('MongoDB Connected'))
-//   .catch(err => console.log(err));
+mongoose.connect(keys.mongoURI)
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
 
 const app = express();
 
@@ -54,12 +54,13 @@ app.use((req, res, next)=>{
 
 // Use Routes
 app.use('/auth/google', googleAuth);
+app.use('/tabs', tabs);
 
 app.get('*', (req, res)=>{
   res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 9000;
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)

@@ -9,11 +9,12 @@ router.get('/', passport.authenticate('google', {scope: ['profile', 'email']}), 
 router.get('/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),(req, res) => {
     res.redirect('/dashboard');
-  });
+});
 
 router.get('/verify', (req, res)=>{
   if(req.user){
     res.send(req.user);
+    console.log(req.user);
   } else {
     console.log('Not Auth');
   }
