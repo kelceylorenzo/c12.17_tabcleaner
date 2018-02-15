@@ -114,20 +114,16 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       previousHighlighted.timeOfDeactivation = timeStamp;  
       previousHighlighted.activeTimeElapsed = timeStamp - previousHighlighted.timeOfActivation;
       previousHighlighted.inactiveTimeElapsed = 0;
-      var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g);
+    var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (previousHighlighted.url).match(/^(chrome)/);
       if(siteUsageTime[domain[0]]){
         siteUsageTime[domain[0]] += previousHighlighted.activeTimeElapsed;
       } else {
         siteUsageTime[domain[0]] = previousHighlighted.activeTimeElapsed;
       }
+      console.log(siteUsageTime)
     }
     if(allTabs[tab.id]){
       updateTab(tab, timeStamp);
-      //find out how much time has passed that previous active tab was active and save to siteusagetime
-      //get the accumulated time and save to url
-      //reset timeSinceActive to current time 
-      //change the current active tab 
-      //set the most recent active tab to start timer for being inactive
     } else {
       createNewTab(tab, timeStamp);
     }
