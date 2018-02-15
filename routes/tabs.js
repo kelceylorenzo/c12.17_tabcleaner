@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
     console.log('post: ', req.body);
     const { windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url } = req.body;
 
-    let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?. ?)';
+    let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?, ?)';
     let inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'googleTabIndex', 'googleID', 'url',
         windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url];
 
