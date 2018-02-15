@@ -33,7 +33,7 @@ function updateTab(tab, timeStamp){
     index: tab.index, 
     screenshot: '',
     highlighted: tab.highlighted
-    }
+  }
 }
 
 /**
@@ -178,6 +178,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    // testServerRequest()
     updatedElaspedDeactivation();
     if(request === 'popup'){
       sendResponse(allTabs);
@@ -207,4 +208,16 @@ function serverRequest(method, action, data=null){
     }
   }
   xhr.send(data);
+}
+
+function testServerRequest(){
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:9000/test", true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == "200") {
+      // JSON.parse does not evaluate the attacker's scripts.
+      console.log(xhr.responseText)
+    } 
+  }
+  xhr.send()
 }

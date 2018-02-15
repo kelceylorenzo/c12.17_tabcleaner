@@ -14,7 +14,7 @@
       "storage",
       "tabs",
       "<all_urls>",
-      "http://localhost:9000"
+      "http://localhost:9000/*"
     ],
     "background": {
         "scripts": ["background.js"]
