@@ -1,5 +1,5 @@
 {
-	"name": "Close Your Tabs",
+	"name": "ctrl-tab-del",
 	"version": "1.0.0",
 	"description": "App to keep track of users tabs based on time",
 	"main": "app.js",
