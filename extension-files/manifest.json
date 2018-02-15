@@ -14,7 +14,8 @@
       "storage",
       "tabs",
       "<all_urls>",
-      "http://localhost:9000/*"
+      "http://localhost:9000/*",
+      "http://www.closeyourtabs.com/*"
     ],
     "background": {
         "scripts": ["background.js"]
