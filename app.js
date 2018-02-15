@@ -54,6 +54,7 @@ app.use((req, res, next)=>{
 
 // Use Routes
 app.use('/auth/google', googleAuth);
+app.use('/tabs', tabs);
 
 app.get('*', (req, res)=>{
   res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
