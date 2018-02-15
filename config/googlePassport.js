@@ -31,9 +31,11 @@ module.exports = function (passport) {
         googleID: profile.id
       }).then(user => {
         if (user) {
+	  console.log(user);
           // Return User
           return done(null, user);
         } else {
+          console.log(newUser);
           // Create User
           new User(newUser)
             .save()
