@@ -3,6 +3,18 @@ import '../assets/css/main-sidebar.css';
 
 class Sidebar extends Component {
 	render() {
+
+		function sendTheData(){
+			$.ajax({
+				url: 'users',
+				method: 'get',
+				dataType: 'json',
+				success: function(data){
+					console.log(data);
+				}
+			})
+		}
+
 		return (
 			<div className="sidebar-container col-xs-2">
 				<div>
@@ -27,7 +39,11 @@ class Sidebar extends Component {
 					<button data-sortType="Window" onClick={this.props.sort}>
 						Window
 					</button>
+					<button onClick={sendTheData()}>
+						SEND DAT DATA
+					</button>
 				</div>
+			
 			</div>
 		);
 	}

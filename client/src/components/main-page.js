@@ -61,7 +61,9 @@ class MainPage extends Component {
 	}
 
 	handleSort(event) {
+
 		let { tabsList } = this.state;
+
 		const sortType = event.target.getAttribute('data-sorttype');
 
 		switch (sortType) {
@@ -110,6 +112,7 @@ class MainPage extends Component {
 				});
 				break;
 			case 'Window':
+
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
 					if (output[tabsList[i].windowId]) {
@@ -117,6 +120,7 @@ class MainPage extends Component {
 					} else {
 						output[tabsList[i].windowId] = [];
 						output[tabsList[i].windowId].push(tabsList[i]);
+
 					}
 				}
 
