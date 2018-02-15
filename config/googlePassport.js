@@ -31,6 +31,7 @@ module.exports = function (passport) {
         googleID: profile.id
       }).then(user => {
         if (user) {
+	  console.log(user);
           // Return User
           console.log(user);
           return done(null, user);
