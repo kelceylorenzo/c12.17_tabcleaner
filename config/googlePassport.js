@@ -33,6 +33,7 @@ module.exports = function (passport) {
         if (user) {
 	  console.log(user);
           // Return User
+          console.log(user);
           return done(null, user);
         } else {
           console.log(newUser);
