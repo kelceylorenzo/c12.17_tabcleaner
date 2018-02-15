@@ -114,13 +114,12 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       previousHighlighted.timeOfDeactivation = timeStamp;  
       previousHighlighted.activeTimeElapsed = timeStamp - previousHighlighted.timeOfActivation;
       previousHighlighted.inactiveTimeElapsed = 0;
-    var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (previousHighlighted.url).match(/^(chrome)/);
+    var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (previousHighlighted.url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/);
       if(siteUsageTime[domain[0]]){
         siteUsageTime[domain[0]] += previousHighlighted.activeTimeElapsed;
       } else {
         siteUsageTime[domain[0]] = previousHighlighted.activeTimeElapsed;
       }
-      console.log(siteUsageTime)
     }
     if(allTabs[tab.id]){
       updateTab(tab, timeStamp);
