@@ -1,10 +1,21 @@
 var allTabs = {};
-var closedTabs = {};
-var currentHighlightTabId = null; 
 var siteUsageTime = {}
 
 /**
-*Periodically checks elapsed deactivate time and updates the elapsed deactivated time
+*Get user id from data base
+* 
+*/
+function getUserInfo(){
+  //get call to database and save ID into local storage
+}
+
+function setCurrentTabId(id){
+  chrome.storage.local.set({'activeTab' : id})
+
+}
+
+/**
+*Checks elapsed deactivate time and updates the elapsed deactivated time
 * 
 */
 function updatedElaspedDeactivation(){
@@ -72,12 +83,8 @@ function createNewTab(tab, currentTime){
 */
 chrome.tabs.onRemoved.addListener(function (id){
   if(allTabs[id].highlighted){
-    currentHighlightTabId = null; 
+    setCurrentTabId(null); 
   }
-  //get current time
-  //get elapsed time for active 
-  //save to site usage time 
-  closedTabs[id] = allTabs[id]
   delete allTabs[id];
 })
 
@@ -87,35 +94,29 @@ chrome.tabs.onRemoved.addListener(function (id){
 *@param {object} activeInfo includes props about the tab clicked
 *call setTime, createNewTab
 */
-chrome.tabs.onActivated.addListener(function(activeInfo) {
-  if(currentHighlightTabId === activeInfo.id ){
-    console.log('higlighted tab become in active')
-  }
-})
 
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   var time = new Date();
   var timeStamp = time.getTime();
+  
   //start time for most recent active tab
   //set newMostActivatedTab
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-    if(currentHighlightTabId){
-      allTabs[currentHighlightTabId].highlighted = false;  
-      allTabs[currentHighlightTabId].timeOfDeactivation = timeStamp;  
-      allTabs[currentHighlightTabId].activeTimeElapsed = allTabs[currentHighlightTabId].activeTimeElapsed + (timeStamp - allTabs[currentHighlightTabId].timeOfActivation);
-      allTabs[currentHighlightTabId].inactiveTimeElapsed = 0;
-    }
-    if(allTabs[tab.id]){
-      updateTab(tab, timeStamp);
-      //find out how much time has passed that previous active tab was active and save to siteusagetime
-      //get the accumulated time and save to url
-      //reset timeSinceActive to current time 
-      //change the current active tab 
-      //set the most recent active tab to start timer for being inactive
-    } else {
-      createNewTab(tab, timeStamp);
-    }
-      currentHighlightTabId = tab.id; 
+    chrome.storage.local.get('activeTab', function(item){
+      var previousId = item.activeTab; 
+      if(previousId){
+          allTabs[previousId].highlighted = false;  
+          allTabs[previousId].timeOfDeactivation = timeStamp;  
+          allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
+          allTabs[previousId].inactiveTimeElapsed = 0;
+      }
+      if(allTabs[tab.id]){
+        updateTab(tab, timeStamp);
+      } else {
+        createNewTab(tab, timeStamp);
+      }
+      setCurrentTabId(tab.id);
+    })
   });
 })
 
@@ -157,6 +158,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 chrome.runtime.onStartup.addListener(function(details){
   console.log('browser open')
   getAllTabs();
+
 })
 
 /**
@@ -167,6 +169,9 @@ chrome.runtime.onStartup.addListener(function(details){
 chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
   getAllTabs();
+  chrome.storage.local.set({'userId' : null})
+  chrome.storage.local.set({'activeTab' : null})
+
 })
 
 /**
@@ -178,7 +183,7 @@ chrome.runtime.onInstalled.addListener(function(details){
 */
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    testServerRequest()
+    // getAllDataFromServer()
     updatedElaspedDeactivation();
     if(request === 'popup'){
       sendResponse(allTabs);
@@ -210,7 +215,7 @@ chrome.runtime.onMessage.addListener(
 //   xhr.send(data);
 // }
 
-function testServerRequest(){
+function getAllDataFromServer(){
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "http://www.closeyourtabs.com/tabs", true);
   xhr.onreadystatechange = function() {
@@ -219,4 +224,36 @@ function testServerRequest(){
     } 
   }
   xhr.send()
+}
+
+function getUserInfoRequest(){
+  console.log('get user info')
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://www.closeyourtabs.com/auth/google/verify", true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == "200") {
+      console.log(xhr.responseText)
+    } 
+  }
+  xhr.send()
+}
+
+function createNewTabRequest(object, userId){
+  object.userId = userId;
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, "http://www.closeyourtabs.com/tabs/" + action, true);
+  if(method === 'POST'){
+    data = JSON.stringify(object);
+    http.setRequestHeader('Content-type','application/json; charset=utf-8');
+  }
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == "200") {
+      // JSON.parse does not evaluate the attacker's scripts.
+      var resp = JSON.parse(xhr.responseText);
+    } else {
+      console.error('error')
+    }
+  }
+  xhr.send(data);
+
 }
