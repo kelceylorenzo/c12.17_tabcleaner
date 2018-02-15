@@ -32,8 +32,10 @@ module.exports = function (passport) {
       }).then(user => {
         if (user) {
           // Return User
+          console.log(user);
           return done(null, user);
         } else {
+          console.log(newUser);
           // Create User
           new User(newUser)
             .save()

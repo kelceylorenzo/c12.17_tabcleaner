@@ -13,7 +13,7 @@ router.get('/callback',
 
 router.get('/verify', (req, res)=>{
   if(req.user){
-    console.log(req.user);
+    res.send(req.user);
   } else {
     console.log('Not Auth');
   }

@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 // Load User Model
 require('./models/GoogleUser');
@@ -13,6 +14,7 @@ require('./config/googlePassport')(passport);
 
 // Load Routes
 const googleAuth = require('./routes/googleAuth');
+const tabs = require('./routes/tabs');
 
 // Load Keys
 const keys = require('./config/keys');
@@ -20,9 +22,9 @@ const keys = require('./config/keys');
 // Map global promises
 mongoose.Promise = global.Promise;
 // Mongoose Connect
-mongoose.connect(keys.mongoURI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+// mongoose.connect(keys.mongoURI)
+//   .then(() => console.log('MongoDB Connected'))
+//   .catch(err => console.log(err));
 
 const app = express();
 
@@ -36,6 +38,10 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// Body Parser Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -48,7 +54,6 @@ app.use((req, res, next)=>{
 
 // Use Routes
 app.use('/auth/google', googleAuth);
-// app.use('/auth/local', localAuth);
 
 app.get('*', (req, res)=>{
   res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
