@@ -1,7 +1,7 @@
 export default [
 	{
 		name: "Home",
-		to: "/"
+		to: "/dashboard"
 	},
 	{
 		name: "Top Ten",
@@ -14,9 +14,5 @@ export default [
 	{
 		name: "About",
 		to: "/about"
-	},
-	{
-		name: "Settings",
-		to: "/settings"
 	}
 ];
