@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 
@@ -13,7 +14,8 @@ import headerData from "./header-data.js";
 import data from "../assets/data/data";
 import tab from "./tab";
 
-import "../assets/css/main-page.css";
+
+import '../assets/css/main-page.css';
 
 // const routes = [
 // 	{
@@ -43,7 +45,8 @@ class MainPage extends Component {
 		super(props);
 		this.state = {
 			tabsList: [],
-			selectedTabs: []
+			selectedTabs: [],
+			sortType: 'Default'
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -61,7 +64,7 @@ class MainPage extends Component {
 
 	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call
 	getData(resp) {
-		resp.map(currentItem => {
+		resp.map((currentItem) => {
 			return (currentItem.selected = false);
 		});
 
@@ -90,11 +93,13 @@ class MainPage extends Component {
 	}
 
 	handleSort(event) {
-		const { tabsList } = this.state;
-		const sortType = event.target.getAttribute("data-sorttype");
+
+		let { tabsList } = this.state;
+
+		const sortType = event.target.getAttribute('data-sorttype');
 
 		switch (sortType) {
-			case "A-Z":
+			case 'A-Z':
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -108,7 +113,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "Z-A":
+			case 'Z-A':
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -122,8 +127,9 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "Time":
+			case 'Time':
 				//currently sorted from oldest >>> newest in terms of activationTime
+				//glitches out sometimes
 				tabsList.sort((a, b) => {
 					let timeA = a.timeofActivation;
 					let timeB = b.timeofActivation;
@@ -137,26 +143,45 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "Window":
-				//currently sorted by tab index but not taking into account separating tabs based on window ID
-				tabsList.sort((a, b) => {
-					let indexA = a.index;
-					let indexB = b.index;
+			case 'Window':
 
-					if (indexA < indexB) {
-						return -1;
+				let output = {};
+				for (let i = 0; i < tabsList.length; i++) {
+					if (output[tabsList[i].windowId]) {
+						output[tabsList[i].windowId].push(tabsList[i]);
+					} else {
+						output[tabsList[i].windowId] = [];
+						output[tabsList[i].windowId].push(tabsList[i]);
+
 					}
-					if (indexA > indexB) {
-						return 1;
+				}
+
+				tabsList = [];
+
+				for (let x in output) {
+					output[x].sort((a, b) => {
+						let indexA = a.index + a.windowId;
+						let indexB = b.index + b.windowId;
+
+						if (indexA < indexB) {
+							return -1;
+						}
+						if (indexA > indexB) {
+							return 1;
+						}
+						return 0;
+					});
+
+					for (let flatten = 0; flatten < output[x].length; flatten++) {
+						tabsList.push(output[x][flatten]);
 					}
-					return 0;
-				});
-				break;
+				}
 		}
 
 		this.setState({
 			...this.state,
-			tabsList: tabsList
+			tabsList: tabsList,
+			sortType: sortType
 		});
 	}
 
@@ -164,7 +189,7 @@ class MainPage extends Component {
 		let { selectedTabs } = this.state;
 
 		for (let tab of selectedTabs) {
-			let newTab = window.open(tab.url, "_blank");
+			let newTab = window.open(tab.url, '_blank');
 			newTab.focus();
 		}
 	}
@@ -193,7 +218,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map(index => {
+		tabsList.map((index) => {
 			index.selected = true;
 			selectedTabs.push(index);
 		});
@@ -210,7 +235,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map(index => {
+		tabsList.map((index) => {
 			index.selected = false;
 		});
 
@@ -222,7 +247,7 @@ class MainPage extends Component {
 	}
 
 	render() {
-		console.log(this.state.tabsList);
+		console.log('sort type: ', this.state.sortType);
 		return (
 			<div>
 				<div className="app-container container-fluid">
@@ -238,10 +263,11 @@ class MainPage extends Component {
 								deselectAll={this.deselectAll}
 								sort={this.handleSort}
 							/>
-							<MainTabArea tabData={this.state.tabsList} select={this.handleIndividualSelect} />
+							<MainTabArea sortType={this.state.sortType}tabData={this.state.tabsList} select={this.handleIndividualSelect} />
 						</div>
 					</div>
 				</div>
+
 			</div>
 			// <div className="app-container container-fluid">
 			// 	<div className="header-container row">
