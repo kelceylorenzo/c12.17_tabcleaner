@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import MainSortButtons from './main-sort';
 import '../assets/css/main-sidebar.css';
 
 class Sidebar extends Component {
@@ -20,7 +19,7 @@ class Sidebar extends Component {
 			<div className="sidebar-container col-xs-2">
 				<div>
 					<button onClick={this.props.openTab}>OPEN</button>
-					<button onClick={this.props.closeTab}>CLOSE</button>
+					<button onClick={this.props.closeTab}>CLOSE/DELETE</button>
 					<button onClick={this.props.selectAll}>SELECT ALL</button>
 					<button onClick={this.props.deselectAll}>DESELECT ALL</button>
 				</div>

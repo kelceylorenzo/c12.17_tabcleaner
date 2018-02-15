@@ -1,7 +1,7 @@
 {
-  "name": "ctrl-tab-del",
+"name": "ctrl-tab-del",
   "version": "1.0.0",
-  "description": "App to share public or write private stories",
+  "description": "App to keep track of users tabs based on time",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "acho \"Error: no test specified\" && exit1 "
   },
-  "author": "James Kirsch",
+  "author": "Andrea Wayte, Henry Moon, James Kirsch, Kelcey Lorenzo, Nick Quan",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

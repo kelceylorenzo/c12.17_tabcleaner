@@ -13,7 +13,8 @@ class MainPage extends Component {
 		super(props);
 		this.state = {
 			tabsList: [],
-			selectedTabs: []
+			selectedTabs: [],
+			sortType: 'Default'
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -60,7 +61,9 @@ class MainPage extends Component {
 	}
 
 	handleSort(event) {
-		const { tabsList } = this.state;
+
+		let { tabsList } = this.state;
+
 		const sortType = event.target.getAttribute('data-sorttype');
 
 		switch (sortType) {
@@ -94,6 +97,7 @@ class MainPage extends Component {
 				break;
 			case 'Time':
 				//currently sorted from oldest >>> newest in terms of activationTime
+				//glitches out sometimes
 				tabsList.sort((a, b) => {
 					let timeA = a.timeofActivation;
 					let timeB = b.timeofActivation;
@@ -108,24 +112,44 @@ class MainPage extends Component {
 				});
 				break;
 			case 'Window':
-				tabsList.sort((a, b) => {
-					let indexA = a.index;
-					let indexB = b.index;
 
-					if (indexA < indexB) {
-						return -1;
+				let output = {};
+				for (let i = 0; i < tabsList.length; i++) {
+					if (output[tabsList[i].windowId]) {
+						output[tabsList[i].windowId].push(tabsList[i]);
+					} else {
+						output[tabsList[i].windowId] = [];
+						output[tabsList[i].windowId].push(tabsList[i]);
+
 					}
-					if (indexA > indexB) {
-						return 1;
+				}
+
+				tabsList = [];
+
+				for (let x in output) {
+					output[x].sort((a, b) => {
+						let indexA = a.index + a.windowId;
+						let indexB = b.index + b.windowId;
+
+						if (indexA < indexB) {
+							return -1;
+						}
+						if (indexA > indexB) {
+							return 1;
+						}
+						return 0;
+					});
+
+					for (let flatten = 0; flatten < output[x].length; flatten++) {
+						tabsList.push(output[x][flatten]);
 					}
-					return 0;
-				});
-				break;
+				}
 		}
 
 		this.setState({
 			...this.state,
-			tabsList: tabsList
+			tabsList: tabsList,
+			sortType: sortType
 		});
 	}
 
@@ -191,7 +215,7 @@ class MainPage extends Component {
 	}
 
 	render() {
-		console.log(this.state.tabsList);
+		console.log('sort type: ', this.state.sortType);
 		return (
 			<div className="main-page-container col-xs-12">
 				<MainSidebar
@@ -201,7 +225,11 @@ class MainPage extends Component {
 					deselectAll={this.deselectAll}
 					sort={this.handleSort}
 				/>
-				<MainTabArea tabData={this.state.tabsList} select={this.handleIndividualSelect} />
+				<MainTabArea
+					sortType={this.state.sortType}
+					tabData={this.state.tabsList}
+					select={this.handleIndividualSelect}
+				/>
 			</div>
 		);
 	}
