@@ -194,21 +194,21 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
     var date = new Date()
     var timeStamp = date.getTime();
-    var updatedTab = updateTab(tab, timeStamp);
-
-    var windowString  = JSON.stringify(tab.windowId);
-    chrome.storage.local.get('currentTabs', function(item){
-      console.log(item);
+    var window  = JSON.stringify(tab.windowId);
+    chrome.storage.local.get(window, function(item){
+      var stringId = JSON.stringify(tabId);
+      var googleIdDb = item[window][stringId];
+      var updatedTab = updateTab(tab, timeStamp);
+      var dataForServer = {
+        databaseTabID: googleIdDb, 
+        tabTitle: updatedTab.title, 
+        googleTabIndex: updatedTab.index, 
+        url: updatedTab.url,
+        favicon: updatedTab.favIconUrl,
+      }
+      updateTabRequest(dataForServer);
     })
-      // var dataForServer = {
-      //   windowId: tab.windowId,
-      //   favicon: tab.favIconUrl,
-      //   title: tab.title,
-      //   url: tab.url,
-      //   index: tab.index,
-      // }
-
-      // updateTabRequest(dataForServer);
+     
       //get back database tab id associated with the google tab id
       //save into local storage as window id: {tabid: googletabID} 
   }
@@ -292,12 +292,23 @@ chrome.runtime.onMessage.addListener(
 //   }
 //   xhr.send(data);
 // }
+function updateTabRequest(tabObject){
+  var xhr = new XMLHttpRequest();
+  xhr.open('PUT', 'http://www.closeyourtabs.com/tabs/');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 & xhr.status === 200) {
+        console.log(xhr.responseText)
+      }
+    }
+  xhr.send(JSON.stringify(tabObject))
+}
 
 function getAllDataFromServer(){
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "http://www.closeyourtabs.com/tabs", true);
   xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == "200") {
+    if (xhr.readyState == 4 & xhr.status === 200) {
       console.log(xhr.responseText)
     } 
   }
@@ -310,13 +321,24 @@ function createNewTabRequest(tabObject, tabId){
   xhr.open('POST', 'http://www.closeyourtabs.com/tabs/');
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
-      if (xhr.status === 200) {
+      if (xhr.readyState == 4 & xhr.status === 200) {
         var result = JSON.parse(xhr.responseText);
-        var windowId  = JSON.stringify(tabObject.windowID);
-        console.log('windowId: ' + windowId + 'TabId: ' + tabId)
-        var dataToStore = {windowId: {tabId: result.data.insertId}}
-        var dataToStoreString = JSON.stringify(dataToStore);
-        chrome.storage.local.set({'currentTabs' : dataToStoreString})
+        var window  = JSON.stringify(tabObject.windowID);
+        var object = {};
+        chrome.storage.local.get(window, function(item){
+          var tabObjectStore = {};
+          tabObjectStore[tabId] = result.data.insertId; 
+          object[window] = tabObjectStore; 
+          if(item){
+            var addNewTabItem = {...item[window]}
+            addNewTabItem[tabId] = result.data.insertId; 
+            object[window] = addNewTabItem; 
+            chrome.storage.local.set(object);
+          }else {
+            chrome.storage.local.set(object);
+          }
+        })
+
       }
   };
   xhr.send(JSON.stringify(tabObject));
