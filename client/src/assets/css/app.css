@@ -4,11 +4,39 @@
 	width: 100vw;
 	overflow-x: hidden;
 	background-color: rgba(168, 209, 232, 0.5);
-	background-image: url('https://www.transparenttextures.com/patterns/az-subtle.png');
+	background-image: url("https://www.transparenttextures.com/patterns/az-subtle.png");
 }
 
 * {
 	box-sizing: border-box;
+}
+
+/* Landing Page Styling */
+
+.landing-page-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	cursor: default;
+}
+
+.login-button-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 5%;
+	width: 100%;
+}
+
+.login-button {
+	border: 1px solid black;
+	border-radius: 1em;
+	padding: 1%;
+	width: 10%;
+	text-align: center;
 }
 
 /* Header Styling */
@@ -21,7 +49,7 @@
 	display: flex;
 	background-color: white;
 	box-shadow: 3px 3px 5px darkgray;
-} 
+}
 
 .header {
 	display: flex;
@@ -105,7 +133,7 @@
 	/* margin-top: 5%; */
 	height: 80%;
 	width: 90%;
-} 
+}
 
 .dashboard-container {
 	height: 90%;
@@ -128,7 +156,7 @@
 
 .side-bar-container > button {
 	margin: auto;
-	width:100%;
+	width: 100%;
 	height: 10%;
 }
 .main-tab-area {
@@ -167,7 +195,7 @@
 .tab-title {
 	height: 15%;
 	text-align: center;
-	margin: auto
+	margin: auto;
 }
 
 .tab-screenshot {
