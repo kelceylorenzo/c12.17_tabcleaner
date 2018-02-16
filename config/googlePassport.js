@@ -36,10 +36,13 @@ module.exports = function (passport) {
                 fields: fields
             }
             console.log(output);
-            if (result.length > 0) {
+            if (results.length > 0) {
                 console.log('user was in db: ', results[0]);
                 return done(null, results[0]);
             } else {
+
+                const {googleId, firstName, lastName, email, image} = newUser;
+ 
                 let query = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
                 let inserts = ['googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
                 let sql = mysql.format(query, inserts);
