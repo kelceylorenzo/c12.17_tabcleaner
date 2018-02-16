@@ -1,56 +1,79 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const mongoose = require('mongoose');
 const keys = require('./keys');
-
-// Load User Model
-const User = mongoose.model('googleUsers');
+const mysql = require('mysql');
+const mysqlCredentials = require('../mysqlCredentials.js');
+const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = function (passport) {
-  passport.use(
-    new GoogleStrategy({
-      clientID: keys.googleClientID,
-      clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback',
-      proxy: true
+    passport.use(new GoogleStrategy({
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: '/auth/google/callback',
+        proxy: true
     }, (accessToken, refreshToken, profile, done) => {
-      // console.log(accessToken);
-      // console.log(profile);
 
-      const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
+        const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
 
-      const newUser = {
-        googleID: profile.id,
-        firstName: profile.name.givenName,
-        lastName: profile.name.familyName,
-        email: profile.emails[0].value,
-        image: image
-      }
-
-      // Check for existing user
-      User.findOne({
-        googleID: profile.id
-      }).then(user => {
-        if (user) {
-	  console.log(user);
-          // Return User
-          console.log(user);
-          return done(null, user);
-        } else {
-          console.log(newUser);
-          // Create User
-          new User(newUser)
-            .save()
-            .then(user => done(null, user));
+        const newUser = {
+            googleID: profile.id,
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: profile.emails[0].value,
+            image: image
         }
-      })
-    })
-  );
 
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  })
-  passport.deserializeUser((id, done) => {
-    User.findById(id).then(user => done(null, user));
-  })
+        let query = "SELECT * FROM users WHERE googleID=? LIMIT 1"
+        let insert = newUser.googleID;
+
+        let sql = mysql.format(query, insert);
+
+        db.query(sql, (err, results, fields) => {
+            console.log('err: ', err);
+            if (err) throw err;
+            const output = {
+                success: true,
+                data: results,
+                fields: fields
+            }
+            console.log(output);
+            if (results.length > 0) {
+                console.log('user was in db: ', results[0]);
+                return done(null, results[0]);
+            } else {
+                console.log('Inserting User.......', newUser)
+                const {googleID, firstName, lastName, email, image} = newUser;
+ 
+                let query = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
+                let inserts = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
+                let sql = mysql.format(query, inserts);
+                db.query(sql, (err, results, fields) => {
+                    console.log('err: ', err);
+                    if (err) throw err;
+                    const output = {
+                        success: true,
+                        data: results,
+                        fields: fields
+                    }
+                    console.log('user was not in db, but is now: ', newUser);
+                })
+            }
+        });
+    }));
+
+
+    passport.serializeUser((user, done) => {
+        done(null, user.googleID);
+    })
+    passport.deserializeUser((id, done) => {
+        let query = "SELECT * FROM users WHERE googleID = ?"
+        let insert = id;
+        let sql = mysql.format(query, insert);
+
+        db.query(sql, (err, results, fields) => {
+            console.log('err: ', err);
+            if (err) throw err;
+            done(null, id);
+        })
+    })
 };
 
