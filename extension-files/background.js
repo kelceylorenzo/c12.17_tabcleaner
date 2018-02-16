@@ -199,12 +199,13 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
       var stringId = JSON.stringify(tabId);
       var googleIdDb = item[window][stringId];
       var updatedTab = updateTab(tab, timeStamp);
+
       var dataForServer = {
         databaseTabID: googleIdDb, 
         tabTitle: updatedTab.title, 
         googleTabIndex: updatedTab.index, 
         url: updatedTab.url,
-        favicon: updatedTab.favIconUrl,
+        favicon: updatedTab.favicon,
       }
       updateTabRequest(dataForServer);
     })
@@ -293,6 +294,7 @@ chrome.runtime.onMessage.addListener(
 //   xhr.send(data);
 // }
 function updateTabRequest(tabObject){
+  console.log(tabObject)
   var xhr = new XMLHttpRequest();
   xhr.open('PUT', 'http://www.closeyourtabs.com/tabs/');
   xhr.setRequestHeader('Content-Type', 'application/json');
