@@ -80,7 +80,7 @@ router.delete('/', (req, res) => {
 router.delete('/all', (req, res) => {
     const { googleID } = req.body;
 
-    let query = 'DELETE * FROM tabs WHERE googleID = ?';
+    let query = 'DELETE FROM tabs WHERE googleID = ?';
     let insert = googleID;
 
     let sql = mysql.format(query, insert);
