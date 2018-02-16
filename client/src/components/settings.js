@@ -1,6 +1,8 @@
+
 import React from 'react';
 import PasswordChange from './password-change';
 import EmailChange from './email-change';
+
 
 export default () => {
 	return (

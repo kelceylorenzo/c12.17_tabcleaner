@@ -221,12 +221,12 @@ class MainPage extends Component {
 	render() {
 		console.log('sort type: ', this.state.sortType);
 		return (
-			<div>
+			<div className="main-page-container">
 				<div className="header-container">
 					<Header routes={headerData} />
 				</div>
-				<div>
-					<div>
+				<div className="dashboard-container">
+					<div className="dashboard">
 						<MainSidebar
 							closeTab={this.closeTab}
 							openTab={this.openTab}
