@@ -35,6 +35,7 @@ module.exports = function (passport) {
                 data: results,
                 fields: fields
             }
+            console.log(output);
             if (results[0].googleID) {
                 console.log('user was in db: ', results[0]);
                 return done(null, results[0]);
