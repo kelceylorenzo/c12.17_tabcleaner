@@ -45,7 +45,7 @@ router.post('/', (req, res) => {
             fields: fields
         }
         console.log(output);
-        res.json(output.data.insertID);
+        res.json(output);
     })
 });
 
@@ -77,7 +77,12 @@ router.put('/', (req, res) => {
 
     db.query(sql, (err, results, fields) => {
         if (err) throw err;
-        console.log(fields);
+        const output = {
+            success: true,
+            data: results,
+            fields: fields
+        }
+        console.log(output);
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
@@ -99,7 +104,12 @@ router.put('/activated', (req, res) => {
 
     db.query(sql, (err, results, fields) => {
         if (err) throw err;
-        console.log(fields);
+        const output = {
+            success: true,
+            data: results,
+            fields: fields
+        }
+        console.log(output);
         const json_output = JSON.stringify(output);
         res.send(json_output);
     })
@@ -109,6 +119,24 @@ router.put('/deactivated', (req, res) => {
     const time = new Date();
     time = time.getTime();
 
+    const { databaseTabID } = req.body;
+
+    let query = 'Update tabs SET deactivatedTime = ?'
+    let insert = time;
+
+    let sql = mysql.format(query, insert);
+
+    db.query(sql, (err, results, fields) => {
+        if (err) throw err;
+        const output = {
+            success: true,
+            data: results,
+            fields: fields
+        }
+        console.log(output);
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    })
 
 });
 
