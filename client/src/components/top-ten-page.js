@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Header from "./header";
-import headerData from "./header-data.js";
+import Header from './header';
+import headerData from './header-data.js';
 
 class TopTenPage extends Component {
 	render() {
 		return (
 			<div>
-				<div>
+				<div className="header-container">
 					<Header routes={headerData} />
 				</div>
 				<div className="top-ten-container">

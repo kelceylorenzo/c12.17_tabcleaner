@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import Tab from "./tab";
+import React, { Component } from 'react';
+import Tab from './tab';
 
 class MainTabArea extends Component {
 	render() {
@@ -8,9 +8,11 @@ class MainTabArea extends Component {
 		});
 
 		return (
+
 			<div className="main-tab-area">
 				<h3 className="main-tab-area-title">Sorted by: {this.props.sortType}</h3>
 				<div className="tab-window">{tabList}</div>
+
 			</div>
 		);
 	}
