@@ -197,7 +197,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
     var updatedTab = updateTab(tab, timeStamp);
 
     var windowString  = JSON.stringify(tab.windowId);
-    chrome.storage.local.get(windowString, function(item){
+    chrome.storage.local.get('currentTabs', function(item){
       console.log(item);
     })
       // var dataForServer = {
@@ -312,11 +312,11 @@ function createNewTabRequest(tabObject, tabId){
   xhr.onreadystatechange = function() {
       if (xhr.status === 200) {
         var result = JSON.parse(xhr.responseText);
-        var googleTabId = result.data.insertId;
-        var windowString  = JSON.stringify(tabObject.windowID);
-        var tabInfo = {tabId:googleTabId }
-        var tabInfoString = JSON.stringify(tabInfo);
-        chrome.storage.local.set({windowString : 'hi'})
+        var windowId  = JSON.stringify(tabObject.windowID);
+        console.log('windowId: ' + windowId + 'TabId: ' + tabId)
+        var dataToStore = {windowId: {tabId: result.data.insertId}}
+        var dataToStoreString = JSON.stringify(dataToStore);
+        chrome.storage.local.set({'currentTabs' : dataToStoreString})
       }
   };
   xhr.send(JSON.stringify(tabObject));
