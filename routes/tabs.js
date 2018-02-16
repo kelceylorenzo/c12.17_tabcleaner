@@ -76,6 +76,7 @@ router.put('/', (req, res) => {
     let query = 'UPDATE tabs SET ??=? ??=? ??=? ??=? WHERE databaseTabID = ? LIMIT 1';
     let insert = ['tabTitle', tabTitle, 'googleTabIndex', googleTabIndex, 'url', url, 'favicon', favicon, databaseTabID];
 
+
     let sql = mysql.format(query, insert);
     console.log(sql);
 
@@ -141,10 +142,6 @@ router.put('/deactivated', (req, res) => {
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
-
-
-
-
 });
 
 
