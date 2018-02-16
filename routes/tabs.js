@@ -73,8 +73,8 @@ router.put('/', (req, res) => {
 
     const { databaseTabID, tabTitle, googleTabIndex, url, favicon } = req.body;
 
-    let query = 'UPDATE tabs SET ??=? ??=? ??=? ??=? WHERE databaseTabID = ? LIMIT 1';
-    let insert = ['tabTitle', tabTitle, 'googleTabIndex', googleTabIndex, 'url', url, 'favicon', favicon, databaseTabID];
+    let query = 'UPDATE tabs SET tabTitle=? googleTabIndex=? url=? favicon=? WHERE databaseTabID = ? LIMIT 1';
+    let insert = [tabTitle, googleTabIndex, url, favicon, databaseTabID];
 
 
     let sql = mysql.format(query, insert);
