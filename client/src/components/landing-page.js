@@ -11,9 +11,7 @@ export default props => {
 					</div>
 					<div>
 						<div>
-							<Link to="/dashboard">
-								LOG IN
-							</Link>
+							<Link to="/dashboard">LOG IN</Link>
 						</div>
 					</div>
 				</div>

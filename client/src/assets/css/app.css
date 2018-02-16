@@ -1,17 +1,15 @@
 .app {
-
 	margin: 0;
 	height: 100vh;
 	width: 100vw;
+	overflow-x: hidden;
 	background-color: rgba(168, 209, 232, 0.5);
 	background-image: url('https://www.transparenttextures.com/patterns/az-subtle.png');
-
 }
 
 * {
 	box-sizing: border-box;
 }
-
 
 /* Header Styling */
 
@@ -23,7 +21,7 @@
 	display: flex;
 	background-color: white;
 	box-shadow: 3px 3px 5px darkgray;
-}
+} 
 
 .header {
 	display: flex;
@@ -98,17 +96,20 @@
 
 .team-link p {
 	margin: auto;
-
+}
 /* Main page styling */
 
 .main-page-container {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
-}
+	/* margin-top: 5%; */
+	height: 80%;
+	width: 90%;
+} 
 
 .dashboard-container {
 	height: 90%;
+	width: 100%;
 }
 
 .dashboard {
@@ -120,7 +121,8 @@
 	display: flex;
 	flex-direction: column;
 	position: fixed;
-	height: 80%;
+	margin-top: 8%;
+	height: 60%;
 	width: 15%;
 }
 
@@ -132,13 +134,16 @@
 .main-tab-area {
 	display: flex;
 	flex-direction: column;
+	margin-top: 8%;
 	margin-left: 20%;
 	width: 80%;
+	height: 100%;
 }
 
 .main-tab-area-window {
 	border: 1px solid green;
 	width: 100%;
+	height: 100%;
 }
 
 .tab-window {
@@ -148,7 +153,6 @@
 	justify-content: flex-start;
 	align-items: flex-start;
 	height: 100%;
-	/* border: 1px solid purple; */
 }
 
 .tab {
