@@ -40,11 +40,11 @@ module.exports = function (passport) {
                 console.log('user was in db: ', results[0]);
                 return done(null, results[0]);
             } else {
-
-                const {googleId, firstName, lastName, email, image} = newUser;
+                console.log('Inserting User.......', newUser)
+                const {googleID, firstName, lastName, email, image} = newUser;
  
                 let query = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
-                let inserts = ['googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
+                let inserts = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
                 let sql = mysql.format(query, inserts);
                 db.query(sql, (err, results, fields) => {
                     console.log('err: ', err);
