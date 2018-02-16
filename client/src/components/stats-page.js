@@ -1,11 +1,11 @@
-import React from "react";
-import Header from "./header";
-import headerData from "./header-data";
+import React from 'react';
+import Header from './header';
+import headerData from './header-data';
 
-export default props => {
+export default (props) => {
 	return (
 		<div>
-			<div>
+			<div className="header-container">
 				<Header routes={headerData} />
 			</div>
 			<div>
