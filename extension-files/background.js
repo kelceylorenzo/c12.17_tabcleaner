@@ -97,8 +97,9 @@ chrome.tabs.onRemoved.addListener(function (id){
 *call setTime, createNewTab
 */
 chrome.tabs.onActivated.addListener(function(activeInfo) {
+  console.log('active changed: ', activeInfo)
   if(currentHighlightTabId === activeInfo.id ){
-    console.log('higlighted tab become in active')
+    console.log('higlighted tab become inactive')
   }
 })
 
