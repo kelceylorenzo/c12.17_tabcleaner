@@ -56,7 +56,7 @@ router.post('/', (req, res) => {
 router.delete('/', (req, res)=>{
     const { databaseTabID } = req.body;
 
-    let query = 'DELETE * FROM tabs WHERE databaseTabID = ?';
+    let query = 'DELETE FROM tabs WHERE databaseTabID = ?';
     let insert = databaseTabID;
 
     let sql = mysql.format(query, insert);
