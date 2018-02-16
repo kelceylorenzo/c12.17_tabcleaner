@@ -49,6 +49,7 @@ router.post('/', (req, res) => {
             fields: fields
         }
         console.log(output);
+        const json_output = JSON.stringify(output);
         res.json(output);
     })
 });
@@ -63,12 +64,41 @@ router.delete('/', (req, res)=>{
     console.log(sql);
 
     db.query(sql, (err, results, fields) => {
+        console.log('err: ', err);
         if (err) throw err;
-        console.log(fields);
+        const output = {
+            success: true,
+            data: results,
+            fields: fields
+        }
+        console.log(output);
         const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.json(output);
     });
 });
+
+router.delete('/all', function () {
+    const { googleID } = req.body;
+
+    let query = 'DELETE * FROM tabs WHERE googleID = ?';
+    let insert = googleID;
+
+    let sql = mysql.format(query, insert);
+
+    db.query(sql, (err, results, fields) => {
+        console.log('err: ', err);
+        if (err) throw err;
+        const output = {
+            success: true,
+            data: results,
+            fields: fields
+        }
+        console.log(output);
+        const json_output = JSON.stringify(output);
+        res.json(output);
+    });
+});
+
 
 router.put('/', (req, res) => {
 
