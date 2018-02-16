@@ -54,7 +54,7 @@ router.post('/', (req, res) => {
     })
 });
 
-router.delete('/', (req, res)=>{
+router.delete('/', (req, res) => {
     const { databaseTabID } = req.body;
 
     let query = 'DELETE FROM tabs WHERE databaseTabID = ?';
@@ -77,7 +77,7 @@ router.delete('/', (req, res)=>{
     });
 });
 
-router.delete('/all', function () {
+router.delete('/all', (req, res) => {
     const { googleID } = req.body;
 
     let query = 'DELETE * FROM tabs WHERE googleID = ?';
