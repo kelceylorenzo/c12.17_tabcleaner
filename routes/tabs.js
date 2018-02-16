@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const app = express();
 const path = require('path');
 const mysqlCredentials = require('../mysqlCredentials.js');
 const mysql = require('mysql');
@@ -14,8 +13,13 @@ db.connect(function (err) {
 router.use(express.static(path.join(__dirname, 'html')));
 
 router.get('/', (req, res) => {
-    let query = 'SELECT * FROM tabs ';
-    db.query(query, function (err, rows, fields) {
+
+    let query = 'SELECT * FROM tabs WHERE googleID=?';
+    let inserts = req.body.googleID;
+
+    let sql = mysql.format(query, insert);
+
+    db.query(sql, function (err, rows, fields) {
         const output = {
             success: true,
             data: rows
@@ -136,7 +140,10 @@ router.put('/deactivated', (req, res) => {
         console.log(output);
         const json_output = JSON.stringify(output);
         res.send(json_output);
-    })
+    });
+
+
+
 
 });
 
