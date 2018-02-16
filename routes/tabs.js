@@ -40,6 +40,8 @@ router.post('/', (req, res) => {
 
     let sql = mysql.format(query, inserts);
 
+    console.log(err);
+
     db.query(sql, (err, results, fields) => {
         console.log('err: ', err);
         if (err) throw err;
@@ -50,7 +52,7 @@ router.post('/', (req, res) => {
         }
         console.log(output);
         res.json(output);
-    })
+    });
 });
 
 router.delete('/', function () {
@@ -146,6 +148,5 @@ router.put('/deactivated', (req, res) => {
 
 
 });
-
 
 module.exports = router;
