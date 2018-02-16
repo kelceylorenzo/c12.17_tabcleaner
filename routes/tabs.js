@@ -16,7 +16,7 @@ router.use(express.static(path.join(__dirname, 'html')));
 router.get('/', (req, res)=>{
     let query = 'SELECT * FROM tabs ';
     db.connect(function () {
-        db.query(query, function (err, reults, fields) {
+        db.query(query, function (err, rows, fields) {
             const output = {
                 success: true,
                 data: rows
@@ -29,11 +29,12 @@ router.get('/', (req, res)=>{
 
 router.post('/', (req, res) => {
     console.log('post: ', req.body);
-    const { windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url } = req.body;
 
-    let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?, ?)';
-    let inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'googleTabIndex', 'googleID', 'url',
-        windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url];
+    const { windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url, favicon } = req.body;
+
+    let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    let inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'googleTabIndex', 'googleID', 'url', 'favicon',
+        windowID, tabTitle, activatedTime, deactivatedTime, googleTabIndex, googleID, url, favicon];
 
     let sql = mysql.format(query, inserts);
 
