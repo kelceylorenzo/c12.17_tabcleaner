@@ -13,7 +13,7 @@ import headerData from "./header-data.js";
 import data from "../assets/data/data";
 import tab from "./tab";
 
-import "../assets/css/main-page.css";
+// import "../assets/css/main-page.css";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -221,27 +221,28 @@ class MainPage extends Component {
 	render() {
 		console.log("sort type: ", this.state.sortType);
 		return (
-			<div className="main-page-container">
-				<div className="row">
+			<div>
+				<div>
 					<Header routes={headerData} />
 				</div>
-				<div className="app-container row">
-					<div className="col-xs-12">
-						<MainSidebar
-							closeTab={this.closeTab}
-							openTab={this.openTab}
-							selectAll={this.selectAll}
-							deselectAll={this.deselectAll}
-							sort={this.handleSort}
-						/>
-						<MainTabArea
-							sortType={this.state.sortType}
-							tabData={this.state.tabsList}
-							select={this.handleIndividualSelect}
-						/>
+				<div>
+					<div>
+								<MainSidebar
+									closeTab={this.closeTab}
+									openTab={this.openTab}
+									selectAll={this.selectAll}
+									deselectAll={this.deselectAll}
+									sort={this.handleSort}
+								/>
+							<MainTabArea
+								sortType={this.state.sortType}
+								tabData={this.state.tabsList}
+								select={this.handleIndividualSelect}
+							/>
+						</div>
 					</div>
 				</div>
-			</div>
+	
 		);
 	}
 }

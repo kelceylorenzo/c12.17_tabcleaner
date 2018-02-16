@@ -1,20 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../assets/css/landing-page.css";
-
-import SignUpPage from "./sign-up-page";
 
 export default props => {
 	return (
-		<div className="container">
-			<div className="landing-page-container">
-				<div className="landing-page">
-					<div className="row text-center">
+		<div>
+			<div>
+				<div>
+					<div>
 						<h1>Close Your Tabs</h1>
 					</div>
-					<div className="button-container">
-						<div className="row">
-							<Link to="/dashboard" className="button btn-default btn bt lg">
+					<div>
+						<div>
+							<Link to="/dashboard">
 								LOG IN
 							</Link>
 						</div>

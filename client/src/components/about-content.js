@@ -3,8 +3,6 @@ import Header from "./header";
 import headerData from "./header-data";
 
 import teamPicture from "../assets/images/about-us-mainimage.png";
-import "../assets/css/header.css";
-import "../assets/css/about.css";
 
 export default props => {
 	return (
@@ -12,40 +10,38 @@ export default props => {
 			<div>
 				<Header routes={headerData} />
 			</div>
-			<div className="about-content-container col-xs-12">
-				<div className="row">
-					<div className="col-xs-12 text-center">
-						<img src={teamPicture} className="about-main-image" />
+			<div>
+				<div>
+					<div>
+						<img src={teamPicture} />
 					</div>
 				</div>
-				<div className="row">
-					<div className="col-xs-10">
-						<blockquote>
-							<p className="about-me-description">
-								<b>DESCRIPTION OF OUR TEAM</b> We make tabs work for you.
-							</p>
-						</blockquote>
+				<div>
+					<div>
+						<p>
+							<b>DESCRIPTION OF OUR TEAM</b> We make tabs work for you.
+						</p>
 					</div>
 				</div>
-				<div className="row">
-					<div className="col-xs-2 text-center">
+				<div>
+					<div>
 						<p>Andrea</p>
 						<p>Github | Portfolio</p>
 					</div>
-					<div className="col-xs-2 text-center">
+					<div>
 						<p>Henry</p>
 						<p>Github | Portfolio</p>
 					</div>
-					<div className="col-xs-2 text-center">
+					<div>
 						<p>James</p>
 						<p>Github | Portfolio</p>
 					</div>
 
-					<div className="col-xs-2 text-center">
+					<div>
 						<p>Kelcey</p>
 						<p>Github | Portfolio</p>
 					</div>
-					<div className="col-xs-2 text-center">
+					<div>
 						<p>Nick</p>
 						<p>Github | Portfolio</p>
 					</div>

@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import Header from "./header";
 import headerData from "./header-data.js";
 
-import "../assets/css/top-ten-page.css";
-
 class TopTenPage extends Component {
 	render() {
 		return (
