@@ -32,15 +32,13 @@ const routes = [
 ];
 
 const App = () => (
-	<div>
-		<div>
+		<div className="app">
 			<Route exact path="/" component={LandingPage} />
 			<Route path="/dashboard" component={MainPage} />
 			<Route path="/about" component={AboutPage} />
 			<Route path="/stats-page" component={StatsPage} />
 			<Route path="/top-ten" component={TopTenPage} />
 		</div>
-	</div>
 );
 
 export default App;

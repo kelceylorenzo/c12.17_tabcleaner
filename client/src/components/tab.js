@@ -12,8 +12,9 @@ export default props => {
 	}
 
 	return (
-		<div onClick={props.select} style={style}>
-			{props.item.title}
+		<div className="tab" onClick={props.select} style={style}>
+			<div className="tab-title">{props.item.title}</div>
+			<div className="tab-screenshot" />
 		</div>
 	);
 };

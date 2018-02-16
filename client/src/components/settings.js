@@ -1,7 +1,7 @@
 import React from "react";
 import PasswordChange from "./password-change";
 import EmailChange from "./email-change";
-import "../assets/css/settings.css";
+// import "../assets/css/settings.css";
 
 export default () => {
 	return (

@@ -221,28 +221,27 @@ class MainPage extends Component {
 	render() {
 		console.log("sort type: ", this.state.sortType);
 		return (
-			<div>
-				<div>
+			<div className="main-page-container">
+				<div className="header-container">
 					<Header routes={headerData} />
 				</div>
-				<div>
-					<div>
-								<MainSidebar
-									closeTab={this.closeTab}
-									openTab={this.openTab}
-									selectAll={this.selectAll}
-									deselectAll={this.deselectAll}
-									sort={this.handleSort}
-								/>
-							<MainTabArea
-								sortType={this.state.sortType}
-								tabData={this.state.tabsList}
-								select={this.handleIndividualSelect}
-							/>
-						</div>
+				<div className="dashboard-container">
+					<div className="dashboard">
+						<MainSidebar
+							closeTab={this.closeTab}
+							openTab={this.openTab}
+							selectAll={this.selectAll}
+							deselectAll={this.deselectAll}
+							sort={this.handleSort}
+						/>
+						<MainTabArea
+							sortType={this.state.sortType}
+							tabData={this.state.tabsList}
+							select={this.handleIndividualSelect}
+						/>
 					</div>
 				</div>
-	
+			</div>
 		);
 	}
 }
