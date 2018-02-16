@@ -54,7 +54,7 @@ module.exports = function (passport) {
                         data: results,
                         fields: fields
                     }
-                    console.log('user was not in db, but is now: ', results[0]);
+                    console.log('user was not in db, but is now: ', newUser);
                 })
             }
         });
