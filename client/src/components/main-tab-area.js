@@ -8,9 +8,11 @@ class MainTabArea extends Component {
 		});
 
 		return (
-			<div className="main-tab-area col-xs-10">
+
+			<div className="main-tab-area">
 				<h3 className="main-tab-area-title">Sorted by: {this.props.sortType}</h3>
-				<div>{tabList}</div>
+				<div className="tab-window">{tabList}</div>
+
 			</div>
 		);
 	}

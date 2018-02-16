@@ -1,7 +1,8 @@
-import React from "react";
-import PasswordChange from "./password-change";
-import EmailChange from "./email-change";
-import "../assets/css/settings.css";
+
+import React from 'react';
+import PasswordChange from './password-change';
+import EmailChange from './email-change';
+
 
 export default () => {
 	return (

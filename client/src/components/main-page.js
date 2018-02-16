@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 
-import AboutPage from "./about-content";
+import AboutPage from "./about-page";
 import Header from "./header";
 import StatsPage from "./stats-page";
 import SettingsPage from "./settings";
@@ -13,7 +13,7 @@ import headerData from "./header-data.js";
 import data from "../assets/data/data";
 import tab from "./tab";
 
-import "../assets/css/main-page.css";
+// import "../assets/css/main-page.css";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -222,11 +222,11 @@ class MainPage extends Component {
 		console.log("sort type: ", this.state.sortType);
 		return (
 			<div className="main-page-container">
-				<div className="row">
-					<Header routes={headerData} />
-				</div>
-				<div className="app-container row">
-					<div className="col-xs-12">
+				<div className="dashboard-container">
+					<div className="header-container">
+						<Header routes={headerData} />
+					</div>
+					<div className="dashboard">
 						<MainSidebar
 							closeTab={this.closeTab}
 							openTab={this.openTab}
