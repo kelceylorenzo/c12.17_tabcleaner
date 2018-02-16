@@ -13,17 +13,15 @@ db.connect(function (err) {
 
 router.use(express.static(path.join(__dirname, 'html')));
 
-router.get('/', (req, res)=>{
+router.get('/', (req, res) => {
     let query = 'SELECT * FROM tabs ';
-    db.connect(function () {
-        db.query(query, function (err, rows, fields) {
-            const output = {
-                success: true,
-                data: rows
-            }
-            const json_output = JSON.stringify(output);
-            res.send(json_output);
-        });
+    db.query(query, function (err, rows, fields) {
+        const output = {
+            success: true,
+            data: rows
+        }
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
     });
 });
 
@@ -47,41 +45,64 @@ router.post('/', (req, res) => {
             fields: fields
         }
         console.log(output);
-        res.json(output);
+        res.json(output.data.insertID);
     })
 });
 
 router.delete('/', function () {
-    let query = 'DELETE * FROM tabs WHERE googleID=' + req.body.id;
-    db.connect(function () {
-        db.query(query, function (err, results, fields) {
-            if (err) throw err;
-            console.log(fields);
-            const json_output = JSON.stringify(output);
-            res.send(json_output);
-        })
-    })
+    const { databaseTabID } = req.body;
+
+    let query = 'DELETE * FROM tabs WHERE databaseTabId = ?';
+    let insert = databaseTabID;
+
+    let sql = mysql.format(query, insert);
+
+    db.query(sql, (err, results, fields) => {
+        if (err) throw err;
+        console.log(fields);
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    });
 });
 
 router.put('/', (req, res) => {
-    const { databaseTabID } = req.body;
+
+    const { databaseTabID, tabTitle, googleTabIndex, url, favicon } = req.body;
+
+    let query = 'UPDATE tabs SET ??=? ??=? ??=? ??=? WHERE databaseTabID = ?';
+    let insert = ['tabTitle', 'googleTabIndex', 'url', 'favicon', tabTitle, googleTabIndex, url, favicon, databaseTabID];
+
+    let sql = mysql.format(query, insert);
+    console.log(sql);
+
+    db.query(sql, (err, results, fields) => {
+        if (err) throw err;
+        console.log(fields);
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    });
+
 
 });
 
 router.put('/activated', (req, res) => {
+
     const time = new Date();
     time = time.getTime();
 
-    let query = 'DELETE * FROM tabs WHERE googleID=' + req.body.id;
-    db.connect(function () {
-        db.query(query, function (err, results, fields) {
-            if (err) throw err;
-            console.log(fields);
-            const json_output = JSON.stringify(output);
-            res.send(json_output);
-        })
-    })
+    const { databaseTabID } = req.body;
 
+    let query = 'Update tabs SET activatedTime = ?'
+    let insert = time;
+
+    let sql = mysql.format(query, insert);
+
+    db.query(sql, (err, results, fields) => {
+        if (err) throw err;
+        console.log(fields);
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    })
 });
 
 router.put('/deactivated', (req, res) => {
