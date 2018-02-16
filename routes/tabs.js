@@ -60,6 +60,7 @@ router.delete('/', (req, res)=>{
     let insert = databaseTabID;
 
     let sql = mysql.format(query, insert);
+    console.log(sql);
 
     db.query(sql, (err, results, fields) => {
         if (err) throw err;
