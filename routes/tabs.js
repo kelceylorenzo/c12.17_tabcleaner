@@ -157,7 +157,7 @@ router.put('/activated', (req, res) => {
 
     const { databaseTabID } = req.body;
 
-    const query = 'Update tabs SET activatedTime = ? WHERE databaseTABID = ? LIMIT 1';
+    const query = 'Update tabs SET activatedTime = ? WHERE databaseTabID = ? LIMIT 1';
     const insert = [time, databaseTabID];
 
     const sql = mysql.format(query, insert);
@@ -181,7 +181,7 @@ router.put('/deactivated', (req, res) => {
 
     const { databaseTabID, googleID } = req.body;
 
-    const query = 'Update tabs SET WHERE databaseTABID = ? LIMIT 1';
+    const query = 'Update tabs SET WHERE databaseTabID = ? LIMIT 1';
     const insert = [time, databaseTabID];
 
     const sql = mysql.format(query, insert);
