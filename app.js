@@ -5,9 +5,6 @@ const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
 
-// Load User Model
-require('./models/GoogleUser');
-
 // Google Passport Config
 require('./config/googlePassport')(passport);
 
