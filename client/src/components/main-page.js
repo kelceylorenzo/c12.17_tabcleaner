@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 
-import AboutPage from "./about-page";
-import Header from "./header";
-import StatsPage from "./stats-page";
-import SettingsPage from "./settings";
-import TopTenPage from "./top-ten-page";
-import MainSidebar from "./main-sidebar";
-import MainTabArea from "./main-tab-area";
+import AboutPage from './about-page';
+import Header from './header';
+import StatsPage from './stats-page';
+import SettingsPage from './settings';
+import TopTenPage from './top-ten-page';
+import MainSidebar from './main-sidebar';
+import MainTabArea from './main-tab-area';
 
-import headerData from "./header-data.js";
-import data from "../assets/data/data";
-import tab from "./tab";
+import headerData from './header-data.js';
+import data from '../assets/data/data';
+import tab from './tab';
 
 // import "../assets/css/main-page.css";
 
@@ -21,14 +21,16 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: "Default"
+			sortType: 'Default'
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
+		this.handleUtilityClick = this.handleUtilityClick.bind(this);
 		this.selectAll = this.selectAll.bind(this);
 		this.deselectAll = this.deselectAll.bind(this);
-		this.openTab = this.openTab.bind(this);
-		this.closeTab = this.closeTab.bind(this);
+		this.openSingleTab = this.openSingleTab.bind(this);
+		this.openSelectedTabs = this.openSelectedTabs.bind(this);
+		this.closeSelectedTabs = this.closeSelectedTabs.bind(this);
 		this.handleSort = this.handleSort.bind(this);
 	}
 
@@ -39,7 +41,7 @@ class MainPage extends Component {
 
 	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call
 	getData(resp) {
-		resp.map(currentItem => {
+		resp.map((currentItem) => {
 			return (currentItem.selected = false);
 		});
 
@@ -70,10 +72,10 @@ class MainPage extends Component {
 	handleSort(event) {
 		let { tabsList } = this.state;
 
-		const sortType = event.target.getAttribute("data-sorttype");
+		const sortType = event.target.getAttribute('data-sorttype');
 
 		switch (sortType) {
-			case "A-Z":
+			case 'A-Z':
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -87,7 +89,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "Z-A":
+			case 'Z-A':
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -101,7 +103,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "Time":
+			case 'Time':
 				//currently sorted from oldest >>> newest in terms of activationTime
 				//glitches out sometimes
 				tabsList.sort((a, b) => {
@@ -117,7 +119,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "Window":
+			case 'Window':
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
 					if (output[tabsList[i].windowId]) {
@@ -157,16 +159,16 @@ class MainPage extends Component {
 		});
 	}
 
-	openTab() {
+	openSelectedTabs() {
 		let { selectedTabs } = this.state;
 
 		for (let tab of selectedTabs) {
-			let newTab = window.open(tab.url, "_blank");
+			let newTab = window.open(tab.url, '_blank');
 			newTab.focus();
 		}
 	}
 
-	closeTab() {
+	closeSelectedTabs() {
 		let { selectedTabs, tabsList } = this.state;
 		let selectedIDs = [];
 
@@ -185,12 +187,41 @@ class MainPage extends Component {
 		});
 	}
 
+	handleUtilityClick(item, selected) {
+		item.selected = false;
+		this.handleIndividualSelect(item);
+
+		switch (selected) {
+			case 'open':
+				this.openSingleTab(item);
+			case 'close':
+				this.closeSingleTab(item);
+			default:
+				return;
+		}
+	}
+
+	openSingleTab(item) {
+		let newTab = window.open(item.url, '_blank');
+		newTab.focus();
+	}
+
+	closeSingleTab(item) {
+		let { tabsList } = this.state;
+		tabsList.splice(tabsList.indexOf(item), 1);
+
+		this.setState({
+			...this.state,
+			tabsList: tabsList
+		});
+	}
+
 	selectAll() {
 		let { tabsList, selectedTabs } = this.state;
 
 		selectedTabs = [];
 
-		tabsList.map(index => {
+		tabsList.map((index) => {
 			index.selected = true;
 			selectedTabs.push(index);
 		});
@@ -207,7 +238,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map(index => {
+		tabsList.map((index) => {
 			index.selected = false;
 		});
 
@@ -219,7 +250,6 @@ class MainPage extends Component {
 	}
 
 	render() {
-		console.log("sort type: ", this.state.sortType);
 		return (
 			<div className="main-page-container">
 				<div className="dashboard-container">
@@ -228,8 +258,8 @@ class MainPage extends Component {
 					</div>
 					<div className="dashboard">
 						<MainSidebar
-							closeTab={this.closeTab}
-							openTab={this.openTab}
+							closeTab={this.closeSelectedTabs}
+							openTab={this.openSelectedTabs}
 							selectAll={this.selectAll}
 							deselectAll={this.deselectAll}
 							sort={this.handleSort}
@@ -238,6 +268,7 @@ class MainPage extends Component {
 							sortType={this.state.sortType}
 							tabData={this.state.tabsList}
 							select={this.handleIndividualSelect}
+							utilityClick={this.handleUtilityClick}
 						/>
 					</div>
 				</div>

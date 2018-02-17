@@ -17,7 +17,7 @@ export default [
 	},
 	{
 		name: 'LOG OUT',
-		to: '/dashboard',
+		to: '/',
 		id: 'log-out-button'
 	}
 ];
