@@ -40,6 +40,7 @@ function checkForUserAccount(){
     }
     console.log('user id: ' + item.userId)
   })
+
 }
 
 
@@ -188,6 +189,16 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       }
       setActiveTab(tab.id, timeStamp)
     })
+
+
+//     var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (previousHighlighted.url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/);
+//       if(siteUsageTime[domain[0]]){
+//         siteUsageTime[domain[0]] += previousHighlighted.activeTimeElapsed;
+//       } else {
+//         siteUsageTime[domain[0]] = previousHighlighted.activeTimeElapsed;
+//       }
+//     }
+
   });
 })
 

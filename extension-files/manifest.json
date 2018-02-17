@@ -15,7 +15,10 @@
       "tabs",
       "<all_urls>",
       "http://localhost:9000/*",
-      "http://www.closeyourtabs.com/*"
+      "http://www.closeyourtabs.com/*",
+      "cookies", 
+      "https://accounts.google.com/"
+
     ],
     "background": {
         "scripts": ["background.js"]
@@ -26,4 +29,5 @@
         "js": ["contentscript.js"]
       }
     ]
+
   }

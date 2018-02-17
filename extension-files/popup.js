@@ -8,6 +8,7 @@ function sendMessageToGetTabInfo(){
         var tabInfo = response[item];
         var tabElement = createDomElement(tabInfo); 
         document.getElementById('tag-titles').appendChild(tabElement);
+        console.log(tabInfo.timeOfSiteOpen)
       }
     }
   );
