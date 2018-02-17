@@ -7,7 +7,7 @@ body {
 	width: 100vw;
 	overflow-x: hidden;
 	/* background-color: rgba(168, 209, 232, 0.5); */
-	background-image: url('https://www.transparenttextures.com/patterns/debut-light.png');
+	background-image: url("https://www.transparenttextures.com/patterns/debut-light.png");
 }
 
 * {
@@ -50,7 +50,7 @@ body {
 	top: 0;
 	display: flex;
 	background-color: rgba(26, 54, 74, 1);
-	font-family: 'Lato', sans-serif;
+	font-family: "Lato", sans-serif;
 	font-weight: 400;
 }
 
@@ -146,12 +146,12 @@ body {
 .team-link p {
 	margin: auto;
 }
+
 /* Main page styling */
 
 .main-page-container {
 	display: flex;
 	flex-direction: column;
-	/* margin-top: 5%; */
 	height: 80%;
 	width: 90%;
 }
@@ -169,17 +169,36 @@ body {
 .side-bar-container {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	position: fixed;
-	margin-top: 8%;
-	height: 60%;
-	width: 15%;
+	margin-top: 12.5%;
+	height: 50%;
+	width: 12%;
+	background-color: rgba(26, 54, 74, 1);
+	border-radius: 0px 8px 8px 0px;
+	border-top: 6px solid rgb(212, 167, 129);
+	border-bottom: 6px solid rgb(212, 167, 129);
+	border-right: 6px solid rgb(212, 167, 129);
+	/* border-top: 5px solid rgb(104, 158, 154);
+	border-bottom: 5px solid rgb(104, 158, 154);
+	border-right: 5px solid rgb(104, 158, 154);
+	*/
 }
 
 .side-bar-container > button {
+	font-family: "Lato", sans-serif;
+	font-weight: 600;
+	font-size: 0.8em;
+	height: 15%;
+	width: 75%;
+	cursor: pointer;
+	background-color: rgba(255, 255, 255, 0.9);
+	color: rgba(26, 54, 74, 1);
 	margin: auto;
-	width: 100%;
-	height: 10%;
+	border-radius: 5px 5px 0px 0px;
 }
+
 .main-tab-area {
 	display: flex;
 	flex-direction: column;

@@ -16,7 +16,7 @@ class Sidebar extends Component {
 				<button className="button" onClick={this.props.deselectAll}>
 					DESELECT ALL
 				</button>
-				<h4>Sort</h4>
+				{/* <h4>Sort</h4>
 				<button className="button" data-sortType="A-Z" onClick={this.props.sort}>
 					A-Z
 				</button>
@@ -28,7 +28,7 @@ class Sidebar extends Component {
 				</button>
 				<button className="button" data-sortType="Window" onClick={this.props.sort}>
 					Window
-				</button>
+				</button> */}
 			</div>
 		);
 	}
