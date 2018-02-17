@@ -7,7 +7,7 @@ body {
 	width: 100vw;
 	overflow-x: hidden;
 	/* background-color: rgba(168, 209, 232, 0.5); */
-	background-image: url("https://www.transparenttextures.com/patterns/debut-light.png");
+	background-image: url('https://www.transparenttextures.com/patterns/debut-light.png');
 }
 
 * {
@@ -50,7 +50,7 @@ body {
 	top: 0;
 	display: flex;
 	background-color: rgba(26, 54, 74, 1);
-	font-family: "Lato", sans-serif;
+	font-family: 'Lato', sans-serif;
 	font-weight: 400;
 }
 
@@ -189,7 +189,7 @@ body {
 }
 
 .side-bar-container > button {
-	font-family: "Lato", sans-serif;
+	font-family: 'Lato', sans-serif;
 	font-weight: 600;
 	font-size: 0.8em;
 	height: 15%;
@@ -208,6 +208,19 @@ body {
 	margin-left: 18%;
 	width: 100%;
 	height: 100%;
+}
+
+.sort-by-container {
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+	padding: 0 5%;
+}
+
+.sort-by-menu {
+	display: flex;
+	justify-content: space-between;
+	width: 30%;
 }
 
 .main-tab-area-window {

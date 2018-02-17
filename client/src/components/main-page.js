@@ -75,7 +75,7 @@ class MainPage extends Component {
 		const sortType = event.target.getAttribute('data-sorttype');
 
 		switch (sortType) {
-			case 'A-Z':
+			case 'az':
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -89,7 +89,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'Z-A':
+			case 'za':
 				tabsList.sort((a, b) => {
 					let titleA = a.title;
 					let titleB = b.title;
@@ -103,7 +103,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'Time':
+			case 'time':
 				//currently sorted from oldest >>> newest in terms of activationTime
 				//glitches out sometimes
 				tabsList.sort((a, b) => {
@@ -119,7 +119,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'Window':
+			case 'window':
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
 					if (output[tabsList[i].windowId]) {
@@ -166,6 +166,7 @@ class MainPage extends Component {
 			let newTab = window.open(tab.url, '_blank');
 			newTab.focus();
 		}
+		this.deselectAll();
 	}
 
 	closeSelectedTabs() {
@@ -262,13 +263,13 @@ class MainPage extends Component {
 							openTab={this.openSelectedTabs}
 							selectAll={this.selectAll}
 							deselectAll={this.deselectAll}
-							sort={this.handleSort}
 						/>
 						<MainTabArea
 							sortType={this.state.sortType}
 							tabData={this.state.tabsList}
 							select={this.handleIndividualSelect}
 							utilityClick={this.handleUtilityClick}
+							sort={this.handleSort}
 						/>
 					</div>
 				</div>
