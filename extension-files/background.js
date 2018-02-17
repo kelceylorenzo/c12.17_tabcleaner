@@ -1,6 +1,7 @@
 //functions to write
 //when close window, remove from database AND local storage
 //
+setLocalStorage('googleID', 101760331504672280672);
 
 
 var allTabs = {};
@@ -57,13 +58,13 @@ function createNewTab(tab, currentTime){
     tabTitle: tab.title,
     activatedTime: 0, 
     deactivatedTime: 0, 
-    googleTabIndex: tab.index, 
+    browserTabIndex: tab.index, 
     googleID: 101760331504672280672, 
     url: tab.url,
     favicon: tab.favIconUrl
   }
   //checks to see if user state is logged in to make call to server 
-  // createNewTabRequest(dataForServer, tab.id);
+  createNewTabRequest(dataForServer, tab.id);
   //get back database tab id associated with the google tab id
   //save into local storage as window id: {tabid: googletabID} 
 }
@@ -76,7 +77,7 @@ function createNewTab(tab, currentTime){
 */
 function setLocalStorage(keyName, value){
   var object = {};
-  object[keyname] = value; 
+  object[keyName] = value; 
   chrome.storage.local.set(object);
 }
 
@@ -99,7 +100,7 @@ function updatedElaspedDeactivation(){
 * Updates a Tab object
 *@param {object} 
 */
-function updateTabInformation(tab, timeStamp){
+function updateTabInformation(tab, timeStamp, updateInfo){
   //if the site changed, get the elapsed time during active state and save to its url
   allTabs[tab.id] = {
     id: tab.id,
@@ -112,14 +113,23 @@ function updateTabInformation(tab, timeStamp){
     highlighted: tab.highlighted
   }
 
-  var dataForServer = {
-    databaseTabID: googleIdDb, 
-    tabTitle: tab.title, 
-    googleTabIndex: tab.index, 
-    url: tab.url,
-    favicon: tab.favicon,
+  if(updateInfo){
+    var dataForServer = {
+      databaseTabID: tab.googleTabId, 
+      tabTitle: tab.title, 
+      browserTabIndex: tab.index, 
+      url: tab.url,
+      favicon: tab.favicon,
+    }
+    console.log('tab is updated')
+    updateTabRequest(dataForServer);
+  } else {
+    console.log('tab is highlighted')
+
+    //tab is highlighed for the first time 
   }
-// updateTabRequest(dataForServer);
+
+
 }
 
 
@@ -152,7 +162,6 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
 *call setTime, createNewTab
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
-  console.log('highlight');
   //call server to give info about previous tab and new tab highlight
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
     //check to see if the id is in local storage. if not, create new tab. 
@@ -163,18 +172,20 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
         var previousHighlighted = currentID.activeTab
         var time = new Date();
         var timeStamp = time.getTime();
-        if (typeof item.links === 'undefined') {
-          console.log("New Tab");
+        if (item[window][stringId] >= 0) {
+          var currentTab = item[window][stringId];
+          //send database the id of previous active tab and new active tab
+          updateTabInformation(tab, timeStamp, false);
+
+        } else {
           createNewTab(tab, timeStamp);
           //SET AS HIGHLIHGTED
-          return; 
-        } else {
-          var currentTab = item[window][stringId];
-          console.log(currentTab)
-          //send database the id of previous active tab and new active tab
-          updateTabInformation(tab, timeStamp);
         }
+
+        var previousDBTabId = item[window][stringId];
         setActiveTab(previousHighlighted, tab.id, timeStamp)
+         //call deactivated using previoushighligheted ; 
+          //call activate with currentTab
       })
     
     })
@@ -227,25 +238,24 @@ function getAllTabs(){
 *@param {object} tab  object containing props about the tab
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
-  console.log('tab updated from chrom API call')
-  // if (tab.url !== undefined && changeInfo.status == "complete") {
-  //   console.log(changeInfo)
-  //   var window  = JSON.stringify(tab.windowId);
-  //   var stringId = JSON.stringify(tab.id);
-  //   var date = new Date()
-  //   var timeStamp = date.getTime();
-  //   chrome.storage.local.get(window, function(item){
-  //     if (typeof item.links === 'undefined') {
-  //       console.log("New Tab");
-  //     } else {
-  //       var googleIdDb = item[window][stringId];
-  //       updateTab(tab, timeStamp);
-  //     }
-  //   })
+  if (tab.url !== undefined && changeInfo.status == "complete") {
+    var window  = JSON.stringify(tab.windowId);
+    var stringId = JSON.stringify(tab.id);
+    var date = new Date()
+    var timeStamp = date.getTime();
+    chrome.storage.local.get(window, function(item){
+      if (item[window][stringId]) {
+        var googleIdDb = item[window][stringId];
+        tab.googleTabId = googleIdDb;
+        updateTabInformation(tab, timeStamp, true);
+      } else {
+        console.log("New Tab");
+      }
+    })
      
-  //     //get back database tab id associated with the google tab id
-  //     //save into local storage as window id: {tabid: googletabID} 
-  // }
+      //get back database tab id associated with the google tab id
+      //save into local storage as window id: {tabid: googletabID} 
+  }
 })
 
 
@@ -259,7 +269,8 @@ function updateTab(tab){
       console.log("New Tab");
     } else {
       var googleIdDb = item[window][stringId];
-      updateTabInformation(tab, timeStamp);
+      tab.googleTabId = googleIdDb;
+      updateTabInformation(tab, timeStamp, true);
     }
   })
      
@@ -286,7 +297,7 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 */
 chrome.runtime.onStartup.addListener(function(details){
   console.log('browser open')
-  getAllTabs();
+  // getAllTabs();
   // checkForUserAccount();
 
 })
@@ -299,7 +310,7 @@ chrome.runtime.onStartup.addListener(function(details){
 chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
   getAllTabs();
-  setLocalStorage('googleID', null);
+  // setLocalStorage('googleID', null);
   setLocalStorage('activeTab', null);
 })
 
@@ -323,13 +334,16 @@ chrome.runtime.onMessage.addListener(
           console.log('user has an account');
           return true; 
         } else {
-          return sendResponse(checkForUserAccount());
+          console.log('user needs to sign in');
+          // return sendResponse(checkForUserAccount());
         }
       })
-    } else if(request=== 'update'){
-      console.log('update from a message');
-      updateTabInformation(sender.tab);
-      sendResponse('tab updated from sender ', sender);
+    // } else if(request=== 'update'){
+    //   var date = new Date()
+    //   var timeStamp = date.getTime();
+    //   console.log('update from a message');
+    //   updateTabInformation(sender.tab, timeStamp, true);
+    //   sendResponse('tab updated from sender ', sender);
 
     }
   });
@@ -410,6 +424,7 @@ function createNewTabRequest(tabObject, tabId){
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
       if (xhr.readyState == 4 & xhr.status === 200) {
+        console.log(xhr.responseText);
         var result = JSON.parse(xhr.responseText);
         var window  = JSON.stringify(tabObject.windowID);
         var object = {};
@@ -420,13 +435,12 @@ function createNewTabRequest(tabObject, tabId){
           if(item){
             var addNewTabItem = {...item[window]}
             addNewTabItem[tabId] = result.data.insertId; 
-            // object[window] = addNewTabItem; 
             setLocalStorage(window, addNewTabItem);
-            // chrome.storage.local.set(object);
           }else {
             setLocalStorage(window, tabObjectStore);
-            // chrome.storage.local.set(object);
           }
+          setLocalStorage('activeTab', tabId);
+
         })
 
       }
@@ -434,3 +448,11 @@ function createNewTabRequest(tabObject, tabId){
   xhr.send(JSON.stringify(tabObject));
 }
 
+function activateTabInDatabase(){
+
+}
+
+
+function deactivateTabInDatabase(){
+  
+}
