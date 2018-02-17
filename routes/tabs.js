@@ -13,7 +13,7 @@ db.connect((err) => {
 router.use(express.static(path.join(__dirname, 'html')));
 
 function checkIfTableExists(req, res, next) {
-    const tblChkSql = "SELECT count(*) FROM information_schema.TABLES"+
+    const tblChkSql = "SELECT count(*) FROM information_schema.TABLES "+
     "WHERE (TABLE_SCHEMA = 'closeyourtabs') AND (TABLE_NAME = 'tabs');";
 
     const creatTblSql = "CREATE TABLE tabs (" +
