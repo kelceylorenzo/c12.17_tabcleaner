@@ -1,3 +1,8 @@
+//functions to write
+//when close window, remove from database AND local storage
+//
+
+
 var allTabs = {};
 var siteUsageTime = {}
 
@@ -75,7 +80,7 @@ function createNewTab(tab, currentTime){
     url: tab.url,
     favicon: tab.favIconUrl
   }
-  createNewTabRequest(dataForServer, tab.id);
+  // createNewTabRequest(dataForServer, tab.id);
   //get back database tab id associated with the google tab id
   //save into local storage as window id: {tabid: googletabID} 
 }
@@ -104,6 +109,7 @@ function updatedElaspedDeactivation(){
   }
 }
 
+
 /**
 * Updates a Tab object
 *@param {object} 
@@ -121,7 +127,14 @@ function updateTab(tab, timeStamp){
     highlighted: tab.highlighted
   }
 
-  return allTabs[tab.id]
+  var dataForServer = {
+    databaseTabID: googleIdDb, 
+    tabTitle: tab.title, 
+    googleTabIndex: tab.index, 
+    url: tab.url,
+    favicon: tab.favicon,
+  }
+// updateTabRequest(dataForServer);
 }
 
 
@@ -134,13 +147,16 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
   if(allTabs[id].highlighted){
       chrome.storage.local.set({'activeTab' : null})
   }
-  var window  = JSON.stringify(removeInfo.windowId);
-  chrome.storage.local.get(window, function(item){
-    var stringId = JSON.stringify(id);
-    var googleIdDb = item[window][stringId];
-    deleteTabFromDatabase(googleIdDb);
 
-  })
+  //DELETE from local storage 
+  var window  = JSON.stringify(removeInfo.windowId);
+  // chrome.storage.local.get(window, function(item){
+  //   var stringId = JSON.stringify(id);
+  //   var googleIdDb = item[window][stringId];
+  //   // deleteTabFromDatabase(googleIdDb);
+  //   console.log(googleIdDb)
+
+  // })
   delete allTabs[id];
 })
 
@@ -151,31 +167,43 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
 *call setTime, createNewTab
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
-  var time = new Date();
-  var timeStamp = time.getTime();
-  
+  console.log('highlight');
   //call server to give info about previous tab and new tab highlight
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-    chrome.storage.local.get('activeTab', function(item){
-      var previousId = item.activeTab; 
-      var newTab = null; 
-      if(previousId){
-          allTabs[previousId].highlighted = false;  
-          allTabs[previousId].timeOfDeactivation = timeStamp;  
-          allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
-          allTabs[previousId].inactiveTimeElapsed = 0;
-      }
-      if(allTabs[tab.id]){
-        updateTab(tab, timeStamp);
-
-      } else {
+    //check to see if the id is in local storage. if not, create new tab. 
+    var window  = JSON.stringify(tab.windowId);
+    var stringId = JSON.stringify(tab.id);
+    chrome.storage.local.get(window, function(item){
+      var time = new Date();
+      var timeStamp = time.getTime();
+      if (typeof item.links === 'undefined') {
+        console.log("New Tab");
         createNewTab(tab, timeStamp);
+        //SET AS HIGHLIHGTED
+        return; 
+      } else {
+        var currentTab = item[window][stringId];
+        console.log(currentTab)
+        updateTab(tab, timeStamp);
       }
-      chrome.storage.local.set({'activeTab' : tab.id})
-    
+      setActiveTab(tab.id, timeStamp)
     })
   });
 })
+
+function setActiveTab(id, timeStamp){
+  chrome.storage.local.get('activeTab', function(item){
+    var previousId = item.activeTab; 
+    var newTab = null; 
+    if(previousId){
+        allTabs[previousId].highlighted = false;  
+        allTabs[previousId].timeOfDeactivation = timeStamp;  
+        allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
+        allTabs[previousId].inactiveTimeElapsed = 0;
+    }
+    chrome.storage.local.set({'activeTab' : id})
+  })
+}
 
 /**
 * Gets all tabs currently in the browser
@@ -199,22 +227,18 @@ function getAllTabs(){
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
+    console.log(changeInfo)
+    var window  = JSON.stringify(tab.windowId);
+    var stringId = JSON.stringify(tab.id);
     var date = new Date()
     var timeStamp = date.getTime();
-    var window  = JSON.stringify(tab.windowId);
     chrome.storage.local.get(window, function(item){
-      var stringId = JSON.stringify(tabId);
-      var googleIdDb = item[window][stringId];
-      var updatedTab = updateTab(tab, timeStamp);
-
-      var dataForServer = {
-        databaseTabID: googleIdDb, 
-        tabTitle: updatedTab.title, 
-        googleTabIndex: updatedTab.index, 
-        url: updatedTab.url,
-        favicon: updatedTab.favicon,
+      if (typeof item.links === 'undefined') {
+        console.log("New Tab");
+      } else {
+        var googleIdDb = item[window][stringId];
+        updateTab(tab, timeStamp);
       }
-      updateTabRequest(dataForServer);
     })
      
       //get back database tab id associated with the google tab id
@@ -242,7 +266,7 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 chrome.runtime.onStartup.addListener(function(details){
   console.log('browser open')
   getAllTabs();
-  checkForUserAccount();
+  // checkForUserAccount();
 
 })
 
@@ -254,7 +278,6 @@ chrome.runtime.onStartup.addListener(function(details){
 chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
   getAllTabs();
-  checkForUserAccount();
   chrome.storage.local.set({'userId' : null})
   chrome.storage.local.set({'activeTab' : null})
 
@@ -283,23 +306,7 @@ chrome.runtime.onMessage.addListener(
 *@param {object} data the data that will be sent 
 */
 
-// function serverRequest(method, action, data=null){
-//   var xhr = new XMLHttpRequest();
-//   xhr.open(method, "http://localhost:9000/" + action, true);
-//   if(method === 'POST'){
-//     data = JSON.stringify(data);
-//     http.setRequestHeader('Content-type','application/json; charset=utf-8');
-//   }
-//   xhr.onreadystatechange = function() {
-//     if (xhr.readyState == 4 && xhr.status == "200") {
-//       // JSON.parse does not evaluate the attacker's scripts.
-//       var resp = JSON.parse(xhr.responseText);
-//     } else {
-//       console.error(message)
-//     }
-//   }
-//   xhr.send(data);
-// }
+
 function updateTabRequest(tabObject){
   console.log(tabObject)
   var xhr = new XMLHttpRequest();
