@@ -1,10 +1,13 @@
-.app {
+body {
 	margin: 0;
+}
+
+.app {
 	height: 100vh;
 	width: 100vw;
 	overflow-x: hidden;
-	background-color: rgba(168, 209, 232, 0.5);
-	background-image: url("https://www.transparenttextures.com/patterns/az-subtle.png");
+	/* background-color: rgba(168, 209, 232, 0.5); */
+	background-image: url('https://www.transparenttextures.com/patterns/debut-light.png');
 }
 
 * {
@@ -40,15 +43,15 @@
 }
 
 /* Header Styling */
-
 .header-container {
 	position: fixed;
 	height: 8%;
 	width: 100%;
 	top: 0;
 	display: flex;
-	background-color: white;
-	box-shadow: 3px 3px 5px darkgray;
+	background-color: rgba(26, 54, 74, 1);
+	font-family: 'Lato', sans-serif;
+	font-weight: 400;
 }
 
 .header {
@@ -59,7 +62,7 @@
 
 .navigation-container {
 	display: flex;
-	width: 60%;
+	width: 50%;
 }
 
 .navigation {
@@ -69,9 +72,27 @@
 	width: 100%;
 }
 
-.nav-links {
-	margin: auto;
+.nav-link-container {
+	height: 100%;
+	width: 20%;
 	display: flex;
+	color: lightgrey;
+	text-decoration: none;
+}
+
+.nav-link-container:hover {
+	border-bottom: 7px solid rgba(86, 135, 132, 1);
+	transition-duration: 0.2s;
+	cursor: pointer;
+}
+
+.nav-link {
+	color: inherit;
+	margin: auto;
+}
+
+#log-out-button:hover {
+	border-bottom: 7px solid rgba(212, 167, 129, 1);
 }
 
 /* About Page */
