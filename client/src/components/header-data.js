@@ -1,22 +1,23 @@
 export default [
 	{
-		name: 'Home',
+		name: 'HOME',
 		to: '/dashboard'
 	},
 	{
-		name: 'Top Ten',
+		name: 'TOP TEN',
 		to: '/top-ten'
 	},
 	{
-		name: 'Stats Page',
+		name: 'STATS PAGE',
 		to: '/stats-page'
 	},
 	{
-		name: 'About',
+		name: 'ABOUT',
 		to: '/about'
 	},
 	{
-		name: 'Log Out',
-		to: '/dashboard'
+		name: 'LOG OUT',
+		to: '/dashboard',
+		id: 'log-out-button'
 	}
 ];

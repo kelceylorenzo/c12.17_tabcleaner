@@ -9,7 +9,6 @@ import StatsPage from './stats-page';
 import TopTenPage from './top-ten-page';
 import headerData from './header-data.js';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/app.css';
 
 const routes = [
@@ -32,7 +31,6 @@ const routes = [
 ];
 
 const App = () => (
-
 	<div className="app">
 		<Route exact path="/" component={LandingPage} />
 		<Route path="/dashboard" component={MainPage} />
@@ -40,7 +38,6 @@ const App = () => (
 		<Route path="/stats-page" component={StatsPage} />
 		<Route path="/top-ten" component={TopTenPage} />
 	</div>
-
 );
 
 export default App;
