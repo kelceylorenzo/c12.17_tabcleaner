@@ -156,65 +156,17 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
 })
 
 
-/**
-* Listens for when a tab becomes active by user clicking on the tab
-*@param {object} activeInfo includes props about the tab clicked
-*call setTime, createNewTab
-*/
-chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
-  //call server to give info about previous tab and new tab highlight
-  chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-    //check to see if the id is in local storage. if not, create new tab. 
-    var window  = JSON.stringify(tab.windowId);
-    var stringId = JSON.stringify(tab.id);
-    chrome.storage.local.get(window, function(item){
-      chrome.storage.local.get('activeTab', function(currentID){
-        var previousHighlighted = currentID.activeTab
-        var time = new Date();
-        var timeStamp = time.getTime();
-        if (item[window][stringId] >= 0) {
-          var currentTab = item[window][stringId];
-          //send database the id of previous active tab and new active tab
-          updateTabInformation(tab, timeStamp, false);
 
-        } else {
-          createNewTab(tab, timeStamp);
-          //SET AS HIGHLIHGTED
-        }
+function setActiveTab(previousHighlighted, newlyHighlighted, previousId, currentTabID,timeStamp){
+  if(previousId){
+      allTabs[previousId].highlighted = false;  
+      allTabs[previousId].timeOfDeactivation = timeStamp;  
+      allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
+      allTabs[previousId].inactiveTimeElapsed = 0;
+  }
+  setLocalStorage('activeTab', currentTabID)
+  activateTabInDatabase(newlyHighlighted)
 
-        var previousDBTabId = item[window][stringId];
-        setActiveTab(previousHighlighted, tab.id, timeStamp)
-         //call deactivated using previoushighligheted ; 
-          //call activate with currentTab
-      })
-    
-    })
-
-
-//     var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (previousHighlighted.url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/);
-//       if(siteUsageTime[domain[0]]){
-//         siteUsageTime[domain[0]] += previousHighlighted.activeTimeElapsed;
-//       } else {
-//         siteUsageTime[domain[0]] = previousHighlighted.activeTimeElapsed;
-//       }
-//     }
-
-  });
-})
-
-function setActiveTab(previousHighlighted, newlyHighlighted, timeStamp){
-  chrome.storage.local.get('activeTab', function(item){
-    var previousId = item.activeTab; 
-    var newTab = null; 
-    if(previousId){
-        allTabs[previousId].highlighted = false;  
-        allTabs[previousId].timeOfDeactivation = timeStamp;  
-        allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
-        allTabs[previousId].inactiveTimeElapsed = 0;
-    }
-    setLocalStorage('activeTab', newlyHighlighted)
-    // updateNewHighlightedTab(previousHighlighted, newlyHighlighted)
-  })
 }
 
 /**
@@ -277,6 +229,54 @@ function updateTab(tab){
       //get back database tab id associated with the google tab id
       //save into local storage as window id: {tabid: googletabID} 
 }
+
+
+/**
+* Listens for when a tab becomes active by user clicking on the tab
+*@param {object} activeInfo includes props about the tab clicked
+*call setTime, createNewTab
+*/
+chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
+  //call server to give info about previous tab and new tab highlight
+  chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
+    //check to see if the id is in local storage. if not, create new tab. 
+    var window  = JSON.stringify(tab.windowId);
+    var stringId = JSON.stringify(tab.id);
+    chrome.storage.local.get(window, function(item){
+      chrome.storage.local.get('activeTab', function(currentID){
+        var previousTab = currentID.activeTab;
+        var previousHighlightedGoogleID = item[window][previousTab.toString()];
+        var time = new Date();
+        var timeStamp = time.getTime();
+        if (item[window][stringId] >= 0) {
+          var currentTab = item[window][stringId];
+          //send database the id of previous active tab and new active tab
+          updateTabInformation(tab, timeStamp, false);
+
+        } else {
+          createNewTab(tab, timeStamp);
+          //SET AS HIGHLIHGTED
+        }
+        var currentActiveHighlight = item[window][stringId];
+        setActiveTab(previousHighlightedGoogleID, currentTab, previousTab,  tab.id, timeStamp);
+        deactivateTabInDatabase(previousHighlightedGoogleID);
+         //call deactivated using previoushighligheted ; 
+          //call activate with currentTab
+      })
+    
+    })
+
+
+//     var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (previousHighlighted.url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/);
+//       if(siteUsageTime[domain[0]]){
+//         siteUsageTime[domain[0]] += previousHighlighted.activeTimeElapsed;
+//       } else {
+//         siteUsageTime[domain[0]] = previousHighlighted.activeTimeElapsed;
+//       }
+//     }
+
+  });
+})
 
 
 /**
@@ -366,9 +366,9 @@ chrome.runtime.onMessage.addListener(
 */
 
 function updateNewHighlightedTab(previousId, currentId){
-  var object = {};
-  object['previousID'] = previousId;
-  object['currentID'] = currentId; 
+  var tabObject = {};
+  tabObject['previousID'] = previousId;
+  tabObject['currentID'] = currentId; 
   var xhr = new XMLHttpRequest();
   xhr.open('PUT', 'http://www.closeyourtabs.com/tabs/');
   xhr.setRequestHeader('Content-Type', 'application/json');
@@ -377,7 +377,7 @@ function updateNewHighlightedTab(previousId, currentId){
         console.log(xhr.responseText)
       }
     }
-  xhr.send(JSON.stringify(object))
+  xhr.send(JSON.stringify(tabObject))
 }
 
 
@@ -448,11 +448,47 @@ function createNewTabRequest(tabObject, tabId){
   xhr.send(JSON.stringify(tabObject));
 }
 
-function activateTabInDatabase(){
-
+function activateTabInDatabase(googleTabID){
+  var tabObject = {};
+  tabObject['databaseTabID'] = googleTabID;
+  console.log(tabObject)
+  var xhr = new XMLHttpRequest();
+  xhr.open('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 & xhr.status === 200) {
+        console.log(xhr.responseText)
+      } else {
+        console.log('error')
+      }
+    }
+  xhr.send(JSON.stringify(tabObject))
 }
 
 
-function deactivateTabInDatabase(){
-  
+function deactivateTabInDatabase(googleTabId){
+  //get user google ID
+  if(googleTabId === null){
+    return; 
+  }
+  chrome.storage.local.get('googleID', function (id){
+    var userGoogleID = id['googleID'];
+    if(userGoogleID){
+      var tabObject = {};
+      tabObject['databaseTabID'] = googleTabId;
+      tabObject['googleID'] = userGoogleID
+      var xhr = new XMLHttpRequest();
+      xhr.open('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 & xhr.status === 200) {
+            console.log(xhr.responseText)
+          }
+      }
+      xhr.send(JSON.stringify(tabObject))
+    } else {
+      console.log('no user')
+    }
+  })
+ 
 }
