@@ -19,7 +19,7 @@ function getUserInfoRequest(){
   //   if (xhr.readyState == 4 && xhr.status == "200") {
   //     // var userObject = xhr.responseText
   //     var result = JSON.parse(xhr.responseText);
-  //     setLocalStorage('userId', result.googleID);
+  //     setLocalStorage('googleID', result.googleID);
   //     console.log(result)
   //   } 
   // }
@@ -175,19 +175,24 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     var window  = JSON.stringify(tab.windowId);
     var stringId = JSON.stringify(tab.id);
     chrome.storage.local.get(window, function(item){
-      var time = new Date();
-      var timeStamp = time.getTime();
-      if (typeof item.links === 'undefined') {
-        console.log("New Tab");
-        createNewTab(tab, timeStamp);
-        //SET AS HIGHLIHGTED
-        return; 
-      } else {
-        var currentTab = item[window][stringId];
-        console.log(currentTab)
-        updateTab(tab, timeStamp);
-      }
-      setActiveTab(tab.id, timeStamp)
+      chrome.storage.local.get('activeTab', function(currentID){
+        var previousHighlighted = currentID.activeTab
+        var time = new Date();
+        var timeStamp = time.getTime();
+        if (typeof item.links === 'undefined') {
+          console.log("New Tab");
+          createNewTab(tab, timeStamp);
+          //SET AS HIGHLIHGTED
+          return; 
+        } else {
+          var currentTab = item[window][stringId];
+          console.log(currentTab)
+          //send database the id of previous active tab and new active tab
+          updateTab(tab, timeStamp);
+        }
+        setActiveTab(previousHighlighted, tab.id, timeStamp)
+      })
+    
     })
 
 
@@ -202,7 +207,7 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   });
 })
 
-function setActiveTab(id, timeStamp){
+function setActiveTab(previousHighlighted, newlyHighlighted, timeStamp){
   chrome.storage.local.get('activeTab', function(item){
     var previousId = item.activeTab; 
     var newTab = null; 
@@ -212,7 +217,8 @@ function setActiveTab(id, timeStamp){
         allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
         allTabs[previousId].inactiveTimeElapsed = 0;
     }
-    chrome.storage.local.set({'activeTab' : id})
+    chrome.storage.local.set({'activeTab' : newlyHighlighted})
+    // updateNewHighlightedTab(previousHighlighted, newlyHighlighted)
   })
 }
 
@@ -317,6 +323,21 @@ chrome.runtime.onMessage.addListener(
 *@param {object} data the data that will be sent 
 */
 
+function updateNewHighlightedTab(previousId, currentId){
+  var object = {};
+  object['previousID'] = previousId;
+  object['currentID'] = currentId; 
+  var xhr = new XMLHttpRequest();
+  xhr.open('PUT', 'http://www.closeyourtabs.com/tabs/');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 & xhr.status === 200) {
+        console.log(xhr.responseText)
+      }
+    }
+  xhr.send(JSON.stringify(object))
+}
+
 
 function updateTabRequest(tabObject){
   console.log(tabObject)
@@ -382,3 +403,4 @@ function createNewTabRequest(tabObject, tabId){
   };
   xhr.send(JSON.stringify(tabObject));
 }
+
