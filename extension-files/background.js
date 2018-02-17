@@ -129,11 +129,18 @@ function updateTab(tab, timeStamp){
 * Remove Tab object from object and move to closedTabs object
 *@param {id} 
 */
-chrome.tabs.onRemoved.addListener(function (id){
+chrome.tabs.onRemoved.addListener(function (id, removeInfo){
   console.log('tab removed')
   if(allTabs[id].highlighted){
       chrome.storage.local.set({'activeTab' : null})
   }
+  var window  = JSON.stringify(removeInfo.windowId);
+  chrome.storage.local.get(window, function(item){
+    var stringId = JSON.stringify(id);
+    var googleIdDb = item[window][stringId];
+    deleteTabFromDatabase(googleIdDb);
+
+  })
   delete allTabs[id];
 })
 
@@ -304,6 +311,18 @@ function updateTabRequest(tabObject){
       }
     }
   xhr.send(JSON.stringify(tabObject))
+}
+
+function deleteTabFromDatabase(tabId){
+  var xhr = new XMLHttpRequest();
+  xhr.open('DELETE', 'http://www.closeyourtabs.com/tabs/');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 & xhr.status === 200) {
+        console.log(xhr.responseText)
+      }
+    }
+  xhr.send(JSON.stringify(tabId))
 }
 
 function getAllDataFromServer(){
