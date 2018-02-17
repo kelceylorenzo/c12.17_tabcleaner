@@ -5,12 +5,41 @@ const mysqlCredentials = require('../mysqlCredentials.js');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
-db.connect(function (err) {
+db.connect((err) => {
     if (err) throw err;
     console.log("Connected to remote DB");
 });
 
 router.use(express.static(path.join(__dirname, 'html')));
+
+function checkIfTableExists() {
+    const tblChkSql = "SELECT count(*) FROM information_schema.TABLES"
+    "WHERE (TABLE_SCHEMA = 'closeyourtabs') AND (TABLE_NAME = 'tabs');";
+
+    const creatTblSql = "CREATE TABLE tabs (" +
+        "databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+        "windowID MEDIUMINT(8) NULL ," +
+        "tabTitle VARCHAR(200) NULL," +
+        "activatedTime double NULL," +
+        "deactivatedTime double NULL," +
+        "browserTabIndex int(10) NULL," +
+        "googleID double  NULL," +
+        "url VARCHAR(2084) NULL," +
+        "favicon VARCHAR(2084) NULL" +
+        ");"
+
+    db.query(tblChkSql, (err, results, fields) => {
+        if(err) throw err;
+        console.log('CHECKING IF TABLE EXISTS: ', results);
+        if (results['count(*)'] == 0) {
+            console.log("TABLE DOESN'T EXIST ****************************************************************************");
+            db.query(creatTblSql, (err, results, fields) => {
+                if (err) throw err;
+                console.log("TABLE CREATED ********************************************************************************");
+            }); 
+        };
+    });
+};
 
 router.get('/', (req, res) => {
 
@@ -29,17 +58,16 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', checkIfTableExists, (req, res) => {
     const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon } = req.body;
 
     const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
         windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon];
 
-        const sql = mysql.format(query, inserts);
+    const sql = mysql.format(query, inserts);
 
-    function insertRow(){ 
-        db.query(sql, (err, results, fields) => {
+    db.query(sql, (err, results, fields) => {
         console.log('err: ', err);
         if (err) throw err;
         const output = {
@@ -50,35 +78,6 @@ router.post('/', (req, res) => {
         console.log(output);
         const json_output = JSON.stringify(output);
         res.json(output);
-    })};
-
-    const creatTblSql = "CREATE TABLE tabs ("+
-        "databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT,"+
-        "windowID MEDIUMINT(8) NULL ,"+
-        "tabTitle VARCHAR(200) NULL,"+
-        "activatedTime double NULL,"+
-        "deactivatedTime double NULL,"+
-        "browserTabIndex int(10) NULL,"+
-        "googleID double  NULL,"+
-        "url VARCHAR(2084) NULL,"+
-        "favicon VARCHAR(2084) NULL"+
-      ");"
-
-    const tblChkSql = "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = 'closeyourtabs') AND (TABLE_NAME = 'tabs');";
-
-    db.query(tblChkSql, (err, results, fields) => {
-        console.log('results: ', results);
-        console.log('fields', fields);
-        if(results['count(*)'] == 0 ){
-            console.log("TABLE DOESN'T EXIST ****************************************************************************");
-            db.query(creatTblSql, (err, results, fields)=>{
-                console.log(err);
-                console.log("TABLE CREATED ********************************************************************************");
-                insertRow();
-            })
-        } else {
-            insertRow();
-        }
     });
 });
 
@@ -128,7 +127,7 @@ router.delete('/id', (req, res) => {
 });
 
 
-router.put('/', (req, res) => {
+router.put('/', checkIfTableExists, (req, res) => {
 
     const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
 
@@ -153,15 +152,15 @@ router.put('/', (req, res) => {
 
 });
 
-router.put('/activated', (req, res) => {
+router.put('/:time', checkIfTableExists, (req, res) => {
 
     let time = new Date();
     time = time.getTime();
 
     const { databaseTabID } = req.body;
 
-    const query = 'Update tabs SET activatedTime = ? WHERE databaseTabID = ? LIMIT 1';
-    const insert = [time, databaseTabID];
+    const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
+    const insert = [req.params.time, time, databaseTabID];
 
     const sql = mysql.format(query, insert);
 
@@ -177,30 +176,5 @@ router.put('/activated', (req, res) => {
         res.send(json_output);
     });
 });
-
-router.put('/deactivated', (req, res) => {
-    let time = new Date();
-    time = time.getTime();
-
-    const { databaseTabID, googleID } = req.body;
-
-    const query = 'Update tabs SET deactivatedTime = ? WHERE databaseTabID = ? LIMIT 1';
-    const insert = [time, databaseTabID];
-
-    const sql = mysql.format(query, insert);
-
-    db.query(sql, (err, results, fields) => {
-        if (err) throw err;
-        const output = {
-            success: true,
-            data: results,
-            fields: fields
-        }
-        console.log(output);
-        const json_output = JSON.stringify(output);
-        res.send(json_output);
-    });
-});
-
 
 module.exports = router;
