@@ -70,7 +70,10 @@ router.post('/', (req, res) => {
         console.log('results: ', results);
         console.log('fields', fields);
         if(results['count(*)'] == 0 ){
+            console.log("TABLE DOESN'T EXIST ****************************************************************************");
             db.query(creatTblSql, (err, results, fields)=>{
+                console.log(err);
+                console.log("TABLE CREATED ********************************************************************************");
                 insertRow();
             })
         } else {
