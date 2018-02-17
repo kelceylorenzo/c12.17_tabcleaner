@@ -69,6 +69,8 @@ router.post('/', (req, res) => {
     const tblChkSql = "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = 'closeyourtabs') AND (TABLE_NAME = 'tabs');";
 
     db.query(tblChkSql, (err, results, fields) => {
+        console.log('results: ', results);
+        console.log('fields', fields);
         if(results.count == 0 ){
             db.query(creatTblSql, (err, results, fields)=>{
                 insertRow();
