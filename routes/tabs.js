@@ -34,7 +34,7 @@ function checkIfTableExists(req, res, next) {
         if(err) throw err;
         console.log('CHECKING IF TABLE EXISTS RESULTS: ', results);
         console.log('CHECKING IF TABLE EXISTS FIELDS: ', fields);
-        if (results['count(*)'] == 0) {
+        if (results.length == 0) {
             console.log("TABLE DOESN'T EXIST ****************************************************************************");
             db.query(creatTblSql, (err, results, fields) => {
                 if (err) throw err;
