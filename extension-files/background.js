@@ -313,6 +313,10 @@ chrome.runtime.onMessage.addListener(
     updatedElaspedDeactivation();
     if(request === 'popup'){
       sendResponse(allTabs);
+    } else if (request === 'login'){
+      checkForUserAccount()
+      sendResponse(true);
+
     } 
   });
 

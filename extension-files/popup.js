@@ -71,4 +71,16 @@ requestAnimationFrame(function() {
   document.body.style.opacity = 1;
 });
 
+var loginBtn = document.getElementById('login').addEventListener('click', loginUser);
+
+function loginUser(){
+  chrome.runtime.sendMessage(
+    "login",
+    function (response) {
+      console.log(response)
+    }
+  );
+}
+
+
 
