@@ -14,10 +14,10 @@ router.use(express.static(path.join(__dirname, 'html')));
 
 router.get('/', (req, res) => {
 
-    let query = 'SELECT * FROM tabs WHERE googleID=?';
-    let inserts = req.body.googleID;
+    const query = 'SELECT * FROM tabs WHERE googleID=?';
+    const inserts = req.body.googleID;
 
-    let sql = mysql.format(query, insert);
+    const sql = mysql.format(query, insert);
 
     db.query(sql, function (err, rows, fields) {
         const output = {
@@ -30,15 +30,13 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    console.log('post: ', req.body);
-
     const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon } = req.body;
 
-    let query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    let inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
+    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
         windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon];
 
-    let sql = mysql.format(query, inserts);
+        const sql = mysql.format(query, inserts);
 
     function insertRow(){ 
         db.query(sql, (err, results, fields) => {
@@ -84,10 +82,10 @@ router.post('/', (req, res) => {
 router.delete('/', (req, res) => {
     const { databaseTabID } = req.body;
 
-    let query = 'DELETE FROM tabs WHERE databaseTabID = ?';
-    let insert = databaseTabID;
+    const query = 'DELETE FROM tabs WHERE databaseTabID = ?';
+    const insert = databaseTabID;
 
-    let sql = mysql.format(query, insert);
+    const sql = mysql.format(query, insert);
     console.log(sql);
 
     db.query(sql, (err, results, fields) => {
@@ -107,10 +105,10 @@ router.delete('/', (req, res) => {
 router.delete('/id', (req, res) => {
     const { googleID } = req.body;
 
-    let query = 'DELETE FROM tabs WHERE googleID = ?';
-    let insert = googleID;
+    const query = 'DELETE FROM tabs WHERE googleID = ?';
+    const insert = googleID;
 
-    let sql = mysql.format(query, insert);
+    const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
         console.log('err: ', err);
@@ -131,10 +129,10 @@ router.put('/', (req, res) => {
 
     const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
 
-    let query = 'UPDATE tabs SET tabTitle=?, browserTabIndex=?, url=?, favicon=? WHERE databaseTabID = ? LIMIT 1';
-    let insert = [tabTitle, browserTabIndex, url, favicon, databaseTabID];
+    const query = 'UPDATE tabs SET tabTitle=?, browserTabIndex=?, url=?, favicon=? WHERE databaseTabID = ? LIMIT 1';
+    const insert = [tabTitle, browserTabIndex, url, favicon, databaseTabID];
 
-    let sql = mysql.format(query, insert);
+    const sql = mysql.format(query, insert);
     console.log(sql);
 
     db.query(sql, (err, results, fields) => {
@@ -154,15 +152,15 @@ router.put('/', (req, res) => {
 
 router.put('/activated', (req, res) => {
 
-    const time = new Date();
+    let time = new Date();
     time = time.getTime();
 
     const { databaseTabID } = req.body;
 
-    let query = 'Update tabs SET activatedTime = ?'
-    let insert = time;
+    const query = 'Update tabs SET activatedTime = ? WHERE databaseTABID = ? LIMIT 1';
+    const insert = [time, databaseTabID];
 
-    let sql = mysql.format(query, insert);
+    const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
         if (err) throw err;
@@ -183,10 +181,10 @@ router.put('/deactivated', (req, res) => {
 
     const { databaseTabID, googleID } = req.body;
 
-    let query = 'Update tabs SET deactivatedTime = ?'
-    let insert = time;
+    const query = 'Update tabs SET WHERE databaseTABID = ? LIMIT 1';
+    const insert = [time, databaseTabID];
 
-    let sql = mysql.format(query, insert);
+    const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
         if (err) throw err;
