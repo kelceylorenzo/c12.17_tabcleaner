@@ -69,7 +69,7 @@ router.post('/', (req, res) => {
     db.query(tblChkSql, (err, results, fields) => {
         console.log('results: ', results);
         console.log('fields', fields);
-        if(results.count == 0 ){
+        if(results['count(*)'] == 0 ){
             db.query(creatTblSql, (err, results, fields)=>{
                 insertRow();
             })
