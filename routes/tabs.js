@@ -39,6 +39,7 @@ function checkIfTableExists() {
             }); 
         };
     });
+    next();
 };
 
 router.get('/', (req, res) => {
