@@ -99,7 +99,7 @@ function updatedElaspedDeactivation(){
 * Updates a Tab object
 *@param {object} 
 */
-function updateTab(tab, timeStamp){
+function updateTabInformation(tab, timeStamp){
   //if the site changed, get the elapsed time during active state and save to its url
   allTabs[tab.id] = {
     id: tab.id,
