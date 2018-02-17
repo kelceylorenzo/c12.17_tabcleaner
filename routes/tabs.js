@@ -178,7 +178,7 @@ router.put('/activated', (req, res) => {
 });
 
 router.put('/deactivated', (req, res) => {
-    const time = new Date();
+    let time = new Date();
     time = time.getTime();
 
     const { databaseTabID, googleID } = req.body;
