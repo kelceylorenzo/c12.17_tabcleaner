@@ -18,23 +18,15 @@ function checkIfTableExists(req, res, next) {
 
     const tblChkSql = "SHOW TABLES LIKE 'tabs' ";
 
-    const creatTblSql = "CREATE TABLE tabs (databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT, windowID MEDIUMINT(8) NULL , tabTitle VARCHAR(200) NULL, activatedTime double NULL, deactivatedTime double NULL, browserTabIndex int(10) NULL, googleID double  NULL, url VARCHAR(2084) NULL, favicon VARCHAR(2084) NULL );"
+    const creatTblSql = "CREATE TABLE IF NOT EXISTS tabs (databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT, windowID MEDIUMINT(8) NULL , tabTitle VARCHAR(200) NULL, activatedTime double NULL, deactivatedTime double NULL, browserTabIndex int(10) NULL, googleID double  NULL, url VARCHAR(2084) NULL, favicon VARCHAR(2084) NULL );"
 
-    db.query(tblChkSql, (err, results, fields) => {
-        if(err) throw err;
-        console.log('CHECKING IF TABLE EXISTS RESULTS: ', results);
-        console.log('CHECKING IF TABLE EXISTS FIELDS: ', fields);
-        if (results.length == 0) {
-            console.log("TABLE DOESN'T EXIST ****************************************************************************");
-            db.query(creatTblSql, (err, results, fields) => {
-                console.log('err: ', err);
-                console.log('results: ', results);
-                console.log('fields: ', fields);
-                if (err) throw err;
-                console.log("TABLE CREATED ********************************************************************************");
-            }); 
-        };
-    });
+    db.query(creatTblSql, (err, results, fields) => {
+        console.log('err: ', err);
+        console.log('results: ', results);
+        console.log('fields: ', fields);
+        if (err) throw err;
+        console.log("TABLE CREATED ********************************************************************************");
+    }); 
     next();
 };
 
