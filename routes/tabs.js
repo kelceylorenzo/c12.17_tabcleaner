@@ -16,7 +16,7 @@ function checkIfTableExists(req, res, next) {
     // const tblChkSql = "SELECT count(*) FROM information_schema.TABLES "+
     // "WHERE (TABLE_SCHEMA = 'closeyourtabs') AND (TABLE_NAME = 'tabs');";
 
-    const tblChkSql = 'SHOW TABLES LIKE tabs';
+    const tblChkSql = "SHOW TABLES LIKE 'tabs' ";
 
     const creatTblSql = "CREATE TABLE tabs (" +
         "databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
