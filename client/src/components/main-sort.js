@@ -5,17 +5,17 @@ class Sort extends Component {
 		return (
 			<div className="sort-by-menu">
 				<p className="sort-by-title">Sort By:</p>
-				<p className="sort-by-option" data-sorttype="az" onClick={this.props.sort}>
-					Title (A-Z)
-				</p>
-				<p className="sort-by-option" data-sorttype="za" onClick={this.props.sort}>
-					Title (Z-A)
-				</p>
-				<p className="sort-by-option" data-sorttype="window" onClick={this.props.sort}>
+				<p className="sort-by-option" onClick={(event) => this.props.sort('window', event)}>
 					Window
 				</p>
-				<p className="sort-by-option" data-sorttype="time" onClick={this.props.sort}>
+				<p className="sort-by-option" onClick={() => this.props.sort('time')}>
 					Time
+				</p>
+				<p className="sort-by-option" onClick={() => this.props.sort('az')}>
+					Title (A-Z)
+				</p>
+				<p className="sort-by-option" onClick={() => this.props.sort('za')}>
+					Title (Z-A)
 				</p>
 			</div>
 		);

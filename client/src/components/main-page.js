@@ -21,7 +21,7 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: 'Default'
+			sortType: 'window'
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -44,6 +44,38 @@ class MainPage extends Component {
 		resp.map((currentItem) => {
 			return (currentItem.selected = false);
 		});
+
+		//this manual sort when fetching data is temporary; need to figure out a way to sort the array by window when first fetching the data from the database
+		let output = {};
+		for (let i = 0; i < resp.length; i++) {
+			if (output[resp[i].windowId]) {
+				output[resp[i].windowId].push(resp[i]);
+			} else {
+				output[resp[i].windowId] = [];
+				output[resp[i].windowId].push(resp[i]);
+			}
+		}
+
+		resp = [];
+
+		for (let x in output) {
+			output[x].sort((a, b) => {
+				let indexA = a.index + a.windowId;
+				let indexB = b.index + b.windowId;
+
+				if (indexA < indexB) {
+					return -1;
+				}
+				if (indexA > indexB) {
+					return 1;
+				}
+				return 0;
+			});
+
+			for (let flatten = 0; flatten < output[x].length; flatten++) {
+				resp.push(output[x][flatten]);
+			}
+		}
 
 		this.setState({
 			...this.state,
@@ -69,10 +101,9 @@ class MainPage extends Component {
 		});
 	}
 
-	handleSort(event) {
+	handleSort(sortType) {
+		console.log('handle sort event: ', event);
 		let { tabsList } = this.state;
-
-		const sortType = event.target.getAttribute('data-sorttype');
 
 		switch (sortType) {
 			case 'az':
@@ -269,7 +300,7 @@ class MainPage extends Component {
 							tabData={this.state.tabsList}
 							select={this.handleIndividualSelect}
 							utilityClick={this.handleUtilityClick}
-							sort={this.handleSort}
+							sort={(sortType) => this.handleSort(sortType)}
 						/>
 					</div>
 				</div>

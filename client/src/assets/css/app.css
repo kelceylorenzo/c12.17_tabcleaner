@@ -223,6 +223,20 @@ body {
 	width: 30%;
 }
 
+.sort-by-option {
+	color: lightgray;
+	border-bottom: 2px solid transparent;
+	padding-bottom: 2%;
+}
+
+.sort-by-option:hover {
+	cursor: pointer;
+	color: black;
+	border-bottom: 2px solid rgb(212, 167, 129);
+	padding-bottom: 2%;
+	transition-duration: 0.5s;
+}
+
 .main-tab-area-window {
 	border: 1px solid green;
 	width: 100%;
@@ -244,7 +258,7 @@ body {
 	margin: 1%;
 	height: 50%;
 	width: 22%;
-	border: 1px solid maroon;
+	border: 1px solid rgba(26, 54, 74, 1);
 }
 
 .tab-title {
@@ -289,7 +303,7 @@ body {
 	width: 95%;
 	margin: auto;
 	display: flex;
-	border: 1px solid palevioletred;
+	border: 1px solid rgb(86, 135, 132);
 }
 
 /* Top Ten Page CSS Styling  */
