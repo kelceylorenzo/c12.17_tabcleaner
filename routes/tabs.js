@@ -10,8 +10,6 @@ db.connect((err) => {
     console.log("Connected to remote DB");
 });
 
-router.use(express.static(path.join(__dirname, 'html')));
-
 function checkIfTableExists(req, res, next) {
     db.query(
         "CREATE TABLE IF NOT EXISTS tabs (" +
@@ -68,9 +66,6 @@ router.post('/', checkIfTableExists, (req, res) => {
     });
 });
 
-// POTENTIALLY MERGE THESE TWO DELETE CALLS 
-// TEST THIS
-
 router.delete('/:deleteID', (req, res) => {
 
     let searchType;
@@ -89,6 +84,8 @@ router.delete('/:deleteID', (req, res) => {
     const insert = [searchType, searchID];
     const sql = mysql.format(query, insert);
 
+    console.log(sql);
+
     db.query(sql, (err, results, fields) => {
         if (err) throw err;
         const output = {
@@ -101,48 +98,6 @@ router.delete('/:deleteID', (req, res) => {
         res.json(output);
     });
 });
-
-
-// router.delete('/', (req, res) => {
-//     const { databaseTabID } = req.body;
-
-//     const query = 'DELETE FROM tabs WHERE databaseTabID = ?';
-//     const insert = databaseTabID;
-//     const sql = mysql.format(query, insert);
-
-//     db.query(sql, (err, results, fields) => {
-//         if (err) throw err;
-//         const output = {
-//             success: true,
-//             data: results,
-//             fields: fields
-//         }
-//         console.log(output);
-//         const json_output = JSON.stringify(output);
-//         res.json(output);
-//     });
-// });
-
-// router.delete('/id', (req, res) => {
-//     const { googleID } = req.body;
-
-//     const query = 'DELETE FROM tabs WHERE googleID = ?';
-//     const insert = googleID;
-//     const sql = mysql.format(query, insert);
-
-//     db.query(sql, (err, results, fields) => {
-//         if (err) throw err;
-//         const output = {
-//             success: true,
-//             data: results,
-//             fields: fields
-//         }
-//         console.log(output);
-//         const json_output = JSON.stringify(output);
-//         res.json(output);
-//     });
-// });
-
 
 router.put('/', checkIfTableExists, (req, res) => {
     const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
