@@ -81,7 +81,6 @@ function createNewTab(tab, currentTime){
         favicon: tab.favIconUrl
       }
       createNewTabRequest(dataForServer, tab.id);
-
     })
   }
 }
@@ -193,7 +192,6 @@ function getAllTabs(){
     tabs.forEach(function(tab){
       createNewTab(tab, timeStamp);
       setLocalStorage('activeTab', tab.id);
-
     })
   })
 }
@@ -206,13 +204,14 @@ function getAllTabs(){
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
+    console.log('tab update')
     var window  = JSON.stringify(tab.windowId);
     var stringId = JSON.stringify(tab.id);
     var date = new Date()
     var timeStamp = date.getTime();
 
     chrome.storage.local.get(window, function(item){
-      if (item[window][stringId]) {
+      if (item[window][stringId] || user.allTabs[tab.id]) {
         var googleIdDb = item[window][stringId];
         tab.googleTabId = googleIdDb;
         updateTabInformation(tab, timeStamp, true);
@@ -255,6 +254,11 @@ function updateTab(tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
+    if(user.loggedIn){
+
+    } else {
+
+    }
     var window  = JSON.stringify(tab.windowId);
     var stringId = JSON.stringify(tab.id);
 
@@ -301,27 +305,34 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
   console.log(moveInfo)
 })
 
-
-
 /**
 * Runs function when first browser loads
-*@param {object}
+*@param {object} details
 *calls getAllTabs
 */
 chrome.runtime.onStartup.addListener(function(details){
-  console.log('browser open')
-  getAllTabs();
-  setLocalStorage('activeTab', null);
-  // checkForUserAccount();
+  console.log('browser open');
+  newExtensionSession();
 })
 
 /**
 * Runs function when first installed
-*@param {object}
+*@param {object} details
 *calls getAllTabs
 */
 chrome.runtime.onInstalled.addListener(function(details){
-  console.log('installed')
+  console.log('installed');
+    // setLocalStorage('googleID', null);
+  newExtensionSession();
+})
+
+
+/**
+* clears local storage of any previous windows and creates an instance of user session
+*checks to see if user is already logged in 
+*calls getAllTabs, new instance of User object
+*/
+function newExtensionSession(){
   chrome.windows.getAll(function(windows){
     windows.forEach(function(window){
       var windowString = window.id.toString();
@@ -331,9 +342,12 @@ chrome.runtime.onInstalled.addListener(function(details){
   })
   getAllTabs();
   user = new User();
-  // setLocalStorage('googleID', null);
-  setLocalStorage('activeTab', null);
-})
+  chrome.storage.local.get('googleID', function(result){
+    if(result.googleID){
+      user.login();
+    } 
+  })
+}
 
 /**
 * Runs function when receive a message from the shared port 
@@ -427,4 +441,5 @@ function createNewTabRequest(tabObject, tabId){
   };
   xhr.send(JSON.stringify(tabObject));
 }
+
 

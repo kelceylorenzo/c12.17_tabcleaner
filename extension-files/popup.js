@@ -2,7 +2,6 @@ var lengthOfString = 40;
 var port = chrome.runtime.connect({name: "tab"});
 
 function init(){
-  console.log('init called')
   document.getElementById('refresh').addEventListener('click', refreshContent);
   document.getElementById('login').addEventListener('click', loginUser);
   document.body.style.opacity = 0;
@@ -16,6 +15,7 @@ function init(){
 function sendMessageToGetTabInfo(){
   port.postMessage({type: "popup"});
   port.onMessage.addListener(function(response) {
+    console.log(response)
     if(!response.sessionInfo){
       return; 
     }
