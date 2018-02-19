@@ -1,24 +1,45 @@
 var lengthOfString = 40; 
+var port = chrome.runtime.connect({name: "tab"});
+
+function init(){
+  console.log('init called')
+  document.getElementById('refresh').addEventListener('click', refreshContent);
+  document.getElementById('login').addEventListener('click', loginUser);
+  document.body.style.opacity = 0;
+  document.body.style.transition = 'opacity ease-out .4s';
+  requestAnimationFrame(function() {
+    document.body.style.opacity = 1;
+  });
+  sendMessageToGetTabInfo();
+}
 
 function sendMessageToGetTabInfo(){
-  chrome.runtime.sendMessage(
-    "popup",
-    function (response) {
-      for(var item in response){
-        var tabInfo = response[item];
-        var tabElement = createDomElement(tabInfo); 
-        document.getElementById('tag-titles').appendChild(tabElement);
-        console.log(tabInfo.timeOfSiteOpen)
-      }
+  port.postMessage({type: "popup"});
+  port.onMessage.addListener(function(response) {
+    if(!response.sessionInfo){
+      return; 
     }
-  );
+    var tabs = response.sessionInfo.allTabs;
+    for(var item in tabs){
+      var tabInfo = tabs[item];
+      var tabElement = createDomElement(tabInfo); 
+      document.getElementById('tag-titles').appendChild(tabElement);
+    }
+    if(response.sessionInfo.userStatus){
+      hideLoginButtons();
+    }
+  });
+}
+
+function hideLoginButtons(){
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('signup').style.display = 'none';
 }
 
 function refreshContent(){
   document.getElementById('tag-titles').innerHTML = "";
   sendMessageToGetTabInfo();
 }
-
 
 function createDomElement(tabObject){
   if(!tabObject.title){
@@ -62,25 +83,14 @@ function highlightTab(index, windowId,event){
   chrome.windows.update(windowId, {focused: true})
 }
 
-document.getElementById('refresh').addEventListener('click', refreshContent);
-sendMessageToGetTabInfo();
-
-document.body.style.opacity = 0;
-document.body.style.transition = 'opacity ease-out .4s';
-requestAnimationFrame(function() {
-  document.body.style.opacity = 1;
-});
-
-var loginBtn = document.getElementById('login').addEventListener('click', loginUser);
-
 function loginUser(){
-  chrome.runtime.sendMessage(
-    "login",
-    function (response) {
-      console.log(response)
+  port.postMessage({type: "login"});
+  port.onMessage.addListener(function(response) {
+    if(response.loginStatus){
+      hideLoginButtons();
     }
-  );
+  });
 }
 
-
+init();
 
