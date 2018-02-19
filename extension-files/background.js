@@ -20,6 +20,8 @@ function checkForUserAccount(){
   xhr.send()
 }
 
+
+
 /**
 * Creates a Tab object, sets timestamp for initial open
 *@param {object} tab 
