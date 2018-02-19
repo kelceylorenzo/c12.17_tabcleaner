@@ -10,6 +10,7 @@ class User{
   }
   login(){
     this.loggedIn = true; 
+    getAllTabs();
   }
   logout(){
     this.loggedIn = false; 
@@ -42,7 +43,6 @@ function checkForUserAccount(){
 }
 
 
-
 /**
 * Creates a Tab object, sets timestamp for initial open
 *@param {object} tab 
@@ -60,6 +60,7 @@ function createNewTab(tab, currentTime){
     inactiveTimeElapsed: 0,
     screenshot: '', 
     highlighted: tab.highlighted
+
   }
   if(tabObject.highlighted){
     tabObject.timeOfActivation = currentTime;
@@ -70,21 +71,22 @@ function createNewTab(tab, currentTime){
   }
   allTabs[tab.id] = tabObject; 
 
-  var dataForServer = {
-    windowID: tab.windowId,
-    tabTitle: tab.title,
-    activatedTime: 0, 
-    deactivatedTime: 0, 
-    browserTabIndex: tab.index, 
-    googleID: 101760331504672280672, 
-    url: tab.url,
-    favicon: tab.favIconUrl
-  }
   if(user.loggedIn){
-    createNewTabRequest(dataForServer, tab.id);
+    chrome.storage.local.get('googleID', function(userID){
+      var dataForServer = {
+        windowID: tab.windowId,
+        tabTitle: tab.title,
+        activatedTime: 0, 
+        deactivatedTime: 0, 
+        browserTabIndex: tab.index, 
+        googleID: userID.googleID, 
+        url: tab.url,
+        favicon: tab.favIconUrl
+      }
+      createNewTabRequest(dataForServer, tab.id);
+
+    })
   }
-  //checks to see if user state is logged in to make call to server 
-  // createNewTabRequest(dataForServer, tab.id);
 }
 
 
@@ -341,32 +343,48 @@ chrome.runtime.onInstalled.addListener(function(details){
 *@param {object}
 * sends response back to the caller
 */
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    // getAllDataFromServer()
-    updatedElaspedDeactivation();
-    if(request === 'popup'){
-      sendResponse(allTabs);
-    } else if (request === 'login'){
-      chrome.storage.local.get('googleID', function(item){
-        if(item.userId){
-          //set state to logged in 
-          console.log('user has an account');
-          return true; 
+// chrome.runtime.onMessage.addListener(
+//   function(request, sender, sendResponse) {
+//    if (request === 'login'){
+//         chrome.storage.local.get('googleID', function(result){
+//           if(result.googleID){
+//             user.login();
+//             user.userID = 
+//             sendResponse({'loginStatus': true});
+//           } else {
+//             sendResponse({'loginStatus': true});
+//           }
+//         })
+//     }
+//   }
+// );
+
+chrome.runtime.onConnect.addListener(function(port) {
+  console.assert(port.name == "tab");
+  port.onMessage.addListener(function(message) {
+    if (message.type == "popup"){
+      updatedElaspedDeactivation();
+      var responseObject = {};
+      responseObject.userStatus = user.loggedIn; 
+      responseObject.allTabs = allTabs; 
+      port.postMessage({sessionInfo: responseObject})
+    } else if(message.type = 'login'){
+      chrome.storage.local.get('googleID', function(result){
+        if(result.googleID){
+          user.login();
+          port.postMessage({'loginStatus': true})
         } else {
-          console.log('user needs to sign in');
-          // return sendResponse(checkForUserAccount());
+          port.postMessage({'loginStatus': false})
         }
       })
-    // } else if(request=== 'update'){
-    //   var date = new Date()
-    //   var timeStamp = date.getTime();
-    //   console.log('update from a message');
-    //   updateTabInformation(sender.tab, timeStamp, true);
-    //   sendResponse('tab updated from sender ', sender);
 
     }
   });
+});
+
+
+
+
 
 
 
