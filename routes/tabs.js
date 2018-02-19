@@ -76,11 +76,11 @@ router.delete('/:deleteID', (req, res) => {
     let searchType;
     let searchID;
 
-    if(params.deleteID === 'google'){
+    if(req.params.deleteID === 'google'){
         searchID = req.body.googleID
         searchType = googleID
     }
-    if(params.deleteID === 'database'){
+    if(req.params.deleteID === 'database'){
         searchID = req.body.databaseTabID;
         searchType = databaseTabID;
     };
