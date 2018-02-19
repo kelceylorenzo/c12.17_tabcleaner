@@ -78,11 +78,11 @@ router.delete('/:deleteID', (req, res) => {
 
     if(req.params.deleteID === 'google'){
         searchID = req.body.googleID
-        searchType = googleID
+        searchType = 'googleID'
     }
     if(req.params.deleteID === 'database'){
         searchID = req.body.databaseTabID;
-        searchType = databaseTabID;
+        searchType = 'databaseTabID';
     };
 
     const query = 'DELETE FROM tabs WHERE ?? = ?';
