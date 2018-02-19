@@ -64,9 +64,8 @@ function createNewTab(tab, currentTime){
     favicon: tab.favIconUrl
   }
   //checks to see if user state is logged in to make call to server 
-  createNewTabRequest(dataForServer, tab.id);
-  //get back database tab id associated with the google tab id
-  //save into local storage as window id: {tabid: googletabID} 
+  // createNewTabRequest(dataForServer, tab.id);
+
 }
 
 
@@ -122,7 +121,7 @@ function updateTabInformation(tab, timeStamp, updateInfo){
       favicon: tab.favicon,
     }
     console.log('tab is updated')
-    updateTabRequest(dataForServer);
+    // updateTabRequest(dataForServer);
   } else {
     console.log('tab is highlighted')
 
@@ -165,7 +164,7 @@ function setActiveTab(previousHighlighted, newlyHighlighted, previousId, current
       allTabs[previousId].inactiveTimeElapsed = 0;
   }
   setLocalStorage('activeTab', currentTabID)
-  activateTabInDatabase(newlyHighlighted)
+  // activateTabInDatabase(newlyHighlighted)
 
 }
 
@@ -243,7 +242,9 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     var window  = JSON.stringify(tab.windowId);
     var stringId = JSON.stringify(tab.id);
     chrome.storage.local.get(window, function(item){
+      console.log(item)
       chrome.storage.local.get('activeTab', function(currentID){
+        console.log(currentID)
         var previousTab = currentID.activeTab;
         var previousHighlightedGoogleID = item[window][previousTab.toString()];
         var time = new Date();
@@ -259,21 +260,10 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
         }
         var currentActiveHighlight = item[window][stringId];
         setActiveTab(previousHighlightedGoogleID, currentTab, previousTab,  tab.id, timeStamp);
-        deactivateTabInDatabase(previousHighlightedGoogleID);
-         //call deactivated using previoushighligheted ; 
-          //call activate with currentTab
+        // deactivateTabInDatabase(previousHighlightedGoogleID);
       })
     
     })
-
-
-//     var domain = (previousHighlighted.url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (previousHighlighted.url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/);
-//       if(siteUsageTime[domain[0]]){
-//         siteUsageTime[domain[0]] += previousHighlighted.activeTimeElapsed;
-//       } else {
-//         siteUsageTime[domain[0]] = previousHighlighted.activeTimeElapsed;
-//       }
-//     }
 
   });
 })
@@ -311,7 +301,7 @@ chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
   getAllTabs();
   // setLocalStorage('googleID', null);
-  setLocalStorage('activeTab', null);
+  setLocalStorage('activeTab', '');
 })
 
 /**
