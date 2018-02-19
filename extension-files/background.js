@@ -4,9 +4,13 @@
 //if returns the key, user state is logged in 
 //
 
+setLocalStorage('googleID', 101760331504672280672); //TEST USER
+var user; 
+
 class User{
   constructor(){
     this.loggedIn =  false; 
+    this.allTabs = {}; 
   }
   login(){
     this.loggedIn = true; 
@@ -16,13 +20,6 @@ class User{
     this.loggedIn = false; 
   }
 }
-
-var user; 
-
-
-setLocalStorage('googleID', 101760331504672280672); //TEST USER
-var allTabs = {};
-var siteUsageTime = {}
 
 /**
 *Check if user has an account 
@@ -69,7 +66,7 @@ function createNewTab(tab, currentTime){
     tabObject.timeOfActivation = 0;
     tabObject.timeOfDeactivation = currentTime;  
   }
-  allTabs[tab.id] = tabObject; 
+  user.allTabs[tab.id] = tabObject; 
 
   if(user.loggedIn){
     chrome.storage.local.get('googleID', function(userID){
@@ -108,6 +105,7 @@ function setLocalStorage(keyName, value){
 function updatedElaspedDeactivation(){
   var date = new Date();
   var currentTime = date.getTime();
+  var allTabs = user.allTabs; 
   for(var tab in allTabs){
     if(!allTabs[tab].highlighted){
       allTabs[tab].inactiveTimeElapsed = currentTime - allTabs[tab].timeOfDeactivation;
@@ -123,7 +121,7 @@ function updatedElaspedDeactivation(){
 
 function updateTabInformation(tab, timeStamp, updateInfo){
   //if the site changed, get the elapsed time during active state and save to its url
-  allTabs[tab.id] = {
+  user.allTabs[tab.id] = {
     id: tab.id,
     windowId: tab.windowId,
     favicon: tab.favIconUrl,
@@ -163,11 +161,12 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
       serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
     })
   }
-  delete allTabs[id];
+  delete user.allTabs[id];
 })
 
 
 function setActiveTab(uniqueID, previousId, currentTabID,timeStamp){
+  var allTabs = user.allTabs; 
   if(allTabs[previousId]){
       allTabs[previousId].highlighted = false;  
       allTabs[previousId].timeOfDeactivation = timeStamp;  
@@ -337,27 +336,11 @@ chrome.runtime.onInstalled.addListener(function(details){
 })
 
 /**
-* Runs function when receive a message
-*@param {string}
-*@param {object}
-*@param {object}
+* Runs function when receive a message from the shared port 
+*@param {object} port 
+*@param {object} message 
 * sends response back to the caller
 */
-// chrome.runtime.onMessage.addListener(
-//   function(request, sender, sendResponse) {
-//    if (request === 'login'){
-//         chrome.storage.local.get('googleID', function(result){
-//           if(result.googleID){
-//             user.login();
-//             user.userID = 
-//             sendResponse({'loginStatus': true});
-//           } else {
-//             sendResponse({'loginStatus': true});
-//           }
-//         })
-//     }
-//   }
-// );
 
 chrome.runtime.onConnect.addListener(function(port) {
   console.assert(port.name == "tab");
@@ -366,7 +349,7 @@ chrome.runtime.onConnect.addListener(function(port) {
       updatedElaspedDeactivation();
       var responseObject = {};
       responseObject.userStatus = user.loggedIn; 
-      responseObject.allTabs = allTabs; 
+      responseObject.allTabs = user.allTabs; 
       port.postMessage({sessionInfo: responseObject})
     } else if(message.type = 'login'){
       chrome.storage.local.get('googleID', function(result){
@@ -377,14 +360,9 @@ chrome.runtime.onConnect.addListener(function(port) {
           port.postMessage({'loginStatus': false})
         }
       })
-
     }
   });
 });
-
-
-
-
 
 
 
