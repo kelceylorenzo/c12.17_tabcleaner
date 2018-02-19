@@ -1,25 +1,79 @@
 import React, { Component } from 'react';
 
-class Sort extends Component {
-	render() {
-		return (
-			<div className="sort-by-menu">
-				<p className="sort-by-title">Sort By:</p>
-				<p className="sort-by-option" onClick={(event) => this.props.sort('window', event)}>
-					Window
-				</p>
-				<p className="sort-by-option" onClick={() => this.props.sort('time')}>
-					Time
-				</p>
-				<p className="sort-by-option" onClick={() => this.props.sort('az')}>
-					Title (A-Z)
-				</p>
-				<p className="sort-by-option" onClick={() => this.props.sort('za')}>
-					Title (Z-A)
-				</p>
-			</div>
-		);
-	}
-}
+let sortOptions = [];
 
-export default Sort;
+export default (props) => {
+	sortOptions = [
+		{
+			name: 'Window',
+			type: 'window',
+			style: {}
+		},
+		{
+			name: 'Time',
+			type: 'time',
+			style: {}
+		},
+		{
+			name: 'Title (A-Z)',
+			type: 'az',
+			style: {}
+		},
+		{
+			name: 'Title (Z-A)',
+			type: 'za',
+			style: {}
+		}
+	];
+
+	for (let sortOptionsIndex = 0; sortOptionsIndex < sortOptions.length; sortOptionsIndex++) {
+		if (props.sortType === sortOptions[sortOptionsIndex].type) {
+			sortOptions[sortOptionsIndex].style = {
+				cursor: 'pointer',
+				color: 'black',
+				borderBottom: '2px solid rgb(212, 167, 129)',
+				paddingBottom: '2%'
+			};
+		}
+	}
+
+	const sortList = sortOptions.map((sortOption, index) => {
+		return (
+			<p
+				key={index}
+				className="sort-by-option"
+				style={sortOption.style}
+				onClick={() => props.sort(sortOption.type)}
+			>
+				{sortOption.name}
+			</p>
+		);
+	});
+
+	return (
+		<div className="sort-by-menu">
+			<p className="sort-by-title">Sort By:</p>
+			{sortList}
+		</div>
+	);
+};
+
+// class Sort extends Component {
+// 	render() {
+// 		const sortList = sortOptions.map((sortOption, index) => {
+// 			return (
+// 				<p className="sort-by-option" onClick={this.props.sort(sortOption.type)}>
+// 					{sortOption.name}
+// 				</p>
+// 			);
+// 		});
+// 		return (
+// 			<div className="sort-by-menu">
+// 				<p className="sort-by-title">Sort By:</p>
+// 				{sortList}
+// 			</div>
+// 		);
+// 	}
+// }
+
+// export default Sort;

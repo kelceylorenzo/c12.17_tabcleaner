@@ -18,7 +18,7 @@ class MainTabArea extends Component {
 		return (
 			<div className="main-tab-area">
 				<div className="sort-by-container">
-					<Sort sort={(sortType, event) => this.props.sort(sortType, event)} />
+					<Sort sort={(sortType) => this.props.sort(sortType)} sortType={this.props.sortType} />
 				</div>
 				<div className="tab-window">{tabList}</div>
 			</div>
