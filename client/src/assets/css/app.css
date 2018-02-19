@@ -25,9 +25,9 @@ body {
 	cursor: default;
 }
 
-.landing-page-title{
+.landing-page-title {
 	font-family: "Lato", sans-serif;
-	color: rgba(0,0,0,.6);;
+	color: rgba(0, 0, 0, 0.6);
 	font-size: 2em;
 }
 
@@ -50,18 +50,24 @@ body {
 	font-weight: 800;
 	text-decoration: none;
 	text-align: center;
-	border: 3px solid rgba(0,0,0,.6);
-	color: rgba(0,0,0,.6);
-	background-color: rgb(215,213, 170);
+	background-color: rgba(86, 135, 132, 0.2);
+	color: rgba(86, 135, 132, 1);
+	border: 3px solid rgba(86, 135, 132, 1);
+	/* border: 3px solid rgba(255,255,255,1);
+	color: rgba(255,255,255,1);
+	background-color: rgba(86, 135, 132, 1); */
 	border-radius: 5px;
 	padding: 1%;
 	width: 10%;
 }
 
-.login-button:hover{
-	background-color: rgba(215,213,170,.5);
-	color: rgba(0,0,0,1);
-	border: 3px solid rgba(0,0,0,.8);
+.login-button:hover {
+	border: 3px solid rgba(255, 255, 255, .6);
+	color: rgba(255, 255, 255, .85);
+	background-color: rgba(86, 135, 132, 1);
+	/* background-color: rgba(86, 135, 132, .2);
+	color: rgba(86, 135, 132, 1);
+	border: 3px solid rgba(86, 135, 132, 1); */
 }
 
 /* Header Styling */
@@ -176,7 +182,7 @@ body {
 	flex-direction: column;
 	height: 80%;
 	width: 100%;
-	font-family: 'Lato', sans-serif;
+	font-family: "Lato", sans-serif;
 	font-weight: 400;
 }
 
