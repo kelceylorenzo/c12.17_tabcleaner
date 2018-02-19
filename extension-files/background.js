@@ -113,21 +113,9 @@ function updateTabInformation(tab, timeStamp, updateInfo){
       browserTabIndex: tab.index, 
       url: tab.url,
       favicon: tab.favicon,
-    }
-<<<<<<< HEAD
-    console.log('tab is updated')
-    // updateTabRequest(dataForServer);
-  } else {
-    console.log('tab is highlighted')
-
-    //tab is highlighed for the first time 
-  }
-
-
-=======
-    serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
+    } 
+    // serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
   } 
->>>>>>> 5303e19696c855bd47da9e53b54b75c459a039a6
 }
 
 
@@ -143,7 +131,7 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
     var googleIdDb = item[window][stringId];
     var tabObject = {};
     tabObject['databaseTabID'] = googleIdDb;
-    serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
+    // serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
   })
   delete allTabs[id];
 })
@@ -157,14 +145,9 @@ function setActiveTab(previousHighlighted, newlyHighlighted, previousId, current
       allTabs[previousId].inactiveTimeElapsed = 0;
   }
   setLocalStorage('activeTab', currentTabID)
-<<<<<<< HEAD
-  // activateTabInDatabase(newlyHighlighted)
-
-=======
   var tabObject = {};
   tabObject['databaseTabID'] = newlyHighlighted;
-  serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject)
->>>>>>> 5303e19696c855bd47da9e53b54b75c459a039a6
+  // serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject)
 }
 
 /**
@@ -242,13 +225,8 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     var stringId = JSON.stringify(tab.id);
 
     chrome.storage.local.get(window, function(item){
-<<<<<<< HEAD
-      console.log(item)
-=======
 
->>>>>>> 5303e19696c855bd47da9e53b54b75c459a039a6
       chrome.storage.local.get('activeTab', function(currentID){
-        console.log(currentID)
         var previousTab = currentID.activeTab;
         var previousHighlightedGoogleID = item[window][previousTab.toString()];
         var time = new Date();
@@ -262,13 +240,6 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
         }
         var currentActiveHighlight = item[window][stringId];
         setActiveTab(previousHighlightedGoogleID, currentTab, previousTab,  tab.id, timeStamp);
-<<<<<<< HEAD
-        // deactivateTabInDatabase(previousHighlightedGoogleID);
-      })
-    
-    })
-
-=======
 
         chrome.storage.local.get('googleID', function (id){
           var userGoogleID = id['googleID'];
@@ -276,13 +247,12 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
             var tabObject = {};
             tabObject['databaseTabID'] = previousHighlightedGoogleID;
             tabObject['googleID'] = userGoogleID
-            serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
+            // serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
      
           }
         })
       })   
     })
->>>>>>> 5303e19696c855bd47da9e53b54b75c459a039a6
   });
 })
 
@@ -317,9 +287,16 @@ chrome.runtime.onStartup.addListener(function(details){
 */
 chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
+  chrome.windows.getAll(function(windows){
+    windows.forEach(function(window){
+      var windowString = window.id.toString();
+      var emptyObject = {}
+      setLocalStorage(windowString, emptyObject);
+    })
+  })
   getAllTabs();
   // setLocalStorage('googleID', null);
-  setLocalStorage('activeTab', '');
+  setLocalStorage('activeTab', null);
 })
 
 /**
