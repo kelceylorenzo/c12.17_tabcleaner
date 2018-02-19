@@ -13,6 +13,7 @@
   "author": "James Kirsch",
   "license": "ISC",
   "dependencies": {
+    "bfg": "^0.3.0",
     "body-parser": "^1.18.2",
     "bundle": "^2.1.0",
     "concurrently": "^3.5.1",
