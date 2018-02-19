@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const path = require('path');
 const router = express.Router();
 
 router.use(express.static(path.join(__dirname, 'client', 'dist')));

@@ -5,17 +5,7 @@ const mysqlCredentials = require('../mysqlCredentials.js');
 const db = mysql.createConnection(mysqlCredentials);
 
 function checkIfTableExists(req, res, next) {
-    db.query("CREATE TABLE IF NOT EXISTS users (" +
-        "googleID double NOT NULL PRIMARY KEY," +
-        "firstName VARCHAR(30) NULL," +
-        "lastName VARCHAR(30) NULL," +
-        "email VARCHAR(50) NULL," +
-        "image VARCHAR(200) NULL);",
-        (err, results, fields) => {
-            if (err) throw err;
-        }
-    );
-    next();
+    
 };
 
 module.exports = function (passport) {
@@ -39,7 +29,7 @@ module.exports = function (passport) {
         const findUserInsert = newUser.googleID;
         const findUser = mysql.format(findUserSQL, findUserInsert);
 
-        db.query(findUser, checkIfTableExists, (err, results, fields) => {
+        db.query(findUser, (err, results, fields) => {
 
             if (err) throw err;
 
@@ -55,11 +45,20 @@ module.exports = function (passport) {
                 let insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
                 let insertUser = mysql.format(query, inserts);
 
-                db.query(insertUser, (err, results, fields) => {
-                    if (err) throw err;
-                    console.log('user was not in db, but is now');
-                    return done(null, newUser);
-                });
+                db.query("CREATE TABLE IF NOT EXISTS users (" +
+                        "googleID double NOT NULL PRIMARY KEY," +
+                        "firstName VARCHAR(30) NULL," +
+                        "lastName VARCHAR(30) NULL," +
+                        "email VARCHAR(50) NULL," +
+                        "image VARCHAR(200) NULL);",
+                        (err, results, fields) => {
+                            if (err) throw err;
+                            db.query(insertUser, (err, results, fields) => {
+                                if (err) throw err;
+                                console.log('user was not in db, but is now');
+                                return done(null, newUser);
+                            });
+                        });
             };
         });
     }));
