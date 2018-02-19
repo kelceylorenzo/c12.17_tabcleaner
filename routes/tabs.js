@@ -13,20 +13,21 @@ db.connect((err) => {
 router.use(express.static(path.join(__dirname, 'html')));
 
 function checkIfTableExists(req, res, next) {
-    // const tblChkSql = "SELECT count(*) FROM information_schema.TABLES "+
-    // "WHERE (TABLE_SCHEMA = 'closeyourtabs') AND (TABLE_NAME = 'tabs');";
-
-    const tblChkSql = "SHOW TABLES LIKE 'tabs' ";
-
-    const creatTblSql = "CREATE TABLE IF NOT EXISTS tabs (databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT, windowID MEDIUMINT(8) NULL , tabTitle VARCHAR(200) NULL, activatedTime double NULL, deactivatedTime double NULL, browserTabIndex int(10) NULL, googleID double  NULL, url VARCHAR(2084) NULL, favicon VARCHAR(2084) NULL );"
-
-    db.query(creatTblSql, (err, results, fields) => {
-        console.log('err: ', err);
-        console.log('results: ', results);
-        console.log('fields: ', fields);
-        if (err) throw err;
-        console.log("TABLE CREATED ********************************************************************************");
-    }); 
+    db.query(
+        "CREATE TABLE IF NOT EXISTS tabs (" +
+        "databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+        "windowID MEDIUMINT(8) NULL ," +
+        "tabTitle VARCHAR(200) NULL," +
+        "activatedTime double NULL," +
+        "deactivatedTime double NULL," +
+        "browserTabIndex int(10) NULL," +
+        "googleID double NULL," +
+        "url VARCHAR(2084) NULL," +
+        "favicon VARCHAR(2084) NULL );",
+        (err, results, fields) => {
+            if (err) throw err;
+        }
+    );
     next();
 };
 
@@ -34,7 +35,6 @@ router.get('/', (req, res) => {
 
     const query = 'SELECT * FROM tabs WHERE googleID=?';
     const inserts = req.body.googleID;
-
     const sql = mysql.format(query, insert);
 
     db.query(sql, function (err, rows, fields) {
@@ -50,14 +50,12 @@ router.get('/', (req, res) => {
 router.post('/', checkIfTableExists, (req, res) => {
     const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon } = req.body;
 
-    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
-        windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon];
-
+                              windowID,   tabTitle,   activatedTime,   deactivatedTime,   browserTabIndex,   googleID,   url,   favicon];
     const sql = mysql.format(query, inserts);
 
     db.query(sql, (err, results, fields) => {
-        console.log('err: ', err);
         if (err) throw err;
         const output = {
             success: true,
@@ -70,39 +68,28 @@ router.post('/', checkIfTableExists, (req, res) => {
     });
 });
 
-router.delete('/', (req, res) => {
-    const { databaseTabID } = req.body;
+// POTENTIALLY MERGE THESE TWO DELETE CALLS 
+// TEST THIS
 
-    const query = 'DELETE FROM tabs WHERE databaseTabID = ?';
-    const insert = databaseTabID;
+router.delete('/:deleteID', (req, res) => {
 
-    const sql = mysql.format(query, insert);
-    console.log(sql);
+    let searchType;
+    let searchID;
 
-    db.query(sql, (err, results, fields) => {
-        console.log('err: ', err);
-        if (err) throw err;
-        const output = {
-            success: true,
-            data: results,
-            fields: fields
-        }
-        console.log(output);
-        const json_output = JSON.stringify(output);
-        res.json(output);
-    });
-});
+    if(params.deleteID === 'google'){
+        searchID = req.body.googleID
+        searchType = googleID
+    }
+    if(params.deleteID === 'database'){
+        searchID = req.body.databaseTabID;
+        searchType = databaseTabID;
+    };
 
-router.delete('/id', (req, res) => {
-    const { googleID } = req.body;
-
-    const query = 'DELETE FROM tabs WHERE googleID = ?';
-    const insert = googleID;
-
+    const query = 'DELETE FROM tabs WHERE ?? = ?';
+    const insert = [searchType, searchID];
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        console.log('err: ', err);
         if (err) throw err;
         const output = {
             success: true,
@@ -114,17 +101,55 @@ router.delete('/id', (req, res) => {
         res.json(output);
     });
 });
+
+
+// router.delete('/', (req, res) => {
+//     const { databaseTabID } = req.body;
+
+//     const query = 'DELETE FROM tabs WHERE databaseTabID = ?';
+//     const insert = databaseTabID;
+//     const sql = mysql.format(query, insert);
+
+//     db.query(sql, (err, results, fields) => {
+//         if (err) throw err;
+//         const output = {
+//             success: true,
+//             data: results,
+//             fields: fields
+//         }
+//         console.log(output);
+//         const json_output = JSON.stringify(output);
+//         res.json(output);
+//     });
+// });
+
+// router.delete('/id', (req, res) => {
+//     const { googleID } = req.body;
+
+//     const query = 'DELETE FROM tabs WHERE googleID = ?';
+//     const insert = googleID;
+//     const sql = mysql.format(query, insert);
+
+//     db.query(sql, (err, results, fields) => {
+//         if (err) throw err;
+//         const output = {
+//             success: true,
+//             data: results,
+//             fields: fields
+//         }
+//         console.log(output);
+//         const json_output = JSON.stringify(output);
+//         res.json(output);
+//     });
+// });
 
 
 router.put('/', checkIfTableExists, (req, res) => {
-
     const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
 
     const query = 'UPDATE tabs SET tabTitle=?, browserTabIndex=?, url=?, favicon=? WHERE databaseTabID = ? LIMIT 1';
     const insert = [tabTitle, browserTabIndex, url, favicon, databaseTabID];
-
     const sql = mysql.format(query, insert);
-    console.log(sql);
 
     db.query(sql, (err, results, fields) => {
         if (err) throw err;
@@ -137,8 +162,6 @@ router.put('/', checkIfTableExists, (req, res) => {
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
-
-
 });
 
 router.put('/:time', checkIfTableExists, (req, res) => {

@@ -4,6 +4,20 @@ const mysql = require('mysql');
 const mysqlCredentials = require('../mysqlCredentials.js');
 const db = mysql.createConnection(mysqlCredentials);
 
+function checkIfTableExists(req, res, next) {
+    db.query("CREATE TABLE IF NOT EXISTS users (" +
+        "googleID double NOT NULL PRIMARY KEY," +
+        "firstName VARCHAR(30) NULL," +
+        "lastName VARCHAR(30) NULL," +
+        "email VARCHAR(50) NULL," +
+        "image VARCHAR(200) NULL);",
+        (err, results, fields) => {
+            if (err) throw err;
+        }
+    );
+    next();
+};
+
 module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: keys.googleClientID,
@@ -13,7 +27,6 @@ module.exports = function (passport) {
     }, (accessToken, refreshToken, profile, done) => {
 
         const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
-
         const newUser = {
             googleID: profile.id,
             firstName: profile.name.givenName,
@@ -22,79 +35,49 @@ module.exports = function (passport) {
             image: image
         }
 
-        const query = "SELECT * FROM users WHERE googleID=? LIMIT 1"
-        const insert = newUser.googleID;
+        const findUserSQL = "SELECT * FROM users WHERE googleID=? LIMIT 1"
+        const findUserInsert = newUser.googleID;
+        const findUser = mysql.format(findUserSQL, findUserInsert);
 
-        let sql = mysql.format(query, insert);
+        db.query(findUser, checkIfTableExists, (err, results, fields) => {
 
-        const createUserTblSQL = 
-            "CREATE TABLE users ("
-            "googleID double NOT NULL PRIMARY KEY,"
-            "firstName VARCHAR(30) NULL,"
-            "lastName VARCHAR(30) NULL,"
-            "email VARCHAR(50) NULL,"
-            "image VARCHAR(200) NULL"
-            ");";
+            if (err) throw err;
 
-        const tblChkSql = "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = 'closeyourtabs') AND (TABLE_NAME = 'tabs');";
-
-        function insertUser(){
-            db.query(sql, (err, results, fields) => {
-                console.log('err: ', err);
-                if (err) throw err;
-                const output = {
-                    success: true,
-                    data: results,
-                    fields: fields
-                };
-                console.log(output);
-                if (results.length > 0) {
-                    console.log('user was in db: ', results[0]);
-                    return done(null, results[0]);
-                } else {
-                    console.log('Inserting User.......', newUser)
-                    const {googleID, firstName, lastName, email, image} = newUser;
-     
-                    let query = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
-                    let inserts = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
-                    let sql = mysql.format(query, inserts);
-                    db.query(sql, (err, results, fields) => {
-                        console.log('err: ', err);
-                        if (err) throw err;
-                        const output = {
-                            success: true,
-                            data: results,
-                            fields: fields
-                        };
-                        console.log('user was not in db, but is now: ', newUser);
-                    });
-                };
-            });
-        };
-
-        db.query(tblChkSql, (err, results, fields)=>{
-            if(results.count == 0){
-                db.query(createUserTblSQL, (err, results, fields)=>{
-                    insertUser();
-                });
+            if (results.length > 0) {
+                console.log('user was in db.....');
+                return done(null, newUser);
             } else {
-                insertUser();
-            }
+                console.log('Inserting User.......');
+
+                const { googleID, firstName, lastName, email, image } = newUser;
+
+                let insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
+                let insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
+                let insertUser = mysql.format(query, inserts);
+
+                db.query(insertUser, (err, results, fields) => {
+                    if (err) throw err;
+                    console.log('user was not in db, but is now');
+                    return done(null, newUser);
+                });
+            };
         });
     }));
 
 
     passport.serializeUser((user, done) => {
-        done(null, user.googleID);
-    })
-    
-    passport.deserializeUser((id, done) => {
-        let query = "SELECT * FROM users WHERE googleID = ?"
-        let insert = id;
-        let sql = mysql.format(query, insert);
 
-        db.query(sql, (err, results, fields) => {
-            console.log('err: ', err);
+        done(null, user.googleID);
+
+    })
+
+    passport.deserializeUser((id, done) => {
+
+        const findUserSQL = "SELECT * FROM users WHERE googleID = ?"
+        const findUserInsert = id;
+        const findUser = mysql.format(query, insert);
+
+        db.query(findUser, (err, results, fields) => {
             if (err) throw err;
             done(null, id);
         })
