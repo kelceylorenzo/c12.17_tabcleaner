@@ -79,6 +79,7 @@ body {
 	background-color: rgba(26, 54, 74, 1);
 	font-family: 'Lato', sans-serif;
 	font-weight: 400;
+	z-index: 5;
 }
 
 .header {
@@ -285,12 +286,12 @@ body {
 	height: 50%;
 	width: 22%;
 	position: relative;
-	border: 3px solid transparent;
+	border: 3px solid rgba(26, 54, 74, 0.4);
 }
 
 .tab-container:hover {
 	cursor: pointer;
-	border: 3px solid rgba(26, 54, 74, 1);
+	border: 3px solid rgba(26, 54, 74, 0.6);
 	transition-duration: 0.3s;
 }
 
@@ -357,7 +358,7 @@ body {
 	width: 95%;
 	margin: auto;
 	display: flex;
-	border: 1px solid rgb(86, 135, 132);
+	/* border: 1px solid rgb(86, 135, 132); */
 }
 
 .tab-screenshot img {
