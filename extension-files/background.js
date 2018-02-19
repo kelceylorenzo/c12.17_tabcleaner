@@ -41,6 +41,8 @@ function checkForUserAccount(){
   xhr.send()
 }
 
+
+
 /**
 * Creates a Tab object, sets timestamp for initial open
 *@param {object} tab 
@@ -78,10 +80,11 @@ function createNewTab(tab, currentTime){
     url: tab.url,
     favicon: tab.favIconUrl
   }
-
   if(user.loggedIn){
     createNewTabRequest(dataForServer, tab.id);
   }
+  //checks to see if user state is logged in to make call to server 
+  // createNewTabRequest(dataForServer, tab.id);
 }
 
 
@@ -136,7 +139,7 @@ function updateTabInformation(tab, timeStamp, updateInfo){
       browserTabIndex: tab.index, 
       url: tab.url,
       favicon: tab.favicon,
-    }
+    } 
     // serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
   } 
 }
@@ -175,6 +178,7 @@ function setActiveTab(uniqueID, previousId, currentTabID,timeStamp){
     tabObject['databaseTabID'] = uniqueID;
     serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
   }
+
 }
 
 /**
@@ -187,6 +191,8 @@ function getAllTabs(){
     var timeStamp = date.getTime();
     tabs.forEach(function(tab){
       createNewTab(tab, timeStamp);
+      setLocalStorage('activeTab', tab.id);
+
     })
   })
 }
@@ -315,6 +321,13 @@ chrome.runtime.onStartup.addListener(function(details){
 */
 chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
+  chrome.windows.getAll(function(windows){
+    windows.forEach(function(window){
+      var windowString = window.id.toString();
+      var emptyObject = {}
+      setLocalStorage(windowString, emptyObject);
+    })
+  })
   getAllTabs();
   user = new User();
   // setLocalStorage('googleID', null);
