@@ -1,3 +1,18 @@
+class User{
+  constructor(){
+    this.loggedIn =  false; 
+  }
+  login(){
+    this.loggedIn = true; 
+  }
+  logout(){
+    this.loggedIn = false; 
+  }
+}
+
+var user; 
+
+
 setLocalStorage('googleID', 101760331504672280672); //TEST USER
 var allTabs = {};
 var siteUsageTime = {}
@@ -57,10 +72,10 @@ function createNewTab(tab, currentTime){
     url: tab.url,
     favicon: tab.favIconUrl
   }
-  //checks to see if user state is logged in to make call to server 
-  createNewTabRequest(dataForServer, tab.id);
-  //get back database tab id associated with the google tab id
-  //save into local storage as window id: {tabid: googletabID} 
+
+  if(user.loggedIn){
+    createNewTabRequest(dataForServer, tab.id);
+  }
 }
 
 
@@ -116,7 +131,7 @@ function updateTabInformation(tab, timeStamp, updateInfo){
       url: tab.url,
       favicon: tab.favicon,
     }
-    serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
+    // serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
   } 
 }
 
@@ -128,28 +143,32 @@ function updateTabInformation(tab, timeStamp, updateInfo){
 chrome.tabs.onRemoved.addListener(function (id, removeInfo){
   //TODO: DELETE from local storage 
   var window  = JSON.stringify(removeInfo.windowId);
-  chrome.storage.local.get(window, function(item){
-    var stringId = JSON.stringify(id);
-    var googleIdDb = item[window][stringId];
-    var tabObject = {};
-    tabObject['databaseTabID'] = googleIdDb;
-    serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
-  })
+  if(user.loggedIn){
+    chrome.storage.local.get(window, function(item){
+      var stringId = JSON.stringify(id);
+      var googleIdDb = item[window][stringId];
+      var tabObject = {};
+      tabObject['databaseTabID'] = googleIdDb;
+      serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
+    })
+  }
   delete allTabs[id];
 })
 
 
-function setActiveTab(previousHighlighted, newlyHighlighted, previousId, currentTabID,timeStamp){
+function setActiveTab(uniqueID, previousId, currentTabID,timeStamp){
   if(allTabs[previousId]){
       allTabs[previousId].highlighted = false;  
       allTabs[previousId].timeOfDeactivation = timeStamp;  
       allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
       allTabs[previousId].inactiveTimeElapsed = 0;
   }
-  setLocalStorage('activeTab', currentTabID)
-  var tabObject = {};
-  tabObject['databaseTabID'] = newlyHighlighted;
-  serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject)
+  setLocalStorage('activeTab', currentTabID);
+  if(user.loggedIn){
+    var tabObject = {};
+    tabObject['databaseTabID'] = uniqueID;
+    serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
+  }
 }
 
 /**
@@ -234,25 +253,26 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
         var time = new Date();
         var timeStamp = time.getTime();
         if (item[window][stringId] >= 0) {
-          var currentTab = item[window][stringId];
+          var currentDBTab = item[window][stringId];
           updateTabInformation(tab, timeStamp, false);
 
         } else {
           createNewTab(tab, timeStamp);
         }
         var currentActiveHighlight = item[window][stringId];
-        setActiveTab(previousHighlightedGoogleID, currentTab, previousTab,  tab.id, timeStamp);
+        setActiveTab(currentDBTab, previousTab,  tab.id, timeStamp);
 
-        chrome.storage.local.get('googleID', function (id){
-          var userGoogleID = id['googleID'];
-          if(userGoogleID){
-            var tabObject = {};
-            tabObject['databaseTabID'] = previousHighlightedGoogleID;
-            tabObject['googleID'] = userGoogleID
-            serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
-     
-          }
-        })
+        if(user.loggedIn){
+          chrome.storage.local.get('googleID', function (id){
+            var userGoogleID = id['googleID'];
+            if(userGoogleID){
+              var tabObject = {};
+              tabObject['databaseTabID'] = previousHighlightedGoogleID;
+              tabObject['googleID'] = userGoogleID
+              serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
+            }
+          })
+        }
       })   
     })
   });
@@ -290,6 +310,7 @@ chrome.runtime.onStartup.addListener(function(details){
 chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed')
   getAllTabs();
+  user = new User();
   // setLocalStorage('googleID', null);
   setLocalStorage('activeTab', null);
 })
