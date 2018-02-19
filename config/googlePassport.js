@@ -43,7 +43,7 @@ module.exports = function (passport) {
 
                 let insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
                 let insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
-                let insertUser = mysql.format(query, inserts);
+                let insertUser = mysql.format(insertUserSQL, insertUserInsert);
 
                 db.query("CREATE TABLE IF NOT EXISTS users (" +
                         "googleID double NOT NULL PRIMARY KEY," +
@@ -74,7 +74,7 @@ module.exports = function (passport) {
 
         const findUserSQL = "SELECT * FROM users WHERE googleID = ?"
         const findUserInsert = id;
-        const findUser = mysql.format(query, insert);
+        const findUser = mysql.format(findUserSQL, findUserInsert);
 
         db.query(findUser, (err, results, fields) => {
             if (err) throw err;
