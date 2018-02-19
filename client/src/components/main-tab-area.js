@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Tab from './tab';
+import Sort from './main-sort';
 
 class MainTabArea extends Component {
 	render() {
@@ -16,7 +17,9 @@ class MainTabArea extends Component {
 
 		return (
 			<div className="main-tab-area">
-				<h3 className="main-tab-area-title">Sorted by: {this.props.sortType}</h3>
+				<div className="sort-by-container">
+					<Sort sort={(sortType) => this.props.sort(sortType)} sortType={this.props.sortType} />
+				</div>
 				<div className="tab-window">{tabList}</div>
 			</div>
 		);
