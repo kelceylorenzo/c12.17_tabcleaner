@@ -1,3 +1,9 @@
+//when user install, user state is logged out. 
+//when user clicks sign up button, directed to page to sign up
+//then user clicks login to check for googleID
+//if returns the key, user state is logged in 
+//
+
 class User{
   constructor(){
     this.loggedIn =  false; 
