@@ -12,13 +12,8 @@ function init(){
   sendMessageToGetTabInfo();
 }
 
-function sendMessageToGetTabInfo(){
-  port.postMessage({type: "popup"});
-  port.onMessage.addListener(function(response) {
-    console.log(response)
-    if(!response.sessionInfo){
-      return; 
-    }
+port.onMessage.addListener(function(response) {
+  if(response.sessionInfo){
     var tabs = response.sessionInfo.allTabs;
     for(var item in tabs){
       var tabInfo = tabs[item];
@@ -28,7 +23,13 @@ function sendMessageToGetTabInfo(){
     if(response.sessionInfo.userStatus){
       hideLoginButtons();
     }
-  });
+  } else if(response.loginStatus){
+    hideLoginButtons();
+  }
+});
+
+function sendMessageToGetTabInfo(){
+  port.postMessage({type: "popup"});
 }
 
 function hideLoginButtons(){
@@ -85,12 +86,8 @@ function highlightTab(index, windowId,event){
 
 function loginUser(){
   port.postMessage({type: "login"});
-  port.onMessage.addListener(function(response) {
-    if(response.loginStatus){
-      hideLoginButtons();
-    }
-  });
 }
 
 init();
+
 

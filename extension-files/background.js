@@ -5,6 +5,7 @@
 //
 
 setLocalStorage('googleID', 101760331504672280672); //TEST USER
+
 var user; 
 
 class User{
@@ -26,17 +27,29 @@ class User{
 * calls setLocalStorage
 */
 function checkForUserAccount(){
-  //check to see if they have an account
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://www.closeyourtabs.com/auth/google/verify", true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == "200") {
-      var result = JSON.parse(xhr.responseText);
-      setLocalStorage('googleID', result.googleID);
-      return result; 
-    } 
-  }
-  xhr.send()
+  return new Promise( (resolve, reject)=> {
+    //check to see if they have an account
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://www.closeyourtabs.com/auth/google/verify", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == "200") {
+
+        var result = JSON.parse(xhr.responseText);
+        if(result){
+          setLocalStorage('googleID', result);
+          resolve(result);
+        }else {
+          reject('no user');
+        }
+      } 
+    }
+    xhr.onerror = function(){
+      reject('No such user exists');
+
+    }
+    xhr.send()
+  })
+ 
 }
 
 
@@ -139,7 +152,7 @@ function updateTabInformation(tab, timeStamp, updateInfo){
       url: tab.url,
       favicon: tab.favicon,
     } 
-    // serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
+    serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
   } 
 }
 
@@ -191,7 +204,9 @@ function getAllTabs(){
     var timeStamp = date.getTime();
     tabs.forEach(function(tab){
       createNewTab(tab, timeStamp);
-      setLocalStorage('activeTab', tab.id);
+      if(tab.highlighted){
+        setLocalStorage('activeTab', tab.id);
+      }
     })
   })
 }
@@ -204,24 +219,18 @@ function getAllTabs(){
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
-    console.log('tab update')
     var window  = JSON.stringify(tab.windowId);
     var stringId = JSON.stringify(tab.id);
     var date = new Date()
     var timeStamp = date.getTime();
 
     chrome.storage.local.get(window, function(item){
-      if (item[window][stringId] || user.allTabs[tab.id]) {
+      if (item[window][stringId]) {
         var googleIdDb = item[window][stringId];
         tab.googleTabId = googleIdDb;
         updateTabInformation(tab, timeStamp, true);
-      } else {
-        console.log("New Tab");
-      }
+      } 
     })
-     
-      //get back database tab id associated with the google tab id
-      //save into local storage as window id: {tabid: googletabID} 
   }
 })
 
@@ -254,11 +263,7 @@ function updateTab(tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-    if(user.loggedIn){
-
-    } else {
-
-    }
+    console.log('tab highligthed')
     var window  = JSON.stringify(tab.windowId);
     var stringId = JSON.stringify(tab.id);
 
@@ -272,13 +277,11 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
         if (item[window][stringId] >= 0) {
           var currentDBTab = item[window][stringId];
           updateTabInformation(tab, timeStamp, false);
-
+          setActiveTab(currentDBTab, previousTab,  tab.id, timeStamp);
         } else {
           createNewTab(tab, timeStamp);
+          setActiveTab(currentDBTab, previousTab,  tab.id, timeStamp);
         }
-        var currentActiveHighlight = item[window][stringId];
-        setActiveTab(currentDBTab, previousTab,  tab.id, timeStamp);
-
         if(user.loggedIn){
           chrome.storage.local.get('googleID', function (id){
             var userGoogleID = id['googleID'];
@@ -312,7 +315,7 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 */
 chrome.runtime.onStartup.addListener(function(details){
   console.log('browser open');
-  newExtensionSession();
+  // newExtensionSession();
 })
 
 /**
@@ -340,13 +343,15 @@ function newExtensionSession(){
       setLocalStorage(windowString, emptyObject);
     })
   })
-  getAllTabs();
   user = new User();
-  chrome.storage.local.get('googleID', function(result){
-    if(result.googleID){
-      user.login();
-    } 
-  })
+  getAllTabs();
+  // checkForUserAccount().then(resp => {
+  //   user.login();
+  //   console.log(resp)
+  // }).catch(err => {
+  //   console.log(err)
+  //   getAllTabs();
+  // })
 }
 
 /**
@@ -366,14 +371,16 @@ chrome.runtime.onConnect.addListener(function(port) {
       responseObject.allTabs = user.allTabs; 
       port.postMessage({sessionInfo: responseObject})
     } else if(message.type = 'login'){
-      chrome.storage.local.get('googleID', function(result){
-        if(result.googleID){
-          user.login();
-          port.postMessage({'loginStatus': true})
-        } else {
-          port.postMessage({'loginStatus': false})
-        }
-      })
+        chrome.storage.local.get('googleID', function(id){
+          if(id.googleID){
+            if(!user.loggedIn){
+              user.login();
+            }
+            port.postMessage({'loginStatus': true})
+          } else {
+            port.postMessage({'loginStatus': false})
+          }
+        })
     }
   });
 });
@@ -413,8 +420,8 @@ function getAllDataFromServer(){
   xhr.send()
 }
 
-
 function createNewTabRequest(tabObject, tabId){
+  console.log('create new')
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'http://www.closeyourtabs.com/tabs/');
   xhr.setRequestHeader('Content-Type', 'application/json');
@@ -441,5 +448,3 @@ function createNewTabRequest(tabObject, tabId){
   };
   xhr.send(JSON.stringify(tabObject));
 }
-
-
