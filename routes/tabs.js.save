@@ -38,12 +38,11 @@ router.get('/', (req, res) => {
     db.query(sql, function (err, rows, fields) {
 	console.log('Error, GET: ', err);
         const output = {
-	    type: 'GET',
             success: true,
             data: rows
         }
         const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send('GET REQUEST', json_output);
 	console.log('GET from: ', req.body.googleID);
     });
 });
@@ -59,14 +58,14 @@ router.post('/', checkIfTableExists, (req, res) => {
     db.query(sql, (err, results, fields) => {
         console.log('Error, POST: ', err);
         const output = {
-	    type: 'POST',
             success: true,
             data: results,
             fields: fields
         };
         console.log('POST from ', googleID, 'Data: ', output);
         const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(
+output);
     });
 });
 
@@ -93,14 +92,13 @@ router.delete('/:deleteID', (req, res) => {
     db.query(sql, (err, results, fields) => {
         console.log('Error, DELETE: ', err);
         const output = {
-	    type: 'DELETE',
             success: true,
             data: results,
             fields: fields
         };
         console.log('DELETE data: ', output);
         const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.json('DELETE method: ', req.params.deleteID, ' DATA: ', output);
     });
 });
 
@@ -114,14 +112,13 @@ router.put('/', checkIfTableExists, (req, res) => {
     db.query(sql, (err, results, fields) => {
         console.log('Error, UPDATE: ', err);
         const output = {
-	    type: 'UPDATE',
             success: true,
             data: results,
             fields: fields
         };
         console.log('UPDATE data: ', output);
         const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send('UPDATE REQUEST: ', json_output);
     });
 });
 
@@ -140,14 +137,13 @@ router.put('/:time', checkIfTableExists, (req, res) => {
     db.query(sql, (err, results, fields) => {
         console.log('Error, TIMEUPDATE: ', err);
         const output = {
-	    type: req.params.time,
             success: true,
             data: results,
             fields: fields
         };
         console.log('UPDATE TIMESTAMP type: ', req.params.time, ' data: ', output);
         const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(req.params.time, ' ', json_output);
     });
 });
 
