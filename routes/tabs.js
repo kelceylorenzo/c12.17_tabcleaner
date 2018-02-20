@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, function (err, rows, fields) {
-	console.log('Error, GET: ', err);
+	    if(err) console.log('Error, GET: ', err);
         const output = {
 	    type: 'GET',
             success: true,
@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
         }
         const json_output = JSON.stringify(output);
         res.send(json_output);
-	console.log('GET from: ', req.body.googleID);
+	    console.log('GET from: ', req.body.googleID);
     });
 });
 
@@ -57,7 +57,7 @@ router.post('/', checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, inserts);
 
     db.query(sql, (err, results, fields) => {
-        console.log('Error, POST: ', err);
+        if(err) console.log('Error, POST: ', err);
         const output = {
 	    type: 'POST',
             success: true,
@@ -91,7 +91,7 @@ router.delete('/:deleteID', (req, res) => {
     console.log(sql);
 
     db.query(sql, (err, results, fields) => {
-        console.log('Error, DELETE: ', err);
+        if(err) console.log('Error, DELETE: ', err);
         const output = {
 	    type: 'DELETE',
             success: true,
@@ -112,7 +112,7 @@ router.put('/', checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        console.log('Error, UPDATE: ', err);
+        if(err) console.log('Error, UPDATE: ', err);
         const output = {
 	    type: 'UPDATE',
             success: true,
@@ -120,6 +120,27 @@ router.put('/', checkIfTableExists, (req, res) => {
             fields: fields
         };
         console.log('UPDATE data: ', output);
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    });
+});
+
+router.put('/move', (req, res) => {
+    const {databaseTabID, browserTabIndex} = req.body;
+
+    const query = 'UPDATE tabs SET browserTabIndex=? WHERE databaseTabID = ? LIMIT 1';
+    const insert = [browserTabIndex, databaseTabID];
+    const sql = mysql.format(query, insert);
+
+    db.query(sql, (err, results, fields) => {
+        if(err) console.log('Error, UPDATE[MOVE]: ', err);
+        const output = {
+            type: 'UPDATE - TAB MOVED',
+            success: true,
+            data: results,
+            fields: fields
+        }
+        console.log(output);
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
@@ -138,7 +159,7 @@ router.put('/:time', checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        console.log('Error, TIMEUPDATE: ', err);
+        if(err) console.log('Error, TIMEUPDATE: ', err);
         const output = {
 	    type: req.params.time,
             success: true,
