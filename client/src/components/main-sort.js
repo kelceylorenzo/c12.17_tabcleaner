@@ -57,23 +57,3 @@ export default (props) => {
 		</div>
 	);
 };
-
-// class Sort extends Component {
-// 	render() {
-// 		const sortList = sortOptions.map((sortOption, index) => {
-// 			return (
-// 				<p className="sort-by-option" onClick={this.props.sort(sortOption.type)}>
-// 					{sortOption.name}
-// 				</p>
-// 			);
-// 		});
-// 		return (
-// 			<div className="sort-by-menu">
-// 				<p className="sort-by-title">Sort By:</p>
-// 				{sortList}
-// 			</div>
-// 		);
-// 	}
-// }
-
-// export default Sort;

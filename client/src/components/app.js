@@ -4,7 +4,6 @@ import { Route } from 'react-router-dom';
 import LandingPage from './landing-page';
 import MainPage from './main-page';
 import AboutPage from './about-page';
-import Header from './header';
 import StatsPage from './stats-page';
 import TopTenPage from './top-ten-page';
 import headerData from './header-data.js';
