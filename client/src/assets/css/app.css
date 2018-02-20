@@ -386,46 +386,60 @@ body {
 
 .page {
 	display: flex;
+	font-family: "Lato", sans-serif;
+	position: relative;
 	flex-direction: column;
-	border: 2px solid black;
+	border: 3px solid rgba(26, 54, 74, 0.4);
 	width: 18%;
 	height: 40%;
 	margin: auto;
 	justify-content: center;
 	align-items: center;
-}
-
-.page:hover{
-	background-color: white;
+	cursor: default;
 }
 
 .website-name {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	height: 15%;
 	width: 100%;
-	/* border: 1px solid red; */
-	text-align: center;
 }
 
 .screenshot-container {
 	display: flex;
+	display: relative;
 	height: 75%;
-}
-
-
-.screenshot-container > img:hover {
-	filter: blur(1px) opacity(10%);
 }
 
 .screenshot {
 	height: 100%;
 	width: 95%;
 	margin: auto;
-	/* border: 2px solid purple; */
 }
 
 .time-spent {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	height: 10%;
 	width: 100%;
-	/* border: 1px solid green; */
-	text-align: center;
+}
+
+.screenshot-overlay {
+	position: absolute;
+	height: 80%;
+	width: 95%;
+	margin: auto;
+	padding: 2%;
+	visibility: hidden;
+}
+
+.page:hover .screenshot-overlay {
+	visibility: visible;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.page:hover .screenshot-container > img {
+	filter: blur(1px);
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import image from "../assets/images/about-us-mainimage.png";
+import image from "../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png";
 import Header from "./header";
 import headerData from "./header-data.js";
 
@@ -15,53 +15,130 @@ class TopTenPage extends Component {
 						<div className="website-name">Youtube</div>
 						<div className="screenshot-container">
 							<img className="screenshot" src={image} alt="top top screenshot" />
-							{/* <div className="screenshot-overlay">here is some text</div> */}
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
 						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 					<div className="page">
 						<div className="website-name">Youtube</div>
-						<div className="screenshot" />
+						<div className="screenshot-container">
+							<img className="screenshot" src={image} alt="top top screenshot" />
+						</div>
+						<div className="screenshot-overlay">
+							<p className="stats">
+								Stop going on YouTube, you've wasted so much time on it you could have built this
+								website.
+							</p>
+						</div>
 						<div className="time-spent">Time Spent: 120</div>
 					</div>
 				</div>

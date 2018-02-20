@@ -8,10 +8,6 @@ export default [
 		to: '/top-ten'
 	},
 	{
-		name: 'STATS PAGE',
-		to: '/stats-page'
-	},
-	{
 		name: 'ABOUT',
 		to: '/about'
 	},
