@@ -1,24 +1,50 @@
 var lengthOfString = 40; 
+var port = chrome.runtime.connect({name: "tab"});
 
-function sendMessageToGetTabInfo(){
-  chrome.runtime.sendMessage(
-    "popup",
-    function (response) {
-      for(var item in response){
-        var tabInfo = response[item];
+function init(){
+  document.getElementById('refresh').addEventListener('click', refreshContent);
+  document.getElementById('login').addEventListener('click', loginUser);
+  document.body.style.opacity = 0;
+  document.body.style.transition = 'opacity ease-out .4s';       
+
+  requestAnimationFrame(function() {
+    document.body.style.opacity = 1;
+  });
+  sendMessageToGetTabInfo();
+}
+
+port.onMessage.addListener(function(response) {
+  if(response.sessionInfo){
+    var windows = response.sessionInfo.allTabs;
+    for(var window in windows){
+      for(var item in windows[window]){
+        var tabInfo = windows[window][item];
         var tabElement = createDomElement(tabInfo); 
         document.getElementById('tag-titles').appendChild(tabElement);
-        console.log(tabInfo.timeOfSiteOpen)
+      }
+      if(response.sessionInfo.userStatus){
+        hideLoginButtons();
       }
     }
-  );
+  
+  } else if(response.loginStatus){
+    hideLoginButtons();
+  }
+});
+
+function sendMessageToGetTabInfo(){
+  port.postMessage({type: "popup"});
+}
+
+function hideLoginButtons(){
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('signup').style.display = 'none';
 }
 
 function refreshContent(){
   document.getElementById('tag-titles').innerHTML = "";
   sendMessageToGetTabInfo();
 }
-
 
 function createDomElement(tabObject){
   if(!tabObject.title){
@@ -62,25 +88,10 @@ function highlightTab(index, windowId,event){
   chrome.windows.update(windowId, {focused: true})
 }
 
-document.getElementById('refresh').addEventListener('click', refreshContent);
-sendMessageToGetTabInfo();
-
-document.body.style.opacity = 0;
-document.body.style.transition = 'opacity ease-out .4s';
-requestAnimationFrame(function() {
-  document.body.style.opacity = 1;
-});
-
-var loginBtn = document.getElementById('login').addEventListener('click', loginUser);
-
 function loginUser(){
-  chrome.runtime.sendMessage(
-    "login",
-    function (response) {
-      console.log(response)
-    }
-  );
+  port.postMessage({type: "login"});
 }
 
+init();
 
 
