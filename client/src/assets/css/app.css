@@ -264,6 +264,11 @@ body {
 	color: rgba(87, 87, 87, 0.4);
 }
 
+.page-switch:hover {
+	color: rgba(26, 54, 74, 1);
+	cursor: pointer;
+}
+
 /* Main page styling */
 
 .main-page-container {
