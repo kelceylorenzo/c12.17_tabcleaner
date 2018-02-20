@@ -126,14 +126,31 @@ body {
 .about-page {
 	width: 100%;
 	height: 100%;
+	display: flex;
+	flex-direction: column;
+	font-family: 'Lato', sans-serif;
 }
 
-.about-page-content-container {
-	display: flex;
-	height: 92%;
-	padding-top: 5%;
+.about-page-title-container {
+	padding-top: 8%;
+	width: 100%;
+	height: 7%;
 	justify-content: center;
-	flex-direction: column;
+	align-content: center;
+	display: flex;
+}
+
+.about-page-title {
+	margin: auto;
+	font-size: 5em;
+}
+
+.about-page-container {
+	display: flex;
+	height: 85%;
+	width: 85%;
+	margin: auto;
+	justify-content: center;
 }
 
 .team-picture-container {
@@ -144,34 +161,111 @@ body {
 .team-picture {
 	margin: auto;
 	width: 100%;
-	border: 5px dashed rgba(26, 54, 74, 1);
+	border: 5px solid rgba(26, 54, 74, 1);
+}
+
+.about-page-content-container {
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+	width: 40%;
+	height: 50%;
 }
 
 .description-container {
-	display: flex;
+	display: none;
+	flex-direction: column;
 	margin: auto;
-	width: 60%;
+	width: 100%;
+	height: 60%;
+}
+
+.about-content-title {
+	font-size: 2em;
+	color: rgb(202, 143, 95);
 }
 
 .description {
 	text-align: justify;
 }
 
-.team-links-container {
+.team-members-container {
 	display: flex;
-	width: 80%;
+	width: 100%;
+	height: 60%;
 	justify-content: space-around;
+	margin: auto;
+	flex-direction: column;
+}
+
+.first-row {
+	display: flex;
+	justify-content: space-around;
+	height: 100%;
+	width: 75%;
 	margin: auto;
 }
 
-.team-link {
+.second-row {
+	display: flex;
+	justify-content: space-around;
+	height: 100%;
+	width: 100%;
+	margin: auto;
+}
+
+.team-member {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	height: 100%;
 }
 
-.team-link p {
-	margin: auto;
+.first-row .team-member {
+	width: 25%;
+}
+
+.second-row .team-member {
+	width: 20%;
+}
+
+.team-member-name {
+	margin: 0 auto;
+	font-size: 1.3em;
+	height: 50%;
+}
+
+.team-member-links-container {
+	display: flex;
+	justify-content: space-between;
+	font-size: 175%;
+	height: 50%;
+}
+
+.team-member-link a {
+	color: rgba(212, 167, 129, 0.7);
+	transition-timing-function: ease-out;
+	transition: font-size 0.5s;
+}
+
+.team-member-link a:hover {
+	color: rgba(0, 0, 0, 0.8);
+	/* transition-duration: 0.3s; */
+	font-size: 120%;
+}
+
+.page-switches-container {
+	width: 100%;
+	height: 10%;
+	display: flex;
+	justify-content: center;
+	/* font-size: 115%; */
+	color: rgba(87, 87, 87, 0.4);
+}
+
+.page-switch:hover {
+	color: rgba(26, 54, 74, 1);
+	cursor: pointer;
 }
 
 /* Main page styling */
@@ -297,7 +391,7 @@ body {
 .select-overlay-container {
 	width: 100%;
 	height: 100%;
-	background-color: rgba(65, 67, 70, 0.8);
+	background-color: rgba(104, 104, 104, 0.3);
 	position: absolute;
 	display: none;
 }
@@ -305,7 +399,8 @@ body {
 .select-overlay {
 	display: flex;
 	margin: auto;
-	width: 50%;
+	width: 30%;
+	opacity: 0.7;
 }
 
 .tab {
