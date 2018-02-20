@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import image from "../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png";
-import Header from "./header";
-import headerData from "./header-data.js";
+import React, { Component } from 'react';
+import image from '../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png';
+import Header from './header';
+import headerData from './header-data.js';
 
 class TopTenPage extends Component {
 	render() {

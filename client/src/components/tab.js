@@ -1,4 +1,5 @@
 import React from 'react';
+import placeholderImage from '../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png';
 
 export default (props) => {
 	let style = {
@@ -18,7 +19,7 @@ export default (props) => {
 			<div className="tab">
 				<div className="tab-title">{props.item.title}</div>
 				<div className="tab-screenshot">
-					<img src="/assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png" alt="" />
+					<img src={placeholderImage} alt="" />
 				</div>
 				<div className="tab-utilities-container">
 					<div
