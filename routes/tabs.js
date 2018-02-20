@@ -36,12 +36,14 @@ router.get('/', (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, function (err, rows, fields) {
+	console.log('Error, GET: ', err);
         const output = {
             success: true,
             data: rows
         }
         const json_output = JSON.stringify(output);
         res.send(json_output);
+	console.log('GET from: ', req.body.googleID);
     });
 });
 
@@ -54,13 +56,13 @@ router.post('/', checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, inserts);
 
     db.query(sql, (err, results, fields) => {
-        if (err) throw err;
+        console.log('Error, POST: ', err);
         const output = {
             success: true,
             data: results,
             fields: fields
-        }
-        console.log(output);
+        };
+        console.log('POST from ', googleID, 'Data: ', output);
         const json_output = JSON.stringify(output);
         res.json(output);
     });
@@ -87,13 +89,13 @@ router.delete('/:deleteID', (req, res) => {
     console.log(sql);
 
     db.query(sql, (err, results, fields) => {
-        if (err) throw err;
+        console.log('Error, DELETE: ', err);
         const output = {
             success: true,
             data: results,
             fields: fields
-        }
-        console.log(output);
+        };
+        console.log('DELETE data: ', output);
         const json_output = JSON.stringify(output);
         res.json(output);
     });
@@ -107,13 +109,13 @@ router.put('/', checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        if (err) throw err;
+        console.log('Error, UPDATE: ', err);
         const output = {
             success: true,
             data: results,
             fields: fields
-        }
-        console.log(output);
+        };
+        console.log('UPDATE data: ', output);
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
@@ -132,13 +134,13 @@ router.put('/:time', checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        if (err) throw err;
+        console.log('Error, TIMEUPDATE: ', err);
         const output = {
             success: true,
             data: results,
             fields: fields
-        }
-        console.log(output);
+        };
+        console.log('UPDATE TIMESTAMP data: ', output);
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
