@@ -1,8 +1,6 @@
-//when user install, user state is logged out. 
-//when user clicks sign up button, directed to page to sign up
-//then user clicks login to check for googleID
-//if returns the key, user state is logged in 
-//
+//plan for tab move
+//store tabs by index in the window
+//when tab is moved, get the indexes between the 2 numbers to update tabs
 
 setLocalStorage('googleID', 101760331504672280672); //TEST USER
 
@@ -11,7 +9,7 @@ var user;
 class User{
   constructor(){
     this.loggedIn =  false; 
-    this.allTabs = {}; 
+    this.tabsSortedByWindow = {};
   }
   login(){
     this.loggedIn = true; 
@@ -48,7 +46,7 @@ function createNewTab(tab, currentTime){
     tabObject.timeOfActivation = 0;
     tabObject.timeOfDeactivation = currentTime;  
   }
-  user.allTabs[tab.id] = tabObject; 
+  user.tabsSortedByWindow[tab.windowId][tab.index] = tabObject; 
 
   if(user.loggedIn){
       chrome.storage.local.get('googleID', function(userID){
@@ -80,7 +78,7 @@ function createNewTab(tab, currentTime){
 
 function updateTabInformation(tab, timeStamp, updateInfo){
   //if the site changed, get the elapsed time during active state and save to its url
-  user.allTabs[tab.id] = {
+  user.tabsSortedByWindow[tab.windowId][tab.index] = {
     id: tab.id,
     windowId: tab.windowId,
     favicon: tab.favIconUrl,
@@ -115,7 +113,7 @@ function updateTabInformation(tab, timeStamp, updateInfo){
 *@param {id} 
 */
 chrome.tabs.onRemoved.addListener(function (id, removeInfo){
-  //TODO: DELETE from local storage 
+  
   var window  = JSON.stringify(removeInfo.windowId);
   if(user.loggedIn){
     chrome.storage.local.get(window, function(item){
@@ -140,7 +138,8 @@ function getAllTabs(){
     tabs.forEach(function(tab){
       createNewTab(tab, timeStamp);
       if(tab.highlighted){
-        setLocalStorage('activeTab', tab.id);
+        var activeWindowTab = 'activeTab' + tab.windowId;
+        setLocalStorage(activeWindowTab, tab.index);
       }
     })
   })
@@ -183,10 +182,11 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     var time = new Date();
     var timeStamp = time.getTime();
     chrome.storage.local.get(window, function(item){
-      chrome.storage.local.get('activeTab', function(currentID){
-        var previousTab = currentID.activeTab;
-        var previousHighlightedGoogleID = item[window][previousTab.toString()];
-        updateLocalTracking(previousTab, timeStamp);
+      var activeWindowTab = 'activeTab' + tab.windowId;
+      chrome.storage.local.get(activeWindowTab, function(currentID){
+        var previousIndex = currentID[activeWindowTab];
+        var previousHighlightedGoogleID = item[window][previousIndex.toString()];
+        updateLocalTracking(previousIndex, tab.windowId, timeStamp);
         if (item[window][stringId] >= 0) {
           var currentDBTab = item[window][stringId];
           tab.googleTabId = currentDBTab; 
@@ -194,7 +194,7 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
         } else {
           createNewTab(tab, timeStamp);
         }
-        setLocalStorage('activeTab', tab.id);
+        setLocalStorage(activeWindowTab, tab.index);
         deactivateTimeTab(previousHighlightedGoogleID);
       })   
     })
@@ -219,13 +219,13 @@ function deactivateTimeTab(uniqueID){
   })
 }
 
-function updateLocalTracking(previousId, timeStamp){
-  var allTabs = user.allTabs; 
-  if(allTabs[previousId]){
-      allTabs[previousId].highlighted = false;  
-      allTabs[previousId].timeOfDeactivation = timeStamp;  
-      allTabs[previousId].activeTimeElapsed = timeStamp - allTabs[previousId].timeOfActivation;
-      allTabs[previousId].inactiveTimeElapsed = 0;
+function updateLocalTracking(previousIndex, windowId,  timeStamp){
+  var allTabs = user.tabsSortedByWindow[windowId]; 
+  if(allTabs[previousIndex]){
+      allTabs[previousIndex].highlighted = false;  
+      allTabs[previousIndex].timeOfDeactivation = timeStamp;  
+      allTabs[previousIndex].activeTimeElapsed = timeStamp - allTabs[previousIndex].timeOfActivation;
+      allTabs[previousIndex].inactiveTimeElapsed = 0;
   }
 }
 
@@ -251,6 +251,7 @@ function newExtensionSession(){
       var windowString = window.id.toString();
       var emptyObject = {}
       setLocalStorage(windowString, emptyObject);
+      user.tabsSortedByWindow[window.id] = {}
     })
   })
   user = new User();
@@ -271,7 +272,7 @@ chrome.runtime.onConnect.addListener(function(port) {
       updatedElaspedDeactivation();
       var responseObject = {};
       responseObject.userStatus = user.loggedIn; 
-      responseObject.allTabs = user.allTabs; 
+      responseObject.allTabs =     user.tabsSortedByWindow; 
       port.postMessage({sessionInfo: responseObject})
     } else if(message.type = 'login'){
         chrome.storage.local.get('googleID', function(id){
@@ -344,7 +345,8 @@ function createNewTabRequest(tabObject, tabId){
             }else {
               setLocalStorage(window, tabObjectStore);
             }
-            setLocalStorage('activeTab', tabId);
+            var activeWindowTab = 'activeTab' + tabObject.windowId;
+            setLocalStorage(activeWindowTab, tabObject.index);
             resolve(result.data.insertId);
           })
         }
@@ -404,12 +406,15 @@ function setLocalStorage(keyName, value){
 function updatedElaspedDeactivation(){
   var date = new Date();
   var currentTime = date.getTime();
-  var allTabs = user.allTabs; 
-  for(var tab in allTabs){
-    if(!allTabs[tab].highlighted){
-      allTabs[tab].inactiveTimeElapsed = currentTime - allTabs[tab].timeOfDeactivation;
+  var windows =  user.tabsSortedByWindow; 
+  for(var window in windows){
+    for(var index in windows[window]){
+      if(!windows[window][index].highlighted){
+        windows[window][index].inactiveTimeElapsed = currentTime - windows[window][index].timeOfDeactivation;
+      }
     }
   }
+
 }
 
 /**
