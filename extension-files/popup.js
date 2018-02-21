@@ -102,6 +102,7 @@ function logoutUser(){
 }
 
 function loginUser(){
+  console.log('login')
   port.postMessage({type: "login"});
 }
 
