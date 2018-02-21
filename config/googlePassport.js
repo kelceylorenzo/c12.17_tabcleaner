@@ -13,7 +13,6 @@ module.exports = function (passport) {
     }, (accessToken, refreshToken, profile, done) => {
 
         console.log('Access Token: ', accessToken);
-        console.log('Refresh Token: ', refreshToken);
 
         const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
         const newUser = {
@@ -29,9 +28,7 @@ module.exports = function (passport) {
         const findUser = mysql.format(findUserSQL, findUserInsert);
 
         db.query(findUser, (err, results) => {
-
-            if (err) throw err;
-
+            if (err) console.log(err);
             if (results.length > 0) {
                 console.log('User was in db.....');
                 return done(null, newUser);
@@ -57,7 +54,8 @@ module.exports = function (passport) {
                                 console.log('User was not in db, but is now');
                                 return done(null, newUser);
                             });
-                        });
+                        }
+                );
             }
         });
     }));
