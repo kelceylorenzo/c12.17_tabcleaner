@@ -35,12 +35,12 @@ router.get('/', (req, res) => {
     const inserts = req.body.googleID;
     const sql = mysql.format(query, insert);
 
-    db.query(sql, function (err, rows, fields) {
+    db.query(sql, function (err, results, fields) {
 	    if(err) console.log('Error, GET: ', err);
         const output = {
 	    type: 'GET',
             success: true,
-            data: rows
+            data: results.message
         }
         const json_output = JSON.stringify(output);
         res.send(json_output);
@@ -61,7 +61,8 @@ router.post('/', checkIfTableExists, (req, res) => {
         const output = {
 	    type: 'POST',
             success: true,
-            data: results,
+            affectedRows: results.affectedRows,
+	    databaseID: insertId,
             fields: fields
         };
         console.log('POST from ', googleID, 'Data: ', output);
@@ -116,7 +117,7 @@ router.put('/', checkIfTableExists, (req, res) => {
         const output = {
 	    type: 'UPDATE',
             success: true,
-            data: results,
+            data: results.message,
             fields: fields
         };
         console.log('UPDATE data: ', output);
@@ -137,7 +138,7 @@ router.put('/move', (req, res) => {
         const output = {
             type: 'UPDATE - TAB MOVED',
             success: true,
-            data: results,
+            data: results.message,
             fields: fields
         }
         console.log(output);
@@ -163,7 +164,7 @@ router.put('/:time', checkIfTableExists, (req, res) => {
         const output = {
 	    type: req.params.time,
             success: true,
-            data: results,
+            data: results.message,
             fields: fields
         };
         console.log('UPDATE TIMESTAMP type: ', req.params.time, ' data: ', output);
