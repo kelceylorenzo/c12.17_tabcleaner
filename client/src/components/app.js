@@ -16,12 +16,12 @@ class App extends Component {
 		axios.get(`/auth/google/verify`).then(resp => {
 			console.log("Verify response: ", resp);
 			if (resp.data) {
-				console.log("TRUE");
-				console.log("this.props: ", this.props);
-				console.log("Response: ", resp);
+				console.log("Logged In");
+				console.log("this.props for verify: ", this.props);
+				console.log("Axios Response object: ", resp);
 				// this.props.history.push("/dashboard");
 			} else {
-				console.log("FALSE");
+				console.log("Not logged in");
 				// this.props.history.push("/");
 			}
 		});
