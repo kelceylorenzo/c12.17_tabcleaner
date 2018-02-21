@@ -107,6 +107,7 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
   //remove tabs from array AND index list
   var tabArray = user.tabsSortedByWindow[removeInfo.windowId];
   var indexInIdsArray = user.tabIds[removeInfo.windowId].indexOf(id);
+  user.tabIds[removeInfo.windowId].splice(indexInIdsArray, 1);
   console.log(indexInIdsArray)
   for(var tab = 0; tab < tabArray.length ; tab++){
     if(tabArray[tab].id === id){
@@ -395,8 +396,7 @@ function getAllTabs(){
     var date = new Date()
     var timeStamp = date.getTime();
     tabs.forEach(function(tab){
-      var newTab = createNewTab(tab, timeStamp);
-      user.tabIds[tab.windowId].push(newTab.id);
+      createNewTab(tab, timeStamp);
     })
   })
 }
