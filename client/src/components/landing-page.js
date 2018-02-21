@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import image from '../assets/images/app-logo.png';
+import React from "react";
+import { Link } from "react-router-dom";
+import image from "../assets/images/app-logo.png";
 
-export default (props) => {
+export default props => {
 	return (
 		<div className="landing-page-container">
 			<img className="logo" src={image} alt="" />
@@ -11,7 +11,7 @@ export default (props) => {
 			</div>
 
 			<div className="login-button-container">
-				<Link className="login-button" to="/auth/google">
+				<Link className="login-button" to="http://closeyourtabs.com/auth/google/">
 					LOG IN
 				</Link>
 			</div>

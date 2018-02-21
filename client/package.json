@@ -3,10 +3,19 @@
 	"version": "1.0.0",
 	"description": "web portal companion for close your tabs project",
 	"main": "index.js",
+	"proxy": {
+		"/auth/*": {
+			"target": "http://localhost:5000"
+		},
+		"/tabs/*": {
+			"target": "http://localhost:5000"
+		}
+	},
 	"scripts": {
 		"start": "node dev_server.js",
 		"bundle": "node_modules/.bin/webpack --config webpack.deploy.config.js --progress --colors",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "npm run dev --prefix .."
 	},
 	"author": "Andrea Wayte, Henry Moon, James Kirsch, Kelcey Lorenzo, and Nick Quan",
 	"license": "ISC",

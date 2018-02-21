@@ -11,17 +11,17 @@ import headerData from "./header-data.js";
 
 import "../assets/css/app.css";
 
-const BASE_URL = "http://closeyourtabs.com";
+// const BASE_URL = "http://closeyourtabs.com";
 
 class App extends Component {
 	verifyLogIn() {
-		axios.get(`${BASE_URL}/auth/google/verify`).then(resp => {
+		axios.get(`/auth/google/verify`).then(resp => {
 			console.log("Verify response: ", resp);
 			if (resp.data) {
-				console.log("TRU")
+				console.log("TRUE");
 				// this.props.history.push("/dashboard");
 			} else {
-				console.log("FALSE")
+				console.log("FALSE");
 				// this.props.history.push("/");
 			}
 		});
