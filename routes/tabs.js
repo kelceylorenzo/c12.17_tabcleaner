@@ -93,7 +93,7 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
 
     console.log(sql);
 
-    db.query(sql, ensureAuthenticated, (err, results, fields) => {
+    db.query(sql, (err, results, fields) => {
         if (err) console.log('Error, DELETE: ', err);
         const output = {
             type: 'DELETE',
