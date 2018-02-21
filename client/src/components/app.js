@@ -9,18 +9,20 @@ import StatsPage from './stats-page';
 import TopTenPage from './top-ten-page';
 import headerData from './header-data.js';
 
-import '../assets/css/app.css';
+import "../assets/css/app.css";
+
+// const BASE_URL = "http://closeyourtabs.com";
 
 class App extends Component {
 	verifyLogIn() {
-		axios.get(`/auth/google/verify`).then((resp) => {
-			console.log('Verify response: ', resp);
+		axios.get(`/auth/google/verify`).then(resp => {
+			console.log("Verify response: ", resp);
 			if (resp.data) {
-				console.log('TRU');
-				this.props.history.push('/');
+				console.log("TRUE");
+				// this.props.history.push("/dashboard");
 			} else {
-				console.log('FALSE');
-				this.props.history.push('/');
+				console.log("FALSE");
+				// this.props.history.push("/");
 			}
 		});
 	}
