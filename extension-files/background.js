@@ -202,37 +202,6 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
 })
 
 /**
-* Calls database to activate the time for tab
-*@param {integer} uniqueID 
-*call serverRequest
-*/
-function activateTimeTab(uniqueID){
-  var tabObject = {};
-  tabObject['databaseTabID'] = uniqueID;
-  serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
-}
-
-/**
-* Calls database to deactivate the time for tab
-*@param {integer} uniqueID 
-*call serverRequest
-*/
-function deactivateTimeTab(uniqueID){
-  if(uniqueID === null){
-    return; 
-  }
-  chrome.storage.local.get('googleID', function (id){
-    var userGoogleID = id['googleID'];
-    if(userGoogleID && user.loggedIn){
-      var tabObject = {};
-      tabObject['databaseTabID'] = uniqueID;
-      tabObject['googleID'] = userGoogleID
-      serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
-    }
-  })
-}
-
-/**
 * Takes previous highlighted tab and sets time of deactivation
 *@param {integer} uniqueID 
 *call serverRequest
@@ -300,6 +269,38 @@ chrome.runtime.onConnect.addListener(function(port) {
 });
 
 
+
+
+/**
+* Calls database to activate the time for tab
+*@param {integer} uniqueID 
+*call serverRequest
+*/
+function activateTimeTab(uniqueID){
+  var tabObject = {};
+  tabObject['databaseTabID'] = uniqueID;
+  serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
+}
+
+/**
+* Calls database to deactivate the time for tab
+*@param {integer} uniqueID 
+*call serverRequest
+*/
+function deactivateTimeTab(uniqueID){
+  if(uniqueID === null){
+    return; 
+  }
+  chrome.storage.local.get('googleID', function (id){
+    var userGoogleID = id['googleID'];
+    if(userGoogleID && user.loggedIn){
+      var tabObject = {};
+      tabObject['databaseTabID'] = uniqueID;
+      tabObject['googleID'] = userGoogleID
+      serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
+    }
+  })
+}
 
 /**
 * basic request to server in which the return callback does not need to do anything 
@@ -389,6 +390,8 @@ function checkForUserAccount(){
 
 }
 
+
+
 /**
 *Sets key value pair in local storage
 *@param {string} keyName
@@ -415,7 +418,6 @@ function updatedElaspedDeactivation(){
       }
     }
   }
-
 }
 
 /**
@@ -428,6 +430,9 @@ function getAllTabs(){
     var timeStamp = date.getTime();
     tabs.forEach(function(tab){
       createNewTab(tab, timeStamp);
+      if(tab.highlighted){
+        user.activeTabIndex[tab.windowId] = tab.index; 
+      }
     })
   })
 }
@@ -441,12 +446,20 @@ function newExtensionSession(){
   user = new User();
   chrome.windows.getAll(function(windows){
     windows.forEach(function(window){
-      user.tabsSortedByWindow[window.id] = [];
-      user.activeTabIndex[window.id] = null;
-      user.tabIds[window.id] = [];
+      newWindowForUser(window);
     })
   })
   getAllTabs();
+}
+
+/**
+* clears local storage of any previous windows and creates an instance of user session
+*@param {object} window window object 
+*/
+function newWindowForUser(window){
+  user.tabsSortedByWindow[window.id] = [];
+  user.activeTabIndex[window.id] = null;
+  user.tabIds[window.id] = [];
 }
 
 /**
@@ -468,4 +481,28 @@ chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed');
     // setLocalStorage('googleID', null);
   newExtensionSession();
+})
+
+/**
+* Listens for window created
+*@param {object} window
+*calls newWindowForUser
+*/
+chrome.windows.onCreated.addListener(function(window){
+  newWindowForUser(window)
+})
+
+
+chrome.windows.onRemoved.addListener(function(windowId){
+  //remove all tabs from database
+  if(user.loggedIn){
+    var arrayOfTabs = user.tabsSortedByWindow[windowId];
+    for(var tab = 0; tab < arrayOfTabs.length ; tab++){
+      //remove from database
+      console.log('remove from DB')
+    }
+  }
+  delete user.tabsSortedByWindow[windowId];
+  delete user.activeTabIndex[windowId];
+  delete user.tabIds[windowId];
 })
