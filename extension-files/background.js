@@ -1,33 +1,45 @@
-//plan for tab move
-//store tabs by index in the window
-//when tab is moved, get the indexes between the 2 numbers to update tabs
-
-setLocalStorage('googleID', 101760331504672280672); //TEST USER
-
 var user; 
 
+
+/**
+* User class keeps track of current tab information and whether logged in state
+*/
 class User{
   constructor(){
     this.loggedIn =  false; 
     this.tabsSortedByWindow = {};
     this.activeTabIndex = {};
     this.tabIds = {};
+    this.userID = null; 
   }
   login(){
     this.loggedIn = true; 
-    getAllTabs();
+    this.sendAllTabsToServer(this.userID);
   }
   logout(){
     this.loggedIn = false; 
   }
+  sendAllTabsToServer(googleID){
+    for(var window in this.tabsSortedByWindow){
+      for(var tab in this.tabsSortedByWindow[window]){
+        var currentTab = this.tabsSortedByWindow[window][tab];
+        this.tabsSortedByWindow[window][tab].googleTabId = this.userID;
+        createNewTabRequest(currentTab);
+      }
+    }
+  }
 }
 
 /**
-* Creates a Tab object, sets timestamp for initial open
+* Creates a Tab object, if highlighted sets time of activation
+* Checks to see if tab is occupying spot to place new tab
 *@param {object} tab 
 *@param {object} currentTime
 */
 function createNewTab(tab, currentTime){
+
+  user.tabIds[tab.windowId].push(tab.id);
+
   var tabObject = {
     id: tab.id,
     windowId: tab.windowId,
@@ -38,32 +50,34 @@ function createNewTab(tab, currentTime){
     activeTimeElapsed: 0,
     inactiveTimeElapsed: 0,
     screenshot: '', 
-    googleTabId: null, 
+    googleTabId: user.userID, 
     highlighted: tab.highlighted
 
   }
   if(tabObject.highlighted){
-    user.activeTabIndex[tab.windowId] = tab.index; 
     tabObject.timeOfActivation = currentTime;
     tabObject.timeOfDeactivation = 0;  
   } else {
     tabObject.timeOfActivation = 0;
     tabObject.timeOfDeactivation = currentTime;  
   } 
-
-  user.tabIds[tab.windowId].push(tab.id);
+  
   var tabArray = user.tabsSortedByWindow[tab.windowId]; 
   if(tabArray.indexOf(tab.index) !== -1){
     console.log('spot taken ')
+    //updates the indexes for all the tabs 
   } else {
     user.tabsSortedByWindow[tab.windowId].push(tabObject);
   }
   return tabObject;
 }
 
+
 /**
-* Updates a Tab object
-*@param {object} 
+* Updates a Tab object and returns an object to send to server 
+*@param {object} tab 
+*@param {object} timeStamp
+*@return {object} dataForServer
 */
 
 function updateTabInformation(tab, timeStamp){
@@ -95,45 +109,38 @@ function updateTabInformation(tab, timeStamp){
 
 
 
-
-
-
-
 /**
-* Remove Tab object from object and move to closedTabs object
-*@param {id} 
+* Remove tab and tab id from user, calls database to remove 
+*@param {integer} id iD of tab removed
+*@param {object} removeInfo windowid
 */
 chrome.tabs.onRemoved.addListener(function (id, removeInfo){
   //remove tabs from array AND index list
   var tabArray = user.tabsSortedByWindow[removeInfo.windowId];
   var indexInIdsArray = user.tabIds[removeInfo.windowId].indexOf(id);
+  var tabID; 
   user.tabIds[removeInfo.windowId].splice(indexInIdsArray, 1);
-  console.log(indexInIdsArray)
   for(var tab = 0; tab < tabArray.length ; tab++){
     if(tabArray[tab].id === id){
+      tabID = user.tabsSortedByWindow[removeInfo.windowId][tab].googleTabId;
       user.tabsSortedByWindow[removeInfo.windowId].splice(tab, 1);
       break; 
     }
   }
-  console.log(user)
 
-  // var window  = JSON.stringify(removeInfo.windowId);
-  // if(user.loggedIn){
-  //   chrome.storage.local.get(window, function(item){
-  //     var stringId = JSON.stringify(id);
-  //     var googleIdDb = item[window][stringId];
-  //     var tabObject = {};
-  //     tabObject['databaseTabID'] = googleIdDb;
-  //     serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
-  //   })
-  // }
-  // delete user.tabsSortedByWindow[removeInfo.windowId][id];
+  user.activeTabIndex[removeInfo.windowId] = null; 
+
+  if(user.loggedIn){
+      var tabObject = {};
+      tabObject['databaseTabID'] = tabID;
+      serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
+  }
 })
 
 
 
 /**
-* Listens to for when a tab updates
+* Listens to for when a tab updates, updates information and sends info to database
 *@param {integer} tab tab id
 *@param {object} changeInfo changed info of the tab
 *@param {object} tab  object containing props about the tab
@@ -164,15 +171,15 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
+    console.log('updated')
     var time = new Date();
     var timeStamp = time.getTime();
-    var previousIndex = user.activeTabIndex[tab.windowId];
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
     if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
       // var tabUpdated = updateTabInformation(tab, timeStamp);
       user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
       if(user.loggedIn){
-        activateTimeTab(tabUpdated.databaseTabID);
+        activateTimeTab(tab.googleTabId);
       }
     } else {
       var newTab = createNewTab(tab, timeStamp);
@@ -183,18 +190,33 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
         })
       }
     }
+    var previousIndex = user.activeTabIndex[tab.windowId];
+    user.activeTabIndex[tab.windowId] = tab.index;
+    if(previousIndex === null){
+      return; 
+    }
     deactivateTimeTab(user.tabsSortedByWindow[tab.windowId][previousIndex].googleTabId);
     updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp);
-    user.activeTabIndex[tab.windowId] = tab.index;
+
   });
 })
 
+/**
+* Calls database to activate the time for tab
+*@param {integer} uniqueID 
+*call serverRequest
+*/
 function activateTimeTab(uniqueID){
   var tabObject = {};
   tabObject['databaseTabID'] = uniqueID;
   serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
 }
 
+/**
+* Calls database to deactivate the time for tab
+*@param {integer} uniqueID 
+*call serverRequest
+*/
 function deactivateTimeTab(uniqueID){
   if(uniqueID === null){
     return; 
@@ -210,19 +232,24 @@ function deactivateTimeTab(uniqueID){
   })
 }
 
+/**
+* Takes previous highlighted tab and sets time of deactivation
+*@param {integer} uniqueID 
+*call serverRequest
+*/
 function updatePreviousHighlightedTab(previousIndex, windowId,  timeStamp){
   var allTabs = user.tabsSortedByWindow[windowId]; 
   if(allTabs[previousIndex]){
       allTabs[previousIndex].highlighted = false;  
       allTabs[previousIndex].timeOfDeactivation = timeStamp;  
-      allTabs[previousIndex].activeTimeElapsed = timeStamp - allTabs[previousIndex].timeOfActivation;
-      allTabs[previousIndex].inactiveTimeElapsed = 0;
   }
 }
 
 
 /**
 * Listens to for when a tab moves in a window
+*@param { integer } tabId id of tab moved
+*@param { object } moveInfo movedTo, movedFrom
 */
 chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
   //update the database with all new indexes
@@ -232,29 +259,39 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 
 
 /**
-* Runs function when receive a message from the shared port 
+* Runs function when receive a message from the shared port, (popup content script) 
 *@param {object} port 
 *@param {object} message 
 * sends response back to the caller
 */
-
 chrome.runtime.onConnect.addListener(function(port) {
   console.assert(port.name == "tab");
   port.onMessage.addListener(function(message) {
     if (message.type == "popup"){
-      updatedElaspedDeactivation();
-      var responseObject = {};
-      responseObject.userStatus = user.loggedIn; 
-      responseObject.allTabs =     user.tabsSortedByWindow; 
-      port.postMessage({sessionInfo: responseObject})
+      if(user.loggedIn){
+        //get request from database 
+
+        //temporary 
+        updatedElaspedDeactivation();
+        var responseObject = {};
+        responseObject.userStatus = user.loggedIn; 
+        responseObject.allTabs =     user.tabsSortedByWindow; 
+        port.postMessage({sessionInfo: responseObject})
+      }else {
+        updatedElaspedDeactivation();
+        var responseObject = {};
+        responseObject.userStatus = user.loggedIn; 
+        responseObject.allTabs =     user.tabsSortedByWindow; 
+        port.postMessage({sessionInfo: responseObject})
+      }
     } else if(message.type = 'login'){
         chrome.storage.local.get('googleID', function(id){
           if(id.googleID){
-            if(!user.loggedIn){
-              user.login();
-            }
+            user.userID = id.googleID;
+            user.login();
             port.postMessage({'loginStatus': true})
           } else {
+            //call database to check if user has account 
             port.postMessage({'loginStatus': false})
           }
         })
@@ -270,7 +307,6 @@ chrome.runtime.onConnect.addListener(function(port) {
 *@param {string} action the target route on the server
 *@param {object} data the data that will be sent 
 */
-
 function serverRequest(method, action, data){
   if(data === null){
     return; 
@@ -286,6 +322,9 @@ function serverRequest(method, action, data){
   xhr.send(JSON.stringify(data))
 }
 
+/**
+* Get request to receive all tabs of user from database 
+*/
 function getAllDataFromServer(){
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "http://www.closeyourtabs.com/tabs", true);
@@ -297,6 +336,10 @@ function getAllDataFromServer(){
   xhr.send()
 }
 
+/**
+* POST request for new tab, saves tabId to user, activates tab when completed  
+*@param {object} tabObject the data that will be sent 
+*/
 function createNewTabRequest(tabObject){
   var dataForServer = {
     windowID: tabObject.windowId,
@@ -305,8 +348,8 @@ function createNewTabRequest(tabObject){
     deactivatedTime: 0, 
     browserTabIndex: tabObject.index, 
     googleID: tabObject.googleID, 
-    url: tab.url,
-    favicon: tab.favIconUrl
+    url: tabObject.url,
+    favicon: tabObject.favIconUrl
   }
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'http://www.closeyourtabs.com/tabs/');
@@ -314,48 +357,36 @@ function createNewTabRequest(tabObject){
   xhr.onreadystatechange = function() {
       if (xhr.readyState == 4 & xhr.status === 200) {
         var result = JSON.parse(xhr.responseText);
-        //store the googlebaseTabID into the objecy
-
-        activateTimeTab(result.data.insertId);
-        var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index]; 
-        user.tabsSortedByWindow[tabObject.windowId][tabObject.index] = {...tabObject, databaseTabID: result.data.insertId}
+        console.log(result);
+        // activateTimeTab(result.data.insertId);
+        // var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index]; 
+        // user.tabsSortedByWindow[tabObject.windowId][tabObject.index] = {...tabObject, databaseTabID: result.data.insertId}
       }
   };
   xhr.onerror = function (){
     reject('error')
   }
   xhr.send(JSON.stringify(dataForServer));
-
 }
 
 
 /**
 *Check if user has an account 
-* calls setLocalStorage
 */
 function checkForUserAccount(){
-  return new Promise( (resolve, reject)=> {
-    //check to see if they have an account
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://www.closeyourtabs.com/auth/google/verify", true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == "200") {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://www.closeyourtabs.com/auth/google/verify", true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == "200") {
+      var result = JSON.parse(xhr.responseText);
+      console.log(result)
+    } 
+  }
+  xhr.onerror = function(){
+    reject('No such user exists');
+  }
+  xhr.send()
 
-        var result = JSON.parse(xhr.responseText);
-        if(result){
-          setLocalStorage('googleID', result);
-          resolve(result);
-        }else {
-          reject('no user');
-        }
-      } 
-    }
-    xhr.onerror = function(){
-      reject('No such user exists');
-    }
-    xhr.send()
-  })
- 
 }
 
 /**
