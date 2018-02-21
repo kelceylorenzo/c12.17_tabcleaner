@@ -1,5 +1,6 @@
 import React from 'react';
 import placeholderImage from '../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png';
+import checkMark from '../assets/images/check-mark.png';
 
 export default (props) => {
 	let style = {
@@ -13,7 +14,7 @@ export default (props) => {
 	return (
 		<div className="tab-container" onClick={props.select}>
 			<div className="select-overlay-container" style={style}>
-				<img className="select-overlay" src="/assets/images/check-mark.png" alt="" />
+				<img className="select-overlay" src={checkMark} alt="" />
 			</div>
 
 			<div className="tab">
