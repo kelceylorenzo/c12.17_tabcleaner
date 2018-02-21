@@ -11,7 +11,7 @@ export default props => {
 			</div>
 
 			<div className="login-button-container">
-				<Link className="login-button" to="/dashboard">
+				<Link className="login-button" to="/auth/google">
 					LOG IN
 				</Link>
 			</div>
