@@ -10,20 +10,18 @@ class User{
     this.tabsSortedByWindow = {};
     this.activeTabIndex = {};
     this.tabIds = {};
-    this.userID = null; 
   }
   login(){
     this.loggedIn = true; 
-    this.sendAllTabsToServer(this.userID);
+    this.sendAllTabsToServer();
   }
   logout(){
     this.loggedIn = false; 
   }
-  sendAllTabsToServer(googleID){
+  sendAllTabsToServer(){
     for(var window in this.tabsSortedByWindow){
       for(var tab in this.tabsSortedByWindow[window]){
         var currentTab = this.tabsSortedByWindow[window][tab];
-        this.tabsSortedByWindow[window][tab].googleTabId = this.userID;
         createNewTabRequest(currentTab);
       }
     }
@@ -50,7 +48,7 @@ function createNewTab(tab, currentTime){
     activeTimeElapsed: 0,
     inactiveTimeElapsed: 0,
     screenshot: '', 
-    googleTabId: user.userID, 
+    databaseTabID: user.userID, 
     highlighted: tab.highlighted
 
   }
@@ -97,11 +95,11 @@ function updateTabInformation(tab, timeStamp){
   user.tabsSortedByWindow[tab.windowId][tab.index] = updatedInfo;
 
   var dataForServer = {
-    databaseTabID: tab.googleTabId, 
-    tabTitle: tab.title, 
-    browserTabIndex: tab.index, 
-    url: tab.url,
-    favicon: tab.favicon,
+    databaseTabID: updatedInfo.databaseTabID, 
+    tabTitle: updatedInfo.title, 
+    browserTabIndex: updatedInfo.index, 
+    url: updatedInfo.url,
+    favicon: updatedInfo.favicon,
   } 
 
   return dataForServer; 
@@ -122,7 +120,7 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
   user.tabIds[removeInfo.windowId].splice(indexInIdsArray, 1);
   for(var tab = 0; tab < tabArray.length ; tab++){
     if(tabArray[tab].id === id){
-      tabID = user.tabsSortedByWindow[removeInfo.windowId][tab].googleTabId;
+      tabID = user.tabsSortedByWindow[removeInfo.windowId][tab].databaseTabID;
       user.tabsSortedByWindow[removeInfo.windowId].splice(tab, 1);
       break; 
     }
@@ -179,15 +177,12 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       // var tabUpdated = updateTabInformation(tab, timeStamp);
       user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
       if(user.loggedIn){
-        activateTimeTab(tab.googleTabId);
+        activateTimeTab(user.tabsSortedByWindow[tab.windowId][tab.index].databaseTabID);
       }
     } else {
       var newTab = createNewTab(tab, timeStamp);
       if(user.loggedIn){
-        chrome.storage.local.get('googleID', function(userID){
-          newTab.googleID = userID; 
           createNewTabRequest(newTab);
-        })
       }
     }
     var previousIndex = user.activeTabIndex[tab.windowId];
@@ -195,42 +190,11 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     if(previousIndex === null){
       return; 
     }
-    deactivateTimeTab(user.tabsSortedByWindow[tab.windowId][previousIndex].googleTabId);
+    deactivateTimeTab(user.tabsSortedByWindow[tab.windowId][previousIndex].databaseTabID);
     updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp);
 
   });
 })
-
-/**
-* Calls database to activate the time for tab
-*@param {integer} uniqueID 
-*call serverRequest
-*/
-function activateTimeTab(uniqueID){
-  var tabObject = {};
-  tabObject['databaseTabID'] = uniqueID;
-  serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
-}
-
-/**
-* Calls database to deactivate the time for tab
-*@param {integer} uniqueID 
-*call serverRequest
-*/
-function deactivateTimeTab(uniqueID){
-  if(uniqueID === null){
-    return; 
-  }
-  chrome.storage.local.get('googleID', function (id){
-    var userGoogleID = id['googleID'];
-    if(userGoogleID && user.loggedIn){
-      var tabObject = {};
-      tabObject['databaseTabID'] = uniqueID;
-      tabObject['googleID'] = userGoogleID
-      serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
-    }
-  })
-}
 
 /**
 * Takes previous highlighted tab and sets time of deactivation
@@ -267,39 +231,64 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 chrome.runtime.onConnect.addListener(function(port) {
   console.assert(port.name == "tab");
   port.onMessage.addListener(function(message) {
+
+    updatedElaspedDeactivation();
+    var responseObject = {};
+    responseObject.userStatus = user.loggedIn; 
+    responseObject.allTabs =  user.tabsSortedByWindow; 
+
     if (message.type == "popup"){
       if(user.loggedIn){
         //get request from database 
-
-        //temporary 
-        updatedElaspedDeactivation();
-        var responseObject = {};
-        responseObject.userStatus = user.loggedIn; 
-        responseObject.allTabs =     user.tabsSortedByWindow; 
         port.postMessage({sessionInfo: responseObject})
-      }else {
-        updatedElaspedDeactivation();
-        var responseObject = {};
-        responseObject.userStatus = user.loggedIn; 
-        responseObject.allTabs =     user.tabsSortedByWindow; 
+      } else {
         port.postMessage({sessionInfo: responseObject})
       }
-    } else if(message.type = 'login'){
-        chrome.storage.local.get('googleID', function(id){
-          if(id.googleID){
-            user.userID = id.googleID;
-            user.login();
-            port.postMessage({'loginStatus': true})
-          } else {
-            //call database to check if user has account 
-            port.postMessage({'loginStatus': false})
-          }
-        })
+    } else if(message.type === 'logout'){
+      user.logout(); 
+      getRequestToServer("http://www.closeyourtabs.com/auth/google/logout");
+    } else if (message.type === 'login'){
+      checkForUserAccount().then(resp=>{
+        if(resp){
+          user.login();
+          port.postMessage({loginStatus: true});
+        } else {
+          port.postMessage({loginStatus: false});
+
+        }
+      }).catch(error=>{
+        console.log(error);
+      })
     }
   });
 });
 
 
+
+
+/**
+* Calls database to activate the time for tab
+*@param {integer} uniqueID 
+*call serverRequest
+*/
+function activateTimeTab(uniqueID){
+  var tabObject = {};
+  tabObject['databaseTabID'] = uniqueID;
+  serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
+}
+
+/**
+* Calls database to deactivate the time for tab
+*@param {integer} uniqueID 
+*call serverRequest
+*/
+function deactivateTimeTab(uniqueID){
+  if(user.loggedIn && uniqueID !== null){
+    var tabObject = {};
+    tabObject['databaseTabID'] = uniqueID;
+    serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
+  }
+}
 
 /**
 * basic request to server in which the return callback does not need to do anything 
@@ -325,12 +314,14 @@ function serverRequest(method, action, data){
 /**
 * Get request to receive all tabs of user from database 
 */
-function getAllDataFromServer(){
+function getRequestToServer(route){
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://www.closeyourtabs.com/tabs", true);
+  xhr.open("GET", route, true);
   xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 & xhr.status === 200) {
-      console.log(xhr.responseText)
+    if (xhr.readyState == 4) {
+      if(xhr.status === 200){
+        console.log(xhr.responseText)
+      }
     } 
   }
   xhr.send()
@@ -347,7 +338,6 @@ function createNewTabRequest(tabObject){
     activatedTime: 0, 
     deactivatedTime: 0, 
     browserTabIndex: tabObject.index, 
-    googleID: tabObject.googleID, 
     url: tabObject.url,
     favicon: tabObject.favIconUrl
   }
@@ -356,11 +346,16 @@ function createNewTabRequest(tabObject){
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
       if (xhr.readyState == 4 & xhr.status === 200) {
-        var result = JSON.parse(xhr.responseText);
-        console.log(result);
-        // activateTimeTab(result.data.insertId);
-        // var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index]; 
-        // user.tabsSortedByWindow[tabObject.windowId][tabObject.index] = {...tabObject, databaseTabID: result.data.insertId}
+        console.log(xhr.responseText);
+        if(JSON.parse(xhr.responseText).insertId){
+          var result = JSON.parse(xhr.responseText).insertId; 
+          activateTimeTab(result);
+          var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index]; 
+          user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = {...tabObj, databaseTabID: result}
+
+        } else {
+          console.log('tab was not created')
+        }
       }
   };
   xhr.onerror = function (){
@@ -374,20 +369,33 @@ function createNewTabRequest(tabObject){
 *Check if user has an account 
 */
 function checkForUserAccount(){
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://www.closeyourtabs.com/auth/google/verify", true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == "200") {
-      var result = JSON.parse(xhr.responseText);
-      console.log(result)
-    } 
-  }
-  xhr.onerror = function(){
-    reject('No such user exists');
-  }
-  xhr.send()
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://www.closeyourtabs.com/auth/google/verify", true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        if(xhr.status == "200"){
+          var result = xhr.responseText;
+          if(result === 'true'){
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        }else {
+          resolve(false);
+        }
+      } 
+    }
+    xhr.onerror = function(){
+      console.log('connect error')
+      reject(false);
+    }
+    xhr.send()
+  })
 
 }
+
+
 
 /**
 *Sets key value pair in local storage
@@ -415,7 +423,6 @@ function updatedElaspedDeactivation(){
       }
     }
   }
-
 }
 
 /**
@@ -428,6 +435,9 @@ function getAllTabs(){
     var timeStamp = date.getTime();
     tabs.forEach(function(tab){
       createNewTab(tab, timeStamp);
+      if(tab.highlighted){
+        user.activeTabIndex[tab.windowId] = tab.index; 
+      }
     })
   })
 }
@@ -441,12 +451,31 @@ function newExtensionSession(){
   user = new User();
   chrome.windows.getAll(function(windows){
     windows.forEach(function(window){
-      user.tabsSortedByWindow[window.id] = [];
-      user.activeTabIndex[window.id] = null;
-      user.tabIds[window.id] = [];
+      newWindowForUser(window);
     })
   })
   getAllTabs();
+  checkForUserAccount().then(resp=>{
+    if(resp){
+      console.log('user logged in');
+      user.login();
+    } else {
+      console.log('user is not logged in ')
+      //show user this info
+    }
+  }).catch(error=>{
+    console.log('ERROR', error)
+  })
+}
+
+/**
+* clears local storage of any previous windows and creates an instance of user session
+*@param {object} window window object 
+*/
+function newWindowForUser(window){
+  user.tabsSortedByWindow[window.id] = [];
+  user.activeTabIndex[window.id] = null;
+  user.tabIds[window.id] = [];
 }
 
 /**
@@ -468,4 +497,28 @@ chrome.runtime.onInstalled.addListener(function(details){
   console.log('installed');
     // setLocalStorage('googleID', null);
   newExtensionSession();
+})
+
+/**
+* Listens for window created
+*@param {object} window
+*calls newWindowForUser
+*/
+chrome.windows.onCreated.addListener(function(window){
+  newWindowForUser(window)
+})
+
+
+chrome.windows.onRemoved.addListener(function(windowId){
+  //remove all tabs from database
+  if(user.loggedIn){
+    var arrayOfTabs = user.tabsSortedByWindow[windowId];
+    for(var tab = 0; tab < arrayOfTabs.length ; tab++){
+      //remove from database
+      console.log('remove from DB')
+    }
+  }
+  delete user.tabsSortedByWindow[windowId];
+  delete user.activeTabIndex[windowId];
+  delete user.tabIds[windowId];
 })
