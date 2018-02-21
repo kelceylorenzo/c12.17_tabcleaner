@@ -169,6 +169,7 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
     if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
       // var tabUpdated = updateTabInformation(tab, timeStamp);
+      user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
       if(user.loggedIn){
         activateTimeTab(tabUpdated.databaseTabID);
       }
