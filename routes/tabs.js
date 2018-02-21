@@ -22,26 +22,24 @@ function checkIfTableExists(req, res, next) {
         "googleID double NULL," +
         "url VARCHAR(2084) NULL," +
         "favicon VARCHAR(2084) NULL );",
-        (err, results, fields) => {
-            if (err) throw err;
-        }
+        (err) => { if (err) throw err; }
     );
     next();
-};
+}
 
 router.get('/', (req, res) => {
 
     const query = 'SELECT * FROM tabs WHERE googleID=?';
-    const inserts = req.body.googleID;
+    const insert = req.user;
     const sql = mysql.format(query, insert);
 
-    db.query(sql, function (err, results, fields) {
+    db.query(sql, function (err, results,) {
 	    if(err) console.log('Error, GET: ', err);
         const output = {
 	    type: 'GET',
             success: true,
             data: results.message
-        }
+        };
         const json_output = JSON.stringify(output);
         res.send(json_output);
 	    console.log('GET from: ', req.body.googleID);
@@ -49,7 +47,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', checkIfTableExists, (req, res) => {
-    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon } = req.body;
+    const googleID = req.user;
+    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon } = req.body;
 
     const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
@@ -62,7 +61,7 @@ router.post('/', checkIfTableExists, (req, res) => {
 	    type: 'POST',
             success: true,
             affectedRows: results.affectedRows,
-	    databaseID: insertId,
+	        insertID: results.insertId,
             fields: fields
         };
         console.log('POST from ', googleID, 'Data: ', output);
@@ -77,13 +76,13 @@ router.delete('/:deleteID', (req, res) => {
     let searchID;
 
     if(req.params.deleteID === 'google'){
-        searchID = req.body.googleID
+        searchID = req.user;
         searchType = 'googleID'
     }
     if(req.params.deleteID === 'database'){
         searchID = req.body.databaseTabID;
         searchType = 'databaseTabID';
-    };
+    }
 
     const query = 'DELETE FROM tabs WHERE ?? = ?';
     const insert = [searchType, searchID];

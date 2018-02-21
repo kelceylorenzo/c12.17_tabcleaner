@@ -4,6 +4,6 @@ module.exports = {
         return next();
       } else {
         res.redirect('/auth/google');
-      };
+      }
     }
   };
