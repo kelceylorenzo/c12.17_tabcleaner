@@ -98,7 +98,7 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
         const output = {
             type: 'DELETE',
             success: true,
-            data: results,
+            data: results.message,
             fields: fields
         };
         console.log('DELETE data: ', output);
