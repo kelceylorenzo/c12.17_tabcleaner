@@ -90,7 +90,7 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
     const query = 'DELETE FROM tabs WHERE ?? = ?';
     const insert = [searchType, searchID];
     const sql = mysql.format(query, insert);
-
+    
     db.query(sql, (err, results, fields) => {
         if (err) console.log('Error, DELETE: ', err);
         const output = {
@@ -171,6 +171,30 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
+
+
+    // db.query("CREATE TABLE IF NOT EXISTS urls (" +
+    //         "googleID double NOT NULL PRIMARY KEY," +
+    //         "url VARCHAR(30) NULL," +
+    //         "totalActive INT(20) NULLl);", 
+    //         (err) => {
+    //             if (err) console.log(err);
+    //             db.query(insertUser, (err) => {
+    //                 if (err) console.log(err);
+    //                 console.log('User was not in db, but is now');
+    //                 return done(null, newUser);
+    //             });
+    //         }
+    // );
+
+
+    // db.query()
+
+
+
+
+
+
 });
 
 module.exports = router;
