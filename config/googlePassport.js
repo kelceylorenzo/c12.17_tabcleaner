@@ -12,6 +12,9 @@ module.exports = function (passport) {
         proxy: true
     }, (accessToken, refreshToken, profile, done) => {
 
+        console.log('Access Token: ', accessToken);
+        console.log('Refresh Token: ', refreshToken);
+
         const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
         const newUser = {
             googleID: profile.id,
@@ -30,7 +33,7 @@ module.exports = function (passport) {
             if (err) throw err;
 
             if (results.length > 0) {
-                console.log('user was in db.....');
+                console.log('User was in db.....');
                 return done(null, newUser);
             } else {
                 console.log('Inserting User.......');
@@ -48,10 +51,10 @@ module.exports = function (passport) {
                         "email VARCHAR(50) NULL," +
                         "image VARCHAR(200) NULL);",
                         (err) => {
-                            if (err) throw err;
+                            if (err) console.log(err);
                             db.query(insertUser, (err) => {
-                                if (err) throw err;
-                                console.log('user was not in db, but is now');
+                                if (err) console.log(err);
+                                console.log('User was not in db, but is now');
                                 return done(null, newUser);
                             });
                         });
@@ -61,13 +64,10 @@ module.exports = function (passport) {
 
 
     passport.serializeUser((user, done) => {
-
         done(null, user.googleID);
-
     })
 
     passport.deserializeUser((id, done) => {
-
         const findUserSQL = "SELECT * FROM users WHERE googleID = ?"
         const findUserInsert = id;
         const findUser = mysql.format(findUserSQL, findUserInsert);

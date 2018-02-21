@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Route } from "react-router-dom";
-import axios from "axios";
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import axios from 'axios';
 
-import LandingPage from "./landing-page";
-import MainPage from "./main-page";
-import AboutPage from "./about-page";
-import StatsPage from "./stats-page";
-import TopTenPage from "./top-ten-page";
-import headerData from "./header-data.js";
+import LandingPage from './landing-page';
+import MainPage from './main-page';
+import AboutPage from './about-page';
+import StatsPage from './stats-page';
+import TopTenPage from './top-ten-page';
+import headerData from './header-data.js';
 
 import "../assets/css/app.css";
 

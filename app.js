@@ -44,9 +44,10 @@ app.use(passport.session());
 // Set Global Vars
 app.use((req, res, next) => {
     res.locals.user = req.user || null;
-    console.log(req.user);
     next();
 });
+
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 // Use Routes
 app.use('/auth/google', googleAuth);

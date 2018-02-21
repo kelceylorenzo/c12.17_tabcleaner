@@ -13,7 +13,7 @@ export default props => {
 			<div className="login-button-container">
 				<Link className="login-button" to="http://closeyourtabs.com/auth/google/">
 					LOG IN
-				</Link>
+				</a>
 			</div>
 		</div>
 	);

@@ -6,7 +6,8 @@ const router = express.Router();
 router.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 router.get('/', passport.authenticate('google', {scope: ['profile', 'email']}), (req, res)=>{
-  console.log('Made it');
+    console.log('REQ: ', res);
+    console.log('RES: ', res);
 });
 
 router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }) ,(req, res) => {
@@ -14,13 +15,13 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }
 });
 
 router.get('/verify', (req, res)=>{
-  if(req.user){
-    res.send(true);
-    console.log(req.user);
-  } else {
-    console.log('Not Auth');
-    res.send(false);
-  }
+    if(req.isAuthenticated()){
+        res.send(true);
+        console.log(req.user, ' is authenticated');
+    } else {
+        console.log('Not Auth');
+        res.send(false);
+    }
 });
 
 router.get('/logout', (req, res)=>{

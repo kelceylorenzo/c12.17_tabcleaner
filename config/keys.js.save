@@ -1,6 +1,0 @@
-module.exports = {
-  mongoURI: 'mongodb://localhost/tabsDB',
-  googleClientID: '705688433293-m0rfdns2uv9qf226k3m7c4getc2u9o07.apps.googleusercontent.com',
-  googleClientSecret: '
-'
-}
