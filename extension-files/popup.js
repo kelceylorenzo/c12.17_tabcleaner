@@ -24,6 +24,7 @@ port.onMessage.addListener(function(response) {
       for(var item in windows[window]){
         var tabInfo = windows[window][item];
         var tabElement = createDomElement(tabInfo); 
+        console.log(tabElement)
         document.getElementById('tag-titles').appendChild(tabElement);
       }
       if(response.sessionInfo.userStatus){
@@ -96,6 +97,8 @@ function highlightTab(index, windowId,event){
 function logoutUser(){
   port.postMessage({type: "logout"});
   document.getElementById('signup').style.display = 'block';
+  document.getElementById('login').style.display = 'block';
+
 }
 
 function loginUser(){

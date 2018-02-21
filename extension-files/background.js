@@ -131,7 +131,7 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
   if(user.loggedIn){
       var tabObject = {};
       tabObject['databaseTabID'] = tabID;
-      serverRequest('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
+      sendDataToServer('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
   }
 })
 
@@ -154,7 +154,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
     if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
       var dataForServer = updateTabInformation(tab, timeStamp);
       if(user.loggedIn){
-        serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
+        sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
       }
     }
   }
@@ -169,7 +169,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-    console.log('updated')
     var time = new Date();
     var timeStamp = time.getTime();
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
@@ -199,7 +198,7 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
 /**
 * Takes previous highlighted tab and sets time of deactivation
 *@param {integer} uniqueID 
-*call serverRequest
+*call sendDataToServer
 */
 function updatePreviousHighlightedTab(previousIndex, windowId,  timeStamp){
   var allTabs = user.tabsSortedByWindow[windowId]; 
@@ -246,7 +245,7 @@ chrome.runtime.onConnect.addListener(function(port) {
       }
     } else if(message.type === 'logout'){
       user.logout(); 
-      getRequestToServer("http://www.closeyourtabs.com/auth/google/logout");
+      requestToServerNoData('GET', "http://www.closeyourtabs.com/auth/google/logout");
     } else if (message.type === 'login'){
       checkForUserAccount().then(resp=>{
         if(resp){
@@ -269,24 +268,24 @@ chrome.runtime.onConnect.addListener(function(port) {
 /**
 * Calls database to activate the time for tab
 *@param {integer} uniqueID 
-*call serverRequest
+*call sendDataToServer
 */
 function activateTimeTab(uniqueID){
   var tabObject = {};
   tabObject['databaseTabID'] = uniqueID;
-  serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
+  sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
 }
 
 /**
 * Calls database to deactivate the time for tab
 *@param {integer} uniqueID 
-*call serverRequest
+*call sendDataToServer
 */
 function deactivateTimeTab(uniqueID){
   if(user.loggedIn && uniqueID !== null){
     var tabObject = {};
     tabObject['databaseTabID'] = uniqueID;
-    serverRequest('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
+    sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
   }
 }
 
@@ -296,7 +295,7 @@ function deactivateTimeTab(uniqueID){
 *@param {string} action the target route on the server
 *@param {object} data the data that will be sent 
 */
-function serverRequest(method, action, data){
+function sendDataToServer(method, action, data){
   if(data === null){
     return; 
   }
@@ -314,9 +313,9 @@ function serverRequest(method, action, data){
 /**
 * Get request to receive all tabs of user from database 
 */
-function getRequestToServer(route){
+function requestToServerNoData(method, route){
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", route, true);
+  xhr.open(method, route, true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       if(xhr.status === 200){
@@ -377,6 +376,7 @@ function checkForUserAccount(){
         if(xhr.status == "200"){
           var result = xhr.responseText;
           if(result === 'true'){
+            clearPreviousTabData();
             resolve(true);
           } else {
             resolve(false);
@@ -393,6 +393,13 @@ function checkForUserAccount(){
     xhr.send()
   })
 
+}
+
+/**
+*Deletes user information from database
+*/
+function clearPreviousTabData(){
+  requestToServerNoData('DELETE', 'http://www.closeyourtabs.com/tabs/google');
 }
 
 
