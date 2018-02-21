@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const mysqlCredentials = require('../mysqlCredentials.js');
+const {ensureAuthenticated} = require('../helper/auth.js');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
@@ -22,46 +23,48 @@ function checkIfTableExists(req, res, next) {
         "googleID double NULL," +
         "url VARCHAR(2084) NULL," +
         "favicon VARCHAR(2084) NULL );",
-        (err) => { if (err) throw err; }
+        (err) => {
+            if (err) throw err;
+        }
     );
     next();
 }
 
-router.get('/', (req, res) => {
+router.get('/', ensureAuthenticated, (req, res) => {
 
     const query = 'SELECT * FROM tabs WHERE googleID=?';
     const insert = req.user;
     const sql = mysql.format(query, insert);
 
     db.query(sql, function (err, results,) {
-	    if(err) console.log('Error, GET: ', err);
+        if (err) console.log('Error, GET: ', err);
         const output = {
-	    type: 'GET',
+            type: 'GET',
             success: true,
             data: results.message
         };
         const json_output = JSON.stringify(output);
         res.send(json_output);
-	    console.log('GET from: ', req.body.googleID);
+        console.log('GET from: ', req.body.googleID);
     });
 });
 
-router.post('/', checkIfTableExists, (req, res) => {
+router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const googleID = req.user;
-    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon } = req.body;
+    const {windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon} = req.body;
 
     const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
-                              windowID,   tabTitle,   activatedTime,   deactivatedTime,   browserTabIndex,   googleID,   url,   favicon];
+        windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon];
     const sql = mysql.format(query, inserts);
 
     db.query(sql, (err, results, fields) => {
-        if(err) console.log('Error, POST: ', err);
+        if (err) console.log('Error, POST: ', err);
         const output = {
-	    type: 'POST',
+            type: 'POST',
             success: true,
             affectedRows: results.affectedRows,
-	        insertID: results.insertId,
+            insertId: results.insertId,
             fields: fields
         };
         console.log('POST from ', googleID, 'Data: ', output);
@@ -70,16 +73,16 @@ router.post('/', checkIfTableExists, (req, res) => {
     });
 });
 
-router.delete('/:deleteID', (req, res) => {
+router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
 
     let searchType;
     let searchID;
 
-    if(req.params.deleteID === 'google'){
+    if (req.params.deleteID === 'google') {
         searchID = req.user;
         searchType = 'googleID'
     }
-    if(req.params.deleteID === 'database'){
+    if (req.params.deleteID === 'database') {
         searchID = req.body.databaseTabID;
         searchType = 'databaseTabID';
     }
@@ -90,10 +93,10 @@ router.delete('/:deleteID', (req, res) => {
 
     console.log(sql);
 
-    db.query(sql, (err, results, fields) => {
-        if(err) console.log('Error, DELETE: ', err);
+    db.query(sql, ensureAuthenticated, (err, results, fields) => {
+        if (err) console.log('Error, DELETE: ', err);
         const output = {
-	    type: 'DELETE',
+            type: 'DELETE',
             success: true,
             data: results,
             fields: fields
@@ -104,17 +107,17 @@ router.delete('/:deleteID', (req, res) => {
     });
 });
 
-router.put('/', checkIfTableExists, (req, res) => {
-    const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
+router.put('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
+    const {databaseTabID, tabTitle, browserTabIndex, url, favicon} = req.body;
 
     const query = 'UPDATE tabs SET tabTitle=?, browserTabIndex=?, url=?, favicon=? WHERE databaseTabID = ? LIMIT 1';
     const insert = [tabTitle, browserTabIndex, url, favicon, databaseTabID];
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        if(err) console.log('Error, UPDATE: ', err);
+        if (err) console.log('Error, UPDATE: ', err);
         const output = {
-	    type: 'UPDATE',
+            type: 'UPDATE',
             success: true,
             data: results.message,
             fields: fields
@@ -125,7 +128,7 @@ router.put('/', checkIfTableExists, (req, res) => {
     });
 });
 
-router.put('/move', (req, res) => {
+router.put('/move', ensureAuthenticated, (req, res) => {
     const {databaseTabID, browserTabIndex} = req.body;
 
     const query = 'UPDATE tabs SET browserTabIndex=? WHERE databaseTabID = ? LIMIT 1';
@@ -133,7 +136,7 @@ router.put('/move', (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        if(err) console.log('Error, UPDATE[MOVE]: ', err);
+        if (err) console.log('Error, UPDATE[MOVE]: ', err);
         const output = {
             type: 'UPDATE - TAB MOVED',
             success: true,
@@ -146,12 +149,12 @@ router.put('/move', (req, res) => {
     });
 });
 
-router.put('/:time', checkIfTableExists, (req, res) => {
+router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     let time = new Date();
     time = time.getTime();
 
-    const { databaseTabID } = req.body;
+    const {databaseTabID} = req.body;
 
     const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
     const insert = [req.params.time, time, databaseTabID];
@@ -159,9 +162,9 @@ router.put('/:time', checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        if(err) console.log('Error, TIMEUPDATE: ', err);
+        if (err) console.log('Error, TIMEUPDATE: ', err);
         const output = {
-	    type: req.params.time,
+            type: req.params.time,
             success: true,
             data: results.message,
             fields: fields
