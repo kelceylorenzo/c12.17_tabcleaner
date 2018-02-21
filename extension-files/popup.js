@@ -3,9 +3,12 @@ var port = chrome.runtime.connect({name: "tab"});
 
 function init(){
   document.getElementById('refresh').addEventListener('click', refreshContent);
+  document.getElementById('logout').addEventListener('click', logoutUser);
   document.getElementById('login').addEventListener('click', loginUser);
+
   document.body.style.opacity = 0;
-  document.body.style.transition = 'opacity ease-out .4s';
+  document.body.style.transition = 'opacity ease-out .4s';       
+
   requestAnimationFrame(function() {
     document.body.style.opacity = 1;
   });
@@ -14,33 +17,25 @@ function init(){
 
 port.onMessage.addListener(function(response) {
   if(response.sessionInfo){
-    var tabs = response.sessionInfo.allTabs;
-    for(var item in tabs){
-      var tabInfo = tabs[item];
-      var tabElement = createDomElement(tabInfo); 
-      document.getElementById('tag-titles').appendChild(tabElement);
+    var windows = response.sessionInfo.allTabs;
+    console.log(windows)
+
+    for(var window in windows){
+      for(var item in windows[window]){
+        var tabInfo = windows[window][item];
+        var tabElement = createDomElement(tabInfo); 
+        document.getElementById('tag-titles').appendChild(tabElement);
+      }
+      if(response.sessionInfo.userStatus){
+        hideLoginButtons();
+      }
     }
-    if(response.sessionInfo.userStatus){
-      hideLoginButtons();
-    }
+  
   } else if(response.loginStatus){
     hideLoginButtons();
   }
 });
 
-function sendMessageToGetTabInfo(){
-  port.postMessage({type: "popup"});
-}
-
-function hideLoginButtons(){
-  document.getElementById('login').style.display = 'none';
-  document.getElementById('signup').style.display = 'none';
-}
-
-function refreshContent(){
-  document.getElementById('tag-titles').innerHTML = "";
-  sendMessageToGetTabInfo();
-}
 
 function createDomElement(tabObject){
   if(!tabObject.title){
@@ -78,10 +73,29 @@ function clickEvent(id, event) {
   elem.parentNode.removeChild(elem);
 }
 
+function sendMessageToGetTabInfo(){
+  port.postMessage({type: "popup"});
+}
+
+function hideLoginButtons(){
+  document.getElementById('signup').style.display = 'none';
+  document.getElementById('login').style.display = 'none';
+}
+
+function refreshContent(){
+  document.getElementById('tag-titles').innerHTML = "";
+  sendMessageToGetTabInfo();
+}
+
 //try adding window id
 function highlightTab(index, windowId,event){
   chrome.tabs.highlight({'tabs': index, 'windowId': windowId})
   chrome.windows.update(windowId, {focused: true})
+}
+
+function logoutUser(){
+  port.postMessage({type: "logout"});
+  document.getElementById('signup').style.display = 'block';
 }
 
 function loginUser(){
