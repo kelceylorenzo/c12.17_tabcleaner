@@ -47,6 +47,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
 // Use Routes
 app.use('/auth/google', googleAuth);
 app.use('/tabs', tabs);
