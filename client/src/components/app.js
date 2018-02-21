@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
+import axios from "axios";
 
-import LandingPage from './landing-page';
-import MainPage from './main-page';
-import AboutPage from './about-page';
-import StatsPage from './stats-page';
-import TopTenPage from './top-ten-page';
-import headerData from './header-data.js';
+import LandingPage from "./landing-page";
+import MainPage from "./main-page";
+import AboutPage from "./about-page";
+import StatsPage from "./stats-page";
+import TopTenPage from "./top-ten-page";
+import headerData from "./header-data.js";
 
 import "../assets/css/app.css";
-
-// const BASE_URL = "http://closeyourtabs.com";
 
 class App extends Component {
 	verifyLogIn() {
@@ -19,6 +17,8 @@ class App extends Component {
 			console.log("Verify response: ", resp);
 			if (resp.data) {
 				console.log("TRUE");
+				console.log("this.props: ", this.props);
+				console.log("Response: ", resp);
 				// this.props.history.push("/dashboard");
 			} else {
 				console.log("FALSE");

@@ -46,8 +46,8 @@ class MainPage extends Component {
 	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call
 	getData() {
 		axios.get("/tabs").then(resp => {
-			console.log("GET RESPONSE: ", resp).catch(err => {
-				console.log("GET RESPONSE ERROR: ", err);
+			console.log("GET RESPONSE for /tabs: ", resp).catch(err => {
+				console.log("GET RESPONSE ERROR from /tabs: ", err);
 			});
 		});
 		// resp.map(currentItem => {
