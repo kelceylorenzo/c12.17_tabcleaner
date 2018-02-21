@@ -1,5 +1,5 @@
 {
-	"name": "CloseYourTabs",
+	"name": "react_starter",
 	"version": "1.0.0",
 	"description": "Starting setup for react redux project",
 	"main": "index.js",
@@ -8,7 +8,7 @@
 		"bundle": "node_modules/.bin/webpack --config webpack.deploy.config.js --progress --colors",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Andrea Wayte, Henry Moon, James Kirsch, Kelcey Lorenzo, and Nick Quan",
+	"author": "Scott Bowler",
 	"license": "ISC",
 	"repository": {
 		"type": "git",
