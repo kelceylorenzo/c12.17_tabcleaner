@@ -12,6 +12,9 @@ module.exports = function (passport) {
         proxy: true
     }, (accessToken, refreshToken, profile, done) => {
 
+        console.log('Access Token: ', accessToken);
+        console.log('Refresh Token: ', refreshToken);
+
         const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
         const newUser = {
             googleID: profile.id,
@@ -48,9 +51,9 @@ module.exports = function (passport) {
                         "email VARCHAR(50) NULL," +
                         "image VARCHAR(200) NULL);",
                         (err) => {
-                            if (err) throw err;
+                            if (err) console.log(err);
                             db.query(insertUser, (err) => {
-                                if (err) throw err;
+                                if (err) console.log(err);
                                 console.log('User was not in db, but is now');
                                 return done(null, newUser);
                             });
