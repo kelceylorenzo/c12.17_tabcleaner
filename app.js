@@ -44,7 +44,6 @@ app.use(passport.session());
 // Set Global Vars
 app.use((req, res, next) => {
     res.locals.user = req.user || null;
-    console.log(req.user);
     next();
 });
 

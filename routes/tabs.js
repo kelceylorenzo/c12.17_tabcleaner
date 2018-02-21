@@ -91,8 +91,6 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
     const insert = [searchType, searchID];
     const sql = mysql.format(query, insert);
 
-    console.log(sql);
-
     db.query(sql, (err, results, fields) => {
         if (err) console.log('Error, DELETE: ', err);
         const output = {
