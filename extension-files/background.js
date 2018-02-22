@@ -27,6 +27,7 @@ class User {
           var timeStamp = getTimeStamp();
           updatePreviousHighlightedTab(previousIndex, tabObj.windowId, timeStamp, tabObj.url);
         }
+
 			}
 		}
 	}
