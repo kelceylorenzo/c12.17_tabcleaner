@@ -1,33 +1,31 @@
 {
-    "manifest_version": 2,
+	"manifest_version": 2,
 
-    "name": "Tab test",
-    "description": "Get url of tabs open",
-    "version": "1.0",
+	"name": "Tab test",
+	"description": "Get url of tabs open",
+	"version": "1.0",
 
-    "browser_action": {
-      "default_icon": "images/iconpurple.png",
-      "default_popup": "popup.html",
-      "default_title": "Fan-TAB-ilous"
-    },
-    "permissions": [
-      "storage",
-      "tabs",
-      "<all_urls>",
-      "http://localhost:9000/*",
-      "http://www.closeyourtabs.com/*",
-      "cookies", 
-      "https://accounts.google.com/"
-
-    ],
-    "background": {
-        "scripts": ["background.js"]
-    },
-    "content_scripts": [
-      {
-        "matches": ["*://*/*"],
-        "js": ["contentscript.js"]
-      }
-    ]
-
-  }
+	"browser_action": {
+		"default_icon": "images/app-logo-favicon-32.png",
+		"default_popup": "popup.html",
+		"default_title": "Fan-TAB-ilous"
+	},
+	"permissions": [
+		"storage",
+		"tabs",
+		"<all_urls>",
+		"http://localhost:9000/*",
+		"http://www.closeyourtabs.com/*",
+		"cookies",
+		"http://closeyourtabs.com/*"
+	],
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://*/*"],
+			"js": ["contentscript.js"]
+		}
+	]
+}

@@ -1,0 +1,143 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
+
+.container {
+	width: 250px;
+	height: 400px;
+	padding: 5px;
+	background-color: rgb(26, 54, 74);
+}
+
+.popup-title-container {
+	width: 100%;
+	height: 10%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Lato', sans-serif;
+	font-weight: 700;
+	background-color: rgb(26, 54, 74);
+	color: lightgray;
+}
+
+.popup-title-container > img {
+	height: 75%;
+}
+
+#tag-titles {
+	height: 79%;
+	overflow: scroll;
+	margin: 5px 0;
+}
+
+.tab-container {
+	width: 100%;
+	height: 10%;
+	display: flex;
+	justify-content: flex-start;
+	border: 2px solid transparent;
+	padding: 5px;
+	font-size: 1.1em;
+	margin: 1% 0;
+	background: white;
+}
+
+.tab-container:hover {
+	cursor: pointer;
+}
+
+.title-container {
+	width: 80%;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.title-container:hover {
+	text-decoration: underline;
+}
+
+.title {
+	font-family: 'Lato', sans-serif;
+	font-size: 1.5em;
+	margin-left: 10px;
+}
+
+.fa-trash-alt {
+	color: black;
+	font-size: 125%;
+}
+
+.fa-trash-alt:hover {
+	color: rgb(156, 95, 88);
+}
+
+.favicon-container {
+	margin: 0 7px;
+	height: 100%;
+}
+
+.favicon-container > img {
+	height: 100%;
+}
+
+.button-container {
+	width: 100%;
+	height: 8%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 1%;
+}
+
+.popup-button {
+	margin: auto;
+	font-family: 'Lato', sans-serif;
+	width: 40%;
+	height: 90%;
+	background-color: white;
+	color: rgb(26, 54, 74);
+}
+
+.popup-button:hover {
+	cursor: pointer;
+	color: white;
+	background-color: transparent;
+	border: 2px solid white;
+}
+
+button:focus {
+	outline: 0;
+}
+
+#refresh {
+	font-size: 125%;
+	color: white;
+	margin: auto;
+}
+
+#refresh:hover {
+	color: rgb(143, 182, 179);
+	cursor: pointer;
+}
+
+/* Functionality classes */
+/* .green {
+	color: green;
+} */
+
+.yellow {
+	background-color: rgb(233, 229, 153);
+}
+
+.red {
+	background-color: rgb(156, 95, 88);
+}
+
+.activetab {
+	font-weight: bold;
+	border: 3px solid rgb(143, 182, 179);
+	padding: 5px;
+}
