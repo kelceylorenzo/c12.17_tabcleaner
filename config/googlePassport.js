@@ -74,9 +74,7 @@ module.exports = function (passport) {
 
         db.query(findUser, (err, results, fields) => {
             if (err) console.log(err);
-            const user = results
-            console.log(user);
-            done(null, user);
+            done(null, id);
         })
     })
 };
