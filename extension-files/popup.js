@@ -17,20 +17,22 @@ function init() {
 
 port.onMessage.addListener(function(response) {
 	if (response.sessionInfo) {
+    var inactiveTabCount = 0; 
 		var windows = response.sessionInfo.allTabs;
-		console.log(windows);
-
 		for (var window in windows) {
 			for (var item in windows[window]) {
 				var tabInfo = windows[window][item];
 				var tabElement = createDomElement(tabInfo);
-				console.log(tabElement);
-				document.getElementById('tag-titles').appendChild(tabElement);
+        document.getElementById('tag-titles').appendChild(tabElement);
+        if(tabInfo.inactiveTimeElapsed > 25000){
+          inactiveTabCount++; 
+        }
 			}
 			if (response.sessionInfo.userStatus) {
 				hideLoginButtons();
 			}
-		}
+    }
+    setBadge(inactiveTabCount);
 	} else if (response.loginStatus) {
 		hideLoginButtons();
 	}
@@ -73,6 +75,11 @@ function createDomElement(tabObject) {
 	return tab;
 }
 
+function setBadge(number){
+  port.postMessage({ type: 'setBadge', number: number });
+
+}
+
 function clickEvent(id, event) {
 	chrome.tabs.remove(id);
 	var elem = document.querySelector('.id' + id);
@@ -111,3 +118,4 @@ function loginUser() {
 }
 
 init();
+
