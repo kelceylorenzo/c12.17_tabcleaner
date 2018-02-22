@@ -169,10 +169,10 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
             let newActiveTime = time - storedActiveTime;
 
             const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
-                "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY," +
-                "googleID DOUBLE NULL," +
-                "url VARCHAR(200) NULL," +
-                "totalActiveTime INT(20) NULL);";
+            "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY," +
+            "googleID DOUBLE NULL," +
+            "url VARCHAR(200) NULL," +
+            "totalActiveTime INT(20) NULL);";
 
             db.query(createUrlTableSQL, (err) => {
                 if (err) console.log(err);
