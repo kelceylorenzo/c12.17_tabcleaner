@@ -141,7 +141,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	font-family: "Lato", sans-serif;
-	cursor:default;
+	cursor: default;
 }
 
 .about-page-title-container {
@@ -235,11 +235,11 @@ body {
 }
 
 .first-row .team-member {
-	width: 25%;
+	width: 50%;
 }
 
 .second-row .team-member {
-	width: 20%;
+	width: 50%;
 }
 
 .team-member-name {
@@ -253,6 +253,8 @@ body {
 	justify-content: space-between;
 	font-size: 175%;
 	height: 50%;
+	width: 75%;
+	margin: auto;
 }
 
 .team-member-link a {
@@ -264,7 +266,7 @@ body {
 .team-member-link a:hover {
 	color: rgba(0, 0, 0, 0.8);
 	/* transition-duration: 0.3s; */
-	font-size: 120%;
+	/* font-size: 120%; */
 }
 
 .page-switches-container {
@@ -274,6 +276,10 @@ body {
 	justify-content: center;
 	/* font-size: 115%; */
 	color: rgba(87, 87, 87, 0.4);
+}
+
+.page-switches{
+	width: 5%
 }
 
 .page-switch:hover {

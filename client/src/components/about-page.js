@@ -91,7 +91,7 @@ class AboutPage extends Component {
 							<div className="first-row">
 								<div className="team-member">
 									<div className="team-member-name">
-										<p>Andrea</p>
+										<p>Andrea Wayte</p>
 									</div>
 									<div className="team-member-links-container">
 										<div className="team-member-link">
@@ -113,7 +113,7 @@ class AboutPage extends Component {
 								</div>
 								<div className="team-member">
 									<div className="team-member-name">
-										<p>Henry</p>
+										<p>Henry Moon</p>
 									</div>
 									<div className="team-member-links-container">
 										<div className="team-member-link">
@@ -140,7 +140,7 @@ class AboutPage extends Component {
 							<div className="second-row">
 								<div className="team-member">
 									<div className="team-member-name">
-										<p>James</p>
+										<p>James Kirsch</p>
 									</div>
 									<div className="team-member-links-container">
 										<div className="team-member-link">
@@ -162,7 +162,7 @@ class AboutPage extends Component {
 								</div>
 								<div className="team-member">
 									<div className="team-member-name">
-										<p>Kelcey</p>
+										<p>Kelcey Lorenzo</p>
 									</div>
 									<div className="team-member-links-container">
 										<div className="team-member-link">
@@ -184,7 +184,7 @@ class AboutPage extends Component {
 								</div>
 								<div className="team-member">
 									<div className="team-member-name">
-										<p>Nick</p>
+										<p>Nick Quan</p>
 									</div>
 									<div className="team-member-links-container">
 										<div className="team-member-link">
