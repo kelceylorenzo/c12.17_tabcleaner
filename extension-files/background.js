@@ -310,7 +310,12 @@ chrome.runtime.onConnect.addListener(function(port) {
 				.catch((error) => {
 					console.log(error);
 				});
-		}
+		} else if(message.type === 'setBadge'){
+      if(message.number > 0){
+        chrome.browserAction.setBadgeText({text: message.number.toString()});
+        chrome.browserAction.setBadgeBackgroundColor({color: '#FF0000'});
+      }
+    }
 	});
 });
 
@@ -606,3 +611,4 @@ function findCookie() {
 		}
 	});
 }
+
