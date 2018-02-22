@@ -171,8 +171,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-    console.log('highlight', tab)
-
     var time = new Date();
     var timeStamp = time.getTime();
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
