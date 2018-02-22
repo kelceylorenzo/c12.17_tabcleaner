@@ -181,6 +181,8 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                 const activeTimeInsert = [req.user, domain];
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
+                console.log(newActiveTime);
+
                 db.query(activeTimeSQL, (err, results) => {
                     if (results.length > 0) {
 
