@@ -1,53 +1,80 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const mongoose = require('mongoose');
 const keys = require('./keys');
+const mysql = require('mysql');
+const mysqlCredentials = require('../mysqlCredentials.js');
+const db = mysql.createConnection(mysqlCredentials);
 
-// Load User Model
-const User = mongoose.model('googleUsers');
+
+
 
 module.exports = function (passport) {
-  passport.use(
-    new GoogleStrategy({
-      clientID: keys.googleClientID,
-      clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback',
-      proxy: true
+    passport.use(new GoogleStrategy({
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: '/auth/google/callback',
+        proxy: true
     }, (accessToken, refreshToken, profile, done) => {
-      // console.log(accessToken);
-      // console.log(profile);
 
-      const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
+        const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
+        const newUser = {
+            googleID: profile.id,
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: profile.emails[0].value,
+            image: image
+        };
 
-      const newUser = {
-        googleID: profile.id,
-        firstName: profile.name.givenName,
-        lastName: profile.name.familyName,
-        email: profile.emails[0].value,
-        image: image
-      }
+        const findUserSQL = "SELECT * FROM users WHERE googleID=? LIMIT 1"
+        const findUserInsert = newUser.googleID;
+        const findUser = mysql.format(findUserSQL, findUserInsert);
 
-      // Check for existing user
-      User.findOne({
-        googleID: profile.id
-      }).then(user => {
-        if (user) {
-          // Return User
-          return done(null, user);
-        } else {
-          // Create User
-          new User(newUser)
-            .save()
-            .then(user => done(null, user));
-        }
-      })
+        db.query(findUser, (err, results) => {
+            if (err) console.log(err);
+            if (results.length > 0) {
+                console.log('User was in db.....');
+                return done(null, newUser);
+            } else {
+                console.log('Inserting User.......');
+
+                const { googleID, firstName, lastName, email, image } = newUser;
+
+                const insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
+                const insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
+                const insertUser = mysql.format(insertUserSQL, insertUserInsert);
+
+                db.query("CREATE TABLE IF NOT EXISTS users (" +
+                        "googleID double NOT NULL PRIMARY KEY," +
+                        "firstName VARCHAR(30) NULL," +
+                        "lastName VARCHAR(30) NULL," +
+                        "email VARCHAR(50) NULL," +
+                        "image VARCHAR(200) NULL);",
+                        (err) => {
+                            if (err) console.log(err);
+                            db.query(insertUser, (err) => {
+                                if (err) console.log(err);
+                                console.log('User was not in db, but is now');
+                                return done(null, newUser);
+                            });
+                        }
+                );
+            }
+        });
+    }));
+
+    passport.serializeUser((user, done) => {
+        done(null, user.googleID);
     })
-  );
 
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  })
-  passport.deserializeUser((id, done) => {
-    User.findById(id).then(user => done(null, user));
-  })
+    passport.deserializeUser((id, done) => {
+
+        const findUserSQL = "SELECT * FROM users WHERE googleID = ?"
+        const findUserInsert = id;
+        const findUser = mysql.format(findUserSQL, findUserInsert);
+
+        db.query(findUser, (err, results, fields) => {
+            if (err) console.log(err);
+            done(null, id);
+        });
+    });
 };
 
