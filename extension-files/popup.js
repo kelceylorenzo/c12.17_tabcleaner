@@ -1,5 +1,6 @@
 var lengthOfString = 40;
 var port = chrome.runtime.connect({ name: 'tab' });
+var inactiveTabCount = 0; 
 
 function init() {
 	document.getElementById('refresh').addEventListener('click', refreshContent);
@@ -17,7 +18,6 @@ function init() {
 
 port.onMessage.addListener(function(response) {
 	if (response.sessionInfo) {
-    var inactiveTabCount = 0; 
 		var windows = response.sessionInfo.allTabs;
 		for (var window in windows) {
 			for (var item in windows[window]) {
@@ -83,7 +83,9 @@ function setBadge(number){
 function clickEvent(id, event) {
 	chrome.tabs.remove(id);
 	var elem = document.querySelector('.id' + id);
-	elem.parentNode.removeChild(elem);
+  elem.parentNode.removeChild(elem);
+  inactiveTabCount--; 
+  setBadge(inactiveTabCount);
 }
 
 function sendMessageToGetTabInfo() {
