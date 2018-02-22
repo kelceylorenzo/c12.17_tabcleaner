@@ -4,6 +4,9 @@ const mysql = require('mysql');
 const mysqlCredentials = require('../mysqlCredentials.js');
 const db = mysql.createConnection(mysqlCredentials);
 
+
+
+
 module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: keys.googleClientID,
@@ -11,8 +14,6 @@ module.exports = function (passport) {
         callbackURL: '/auth/google/callback',
         proxy: true
     }, (accessToken, refreshToken, profile, done) => {
-
-        console.log('Access Token: ', accessToken);
 
         const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
         const newUser = {
@@ -37,9 +38,9 @@ module.exports = function (passport) {
 
                 const { googleID, firstName, lastName, email, image } = newUser;
 
-                let insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
-                let insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
-                let insertUser = mysql.format(insertUserSQL, insertUserInsert);
+                const insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
+                const insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
+                const insertUser = mysql.format(insertUserSQL, insertUserInsert);
 
                 db.query("CREATE TABLE IF NOT EXISTS users (" +
                         "googleID double NOT NULL PRIMARY KEY," +
@@ -60,20 +61,20 @@ module.exports = function (passport) {
         });
     }));
 
-
     passport.serializeUser((user, done) => {
         done(null, user.googleID);
     })
 
     passport.deserializeUser((id, done) => {
+
         const findUserSQL = "SELECT * FROM users WHERE googleID = ?"
         const findUserInsert = id;
         const findUser = mysql.format(findUserSQL, findUserInsert);
 
         db.query(findUser, (err, results, fields) => {
-            if (err) throw err;
+            if (err) console.log(err);
             done(null, id);
-        })
-    })
+        });
+    });
 };
 
