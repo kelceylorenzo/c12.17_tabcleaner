@@ -169,7 +169,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
             let newActiveTime = time - storedActiveTime;
 
             const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
-            "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY," +
+            "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
             "googleID DOUBLE NULL," +
             "url VARCHAR(200) NULL," +
             "totalActiveTime INT(20) NULL);";
@@ -208,7 +208,6 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                             console.log(results);
                             console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
                         });
-
                     }
                 })
             })
