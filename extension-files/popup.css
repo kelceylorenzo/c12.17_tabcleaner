@@ -21,7 +21,6 @@ a:focus {
 	height: 400px;
 	padding: 5px;
 	background-color: rgb(26, 54, 74);
-	overflow: scroll;
 }
 
 .popup-title-container {
@@ -44,8 +43,6 @@ a:focus {
 	height: 78%;
 	width: 100%;
 	margin: 1% 0;
-	overflow-y: scroll;
-	overflow-x: hidden;
 }
 
 .tab-container {
