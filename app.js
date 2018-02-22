@@ -4,7 +4,7 @@ const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
+// const cookieSession = require('cookie-session');
 
 // Google Passport Config
 require('./config/googlePassport')(passport);
@@ -28,10 +28,10 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(cookieSession({
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: [keys.cookieKey]
-}))
+// app.use(cookieSession({
+//     maxAge: 30 * 24 * 60 * 60 * 1000,
+//     keys: [keys.cookieKey]
+// }))
 
 // Authentication Middleware
 app.use(cookieParser());

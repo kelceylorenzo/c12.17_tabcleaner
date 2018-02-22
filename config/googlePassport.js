@@ -15,8 +15,6 @@ module.exports = function (passport) {
         proxy: true
     }, (accessToken, refreshToken, profile, done) => {
 
-        console.log('Access Token: ', accessToken);
-
         const image = profile.photos[0].value.substring(0, profile.photos[0].value.indexOf('?'));
         const newUser = {
             googleID: profile.id,
@@ -68,6 +66,7 @@ module.exports = function (passport) {
     })
 
     passport.deserializeUser((id, done) => {
+
         const findUserSQL = "SELECT * FROM users WHERE googleID = ?"
         const findUserInsert = id;
         const findUser = mysql.format(findUserSQL, findUserInsert);
@@ -75,7 +74,7 @@ module.exports = function (passport) {
         db.query(findUser, (err, results, fields) => {
             if (err) console.log(err);
             done(null, id);
-        })
-    })
+        });
+    });
 };
 
