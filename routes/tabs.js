@@ -154,10 +154,10 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     const { databaseTabID, url } = req.body;
 
-    let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/);
-    domain = domain[0];
-
     if (req.params.time === 'deactivatedTime' && url) {
+
+        let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/);
+        domain = domain[0];
 
         const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ? LIMIT 1';
         const getActiveTimeInsert = databaseTabID;
