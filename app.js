@@ -12,6 +12,7 @@ require('./config/googlePassport')(passport);
 // Load Routes
 const googleAuth = require('./routes/googleAuth');
 const tabs = require('./routes/tabs');
+const urls = require('./routes/urls');
 
 // Load Keys
 const keys = require('./config/keys');
@@ -58,6 +59,7 @@ app.use((req, res, next) => {
 // Use Routes
 app.use('/auth/google', googleAuth);
 app.use('/tabs', tabs);
+app.use('/urls', urls);
 
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
