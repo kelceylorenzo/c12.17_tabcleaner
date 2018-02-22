@@ -30,9 +30,10 @@ app.use((req, res, next) => {
 });
 
 app.use(cookieSession({
+    name: 'tabsSession',
     maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey]
-}))
+}));
 
 // Authentication Middleware
 app.use(cookieParser());
