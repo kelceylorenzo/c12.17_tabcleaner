@@ -195,7 +195,7 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
     if(previousIndex === null){
       return; 
     }
-    deactivateTimeTab(user.tabsSortedByWindow[tab.windowId][previousIndex].databaseTabID);
+    deactivateTimeTab(user.tabsSortedByWindow[tab.windowId][previousIndex].databaseTabID, tab.url);
     updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp);
 
   });
@@ -336,10 +336,12 @@ function activateTimeTab(uniqueID){
 *@param {integer} uniqueID 
 *call sendDataToServer
 */
-function deactivateTimeTab(uniqueID){
+function deactivateTimeTab(uniqueID, url){
   if(user.loggedIn && uniqueID !== null){
     var tabObject = {};
     tabObject['databaseTabID'] = uniqueID;
+    tabObject['url'] = url;
+
     sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
   }
 }
