@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 // Google Passport Config
 require('./config/googlePassport')(passport);
 
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
 // Load Routes
 const googleAuth = require('./routes/googleAuth');
 const tabs = require('./routes/tabs');
@@ -47,7 +49,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 // Use Routes
 app.use('/auth/google', googleAuth);
