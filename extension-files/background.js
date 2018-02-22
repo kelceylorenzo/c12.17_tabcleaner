@@ -171,6 +171,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
+    console.log('highlight', tab)
+
     var time = new Date();
     var timeStamp = time.getTime();
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
@@ -227,6 +229,24 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
     updateIndex(moveInfo.fromIndex, moveInfo.toIndex, moveInfo.windowId);
 
   }
+})
+
+
+/**
+* Listens for when a tab is detached from window 
+*@param {integer} tabId 
+*@param {object} detachInfo  oldPosition, oldWindowId
+*/
+chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
+  console.log('detach')
+  var tab = user.tabsSortedByWindow[detachInfo.oldWindowId][detachInfo.oldPosition];
+  var tabIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
+  user.tabIds[detachInfo.oldWindowId].splice(tabIndex, 1);
+  user.tabsSortedByWindow[detachInfo.oldWindowId].splice(detachInfo.oldPosition, 1);
+  if(user.activeTabIndex[detachInfo.oldWindowId] === detachInfo.oldPosition){
+    user.activeTabIndex[detachInfo.oldWindowId] = null; 
+  }
+  updateIndex(detachInfo.oldPosition, user.tabsSortedByWindow[detachInfo.oldWindowId].length-1, detachInfo.oldWindowId);
 })
 
 
