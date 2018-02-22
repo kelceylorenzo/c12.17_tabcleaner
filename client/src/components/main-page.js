@@ -45,7 +45,7 @@ class MainPage extends Component {
 			.get("/tabs")
 			.then(resp => {
 				console.log("GET response for /tabs: ", resp.data);
-				console.log("Resp.data.data: ", resp.data.data)
+				console.log("Resp.data.data: ", resp.data.data);
 				resp.data.data.map(currentItem => {
 					return (currentItem.selected = false);
 				});
@@ -75,13 +75,16 @@ class MainPage extends Component {
 
 	handleRefresh() {
 		console.log("refresh button clicked");
-		// axios.get("/tabs").then(resp => {
-		// 	console.log("Refresh button clicked: ", resp);
-		// 	// this.setState({
-		// 	// 	...this.state,
-		// 	// 	tabList: tabsList
-		// 	// }, () => this.handleSort("window") )
-		// });
+		axios.get("/tabs").then(resp => {
+			console.log("Refresh button clicked: ", resp);
+			this.setState(
+				{
+					...this.state,
+					tabList: resp.data.data
+				},
+				() => this.handleSort("window")
+			);
+		});
 	}
 
 	handleViewChange() {
