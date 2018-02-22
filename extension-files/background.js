@@ -238,7 +238,6 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 *@param {object} detachInfo  oldPosition, oldWindowId
 */
 chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
-  console.log('detach')
   var tab = user.tabsSortedByWindow[detachInfo.oldWindowId][detachInfo.oldPosition];
   var tabIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
   user.tabIds[detachInfo.oldWindowId].splice(tabIndex, 1);
@@ -249,6 +248,31 @@ chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
   updateIndex(detachInfo.oldPosition, user.tabsSortedByWindow[detachInfo.oldWindowId].length-1, detachInfo.oldWindowId);
 })
 
+/**
+* Listens for when a tab is attached to window 
+*@param {integer} tabId 
+*@param {object} detachInfo  newPosition, newWindowId
+*/
+chrome.tabs.onAttached.addListener(function(tabId, attachInfo){
+  console.log('attached', attachInfo)
+  console.log(tabId);
+  //if the index of the attached is less than the current active, add 1 to the current active 
+  var windowTabs = user.tabsSortedByWindow[attachInfo.newWindowId];
+  var currentActiveIndex = user.activeTabIndex[attachInfo.newWindowId];
+  if(currentActiveIndex > attachInfo.newPosition){
+    user.activeTabIndex[attachInfo.newWindowId] = currentActiveIndex++; 
+  }
+  //
+
+  // var tab = user.tabsSortedByWindow[detachInfo.oldWindowId][detachInfo.oldPosition];
+  // var tabIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
+  // user.tabIds[detachInfo.oldWindowId].splice(tabIndex, 1);
+  // user.tabsSortedByWindow[detachInfo.oldWindowId].splice(detachInfo.oldPosition, 1);
+  // if(user.activeTabIndex[detachInfo.oldWindowId] === detachInfo.oldPosition){
+  //   user.activeTabIndex[detachInfo.oldWindowId] = null; 
+  // }
+  // updateIndex(detachInfo.oldPosition, user.tabsSortedByWindow[detachInfo.oldWindowId].length-1, detachInfo.oldWindowId);
+})
 
 /**
 * Runs function when receive a message from the shared port, (popup content script) 
