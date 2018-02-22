@@ -164,12 +164,8 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
-
             const storedActiveTime = results.activatedTime;
             let newActiveTime = time - storedActiveTime;
-
-            console.log('getActiveTime: ', results);
-            console.log('newActiveTime: ', newActiveTime);
 
             const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
             "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY," +
@@ -188,7 +184,9 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
                     if (results.length > 0) {
 
-                        let newActiveTime = results.totalActiveTime + newActiveTime;
+                        newActiveTime = results.totalActiveTime + newActiveTime;
+
+                        console.log('newActiveTime: ', newActiveTime);
 
                         const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ? LIMIT 1';
                         const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
