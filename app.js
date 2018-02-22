@@ -39,8 +39,8 @@ app.use(cookieSession({
 app.use(cookieParser());
 app.use(session({
     secret: 'secret',
-    resave: false,
-    saveUninitialized: false
+    resave: true,
+    saveUninitialized: true
 }));
 
 // Body Parser Middleware
