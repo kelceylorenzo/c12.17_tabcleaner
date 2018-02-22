@@ -22,6 +22,7 @@ class User {
 			for (var tab in this.tabsSortedByWindow[window]) {
 				var currentTab = this.tabsSortedByWindow[window][tab];
 				createNewTabRequest(currentTab);
+				//deactivate. if no database tab id, return 
 			}
 		}
 	}
