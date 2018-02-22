@@ -17,7 +17,6 @@ class App extends Component {
 		axios.get(`/auth/google/verify`).then(resp => {
 			console.log("Verify response: ", resp);
 			if (resp.data) {
-				console.log("Logged In");
 				console.log("this.props for verify: ", this.props);
 				console.log("Axios Response object: ", resp);
 				// this.props.history.push("/dashboard");
