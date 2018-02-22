@@ -36,12 +36,12 @@ router.get('/', ensureAuthenticated, (req, res) => {
     const insert = req.user;
     const sql = mysql.format(query, insert);
 
-    db.query(sql, function (err, results, ) {
+    db.query(sql, function (err, results) {
         if (err) console.log('Error, GET: ', err);
         const output = {
             type: 'GET',
             success: true,
-            data: results.message
+            data: results
         };
         const json_output = JSON.stringify(output);
         res.send(json_output);
