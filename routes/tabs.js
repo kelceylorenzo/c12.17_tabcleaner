@@ -173,7 +173,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                 "googleID double NOT NULL," +
                 "url VARCHAR(30) NULL," +
                 "totalActiveTime INT(20) NULL);";
-            
+
             db.query(createUrlTableSQL, (err) => {
                 if (err) console.log(err);
 
@@ -202,8 +202,8 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                         const insertUrlInsert = [req.user, domain, newActiveTime];
                         const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
 
-                        db.query(insertUrlSQL, (err, results)=>{
-                            if(err) console.log(err);
+                        db.query(insertUrlSQL, (err, results) => {
+                            if (err) console.log(err);
                             console.log(results);
                             console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
                         });
