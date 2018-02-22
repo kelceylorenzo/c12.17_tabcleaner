@@ -44,14 +44,4 @@ class App extends Component {
 	}
 }
 
-// const App = () => (
-// 	<div className="app">
-// 		<Route exact path="/" component={LandingPage} />
-// 		<Route path="/dashboard" component={MainPage} />
-// 		<Route path="/about" component={AboutPage} />
-// 		<Route path="/stats-page" component={StatsPage} />
-// 		<Route path="/top-ten" component={TopTenPage} />
-// 	</div>
-// );
-
 export default App;
