@@ -182,6 +182,8 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
                 db.query(activeTimeSQL, (err, results) => {
                     newActiveTime = results.totalActiveTime + newActiveTime;
+                    console.log('STORED ACTIVE TIME: ', storedActiveTime);
+                    console.log('TIME: ', time);
                     console.log('newActiveTime: ', newActiveTime);
                     if (results.length > 0) {
 
