@@ -11,7 +11,7 @@ db.connect((err) => {
     console.log("Connected to remote DB");
 });
 
-checkIfTableExists: (req, res, next) => {
+function checkIfTableExists (req, res, next){
     db.query(
         "CREATE TABLE IF NOT EXISTS tabs (" +
         "databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
