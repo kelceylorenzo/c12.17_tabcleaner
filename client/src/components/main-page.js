@@ -54,6 +54,14 @@ class MainPage extends Component {
 		);
 	}
 
+	handleRefresh(){
+		console.log("refresh button clicked")
+	}
+
+	handleViewChange() {
+		console.log("handle view button clicked")
+	}
+
 	handleIndividualSelect(item) {
 		let { tabsList, selectedTabs } = this.state;
 
@@ -272,6 +280,8 @@ class MainPage extends Component {
 							select={this.handleIndividualSelect}
 							utilityClick={this.handleUtilityClick}
 							sort={(sortType) => this.handleSort(sortType)}
+							handleRefresh={this.handleRefresh}
+							handleViewChange={this.handleViewChange}
 						/>
 					</div>
 				</div>
