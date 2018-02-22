@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const mysqlCredentials = require('../mysqlCredentials');
-const { ensureAuthenticated } = require('../helper/auth');
-const { checkIfTableExists } = require('../helper/checkIfTableExists');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
+const { ensureAuthenticated } = require('../helper/auth');
+const { checkIfTableExists } = require('../helper/checkIfTableExists');
 
 db.connect((err) => {
     if (err) throw err;
