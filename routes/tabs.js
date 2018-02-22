@@ -181,12 +181,11 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
                 db.query(activeTimeSQL, (err, results) => {
-
+                    newActiveTime = results.totalActiveTime + newActiveTime;
+                    console.log('newActiveTime: ', newActiveTime);
                     if (results.length > 0) {
 
-                        newActiveTime = results.totalActiveTime + newActiveTime;
-
-                        console.log('newActiveTime: ', newActiveTime);
+                        
 
                         const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ? LIMIT 1';
                         const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
