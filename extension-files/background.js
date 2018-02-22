@@ -89,8 +89,8 @@ function updateTabInformation(tab){
     favicon: tab.favIconUrl,
     title: tab.title,
     url: tab.url,
+    screenshot: tab.screenshot, 
     index: tab.index, 
-    screenshot: '',
     highlighted: tab.highlighted
   }
 
@@ -147,18 +147,22 @@ chrome.tabs.onRemoved.addListener(function (id, removeInfo){
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
-    var window  = JSON.stringify(tab.windowId);
-    var stringId = JSON.stringify(tab.id);
-    var date = new Date()
-    var timeStamp = date.getTime();
+    chrome.tabs.captureVisibleTab({quality: 5},function(dataUrl){
+      tab.screenshot = dataUrl; 
+      console.log(dataUrl.length)
+      var window  = JSON.stringify(tab.windowId);
+      var stringId = JSON.stringify(tab.id);
+      var date = new Date()
+      var timeStamp = date.getTime();
 
-    //check to see if tab already exists
-    if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
-      var dataForServer = updateTabInformation(tab);
-      if(user.loggedIn){
-        sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
+      //check to see if tab already exists
+      if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
+        var dataForServer = updateTabInformation(tab);
+        if(user.loggedIn){
+          sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
+        }
       }
-    }
+    })
   }
 })
 
