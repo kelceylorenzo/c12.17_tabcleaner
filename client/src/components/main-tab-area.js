@@ -21,7 +21,7 @@ class MainTabArea extends Component {
 			<div className="main-tab-area">
 				<div className="main-toolbar-container">
 					<div className="tab-view-menu">
-						<div className="tab-view-option">
+						<div onClick={this.props.handleViwChange} className="tab-view-option">
 							<i className="grid-view-button fas fa-th-large" />
 						</div>
 						<div className="tab-view-option">

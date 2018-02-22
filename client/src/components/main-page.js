@@ -44,32 +44,51 @@ class MainPage extends Component {
 		axios
 			.get("/tabs")
 			.then(resp => {
-				console.log("GET RESPONSE for /tabs: ", resp);
+				console.log("GET response for /tabs: ", resp.data);
+				console.log("Resp.data.data: ", resp.data.data);
+				resp.data.data.map(currentItem => {
+					return (currentItem.selected = false);
+				});
+				this.setState(
+					{
+						...this.state,
+						tabsList: resp.data.data
+					},
+					() => this.handleSort("window")
+				);
 			})
 			.catch(err => {
 				console.log("GET RESPONSE ERROR from /tabs: ", err);
 			});
 	}
-	// resp.map(currentItem => {
-	// 	return (currentItem.selected = false);
-	// });
-	// this.setState(
-	// 	{
-	// 		...this.state,
-	// 		tabsList: resp
-	// 	},
-	// 	() => this.handleSort("window")
-	// );
+
+	// resp.data.data.map(currentItem => {
+	// 				return (currentItem.selected = false);
+	// 			});
+	// 			this.setState(
+	// 				{
+	// 					...this.state,
+	// 					tabsList: resp
+	// 				},
+	// 				() => this.handleSort("window")
+	// 			);
 
 	handleRefresh() {
 		console.log("refresh button clicked");
-		// axios.get("/tabs").then(resp => {
-		// 	console.log("Refresh button clicked: ", resp);
-		// 	// this.setState({
-		// 	// 	...this.state,
-		// 	// 	tabList: tabsList
-		// 	// }, () => this.handleSort("window") )
-		// });
+		axios.get("/tabs").then(resp => {
+			console.log("Refresh button clicked: ", resp);
+			this.setState(
+				{
+					...this.state,
+					tabList: resp.data.data
+				},
+				() => this.handleSort("window")
+			);
+		});
+	}
+
+	handleViewChange() {
+		console.log("handle view button clicked");
 	}
 
 	handleIndividualSelect(item) {
@@ -285,12 +304,13 @@ class MainPage extends Component {
 							deselectAll={this.deselectAll}
 						/>
 						<MainTabArea
+							select={this.handleIndividualSelect}
+							sort={sortType => this.handleSort(sortType)}
 							sortType={this.state.sortType}
 							tabData={this.state.tabsList}
-							select={this.handleIndividualSelect}
 							utilityClick={this.handleUtilityClick}
+							handleViewChange={this.handleViewChange}
 							handleRefresh={this.handleRefresh}
-							sort={sortType => this.handleSort(sortType)}
 						/>
 					</div>
 				</div>
