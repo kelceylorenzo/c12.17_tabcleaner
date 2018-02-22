@@ -21,7 +21,12 @@ class User {
 		for (var window in this.tabsSortedByWindow) {
 			for (var tab in this.tabsSortedByWindow[window]) {
 				var currentTab = this.tabsSortedByWindow[window][tab];
-				createNewTabRequest(currentTab);
+        createNewTabRequest(currentTab);
+        if(!tabObj.highlighted){
+          var previousIndex = user.activeTabIndex[tabObj.windowId];
+          var timeStamp = getTimeStamp();
+          updatePreviousHighlightedTab(previousIndex, tabObj.windowId, timeStamp, tabObj.url);
+        }
 			}
 		}
 	}
@@ -64,7 +69,6 @@ function createNewTab(tab, currentTime){
   if(tabObject.index < tabArray.length){
     user.tabsSortedByWindow[tabObject.windowId].splice(tabObject.index, 0, tabObject);
     var nextIndex = tab.index + 1; 
-    console.log(user);
     updateIndex(nextIndex, (user.tabsSortedByWindow[tabObject.windowId].length - 1), tabObject.windowId);
   } else {
     user.tabsSortedByWindow[tab.windowId].push(tabObject);
@@ -146,11 +150,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
     chrome.tabs.captureVisibleTab({quality: 5},function(dataUrl){
       tab.screenshot = dataUrl; 
-      console.log(dataUrl.length)
       var window  = JSON.stringify(tab.windowId);
       var stringId = JSON.stringify(tab.id);
-      var date = new Date()
-      var timeStamp = date.getTime();
+      var timeStamp = getTimeStamp();
 
       //check to see if tab already exists
       if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
@@ -172,12 +174,13 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-    var time = new Date();
-    var timeStamp = time.getTime();
+    var timeStamp = getTimeStamp();
+    var previousIndex = user.activeTabIndex[tab.windowId];
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
     if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
       // var tabUpdated = updateTabInformation(tab, timeStamp);
       user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
+      user.activeTabIndex[tab.windowId] = tab.index;
       if(user.loggedIn){
         activateTimeTab(user.tabsSortedByWindow[tab.windowId][tab.index].databaseTabID);
       }
@@ -187,23 +190,22 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
           createNewTabRequest(newTab);
       }
     }
-    var previousIndex = user.activeTabIndex[tab.windowId];
-    user.activeTabIndex[tab.windowId] = tab.index;
-    if(previousIndex === null){
-      return; 
-    }
-    deactivateTimeTab(user.tabsSortedByWindow[tab.windowId][previousIndex].databaseTabID, tab.url);
-    updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp);
-
+   
+    updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp, tab.url);
   });
 })
+
 
 /**
  * Takes previous highlighted tab and sets time of deactivation
  *@param {integer} uniqueID
  *call sendDataToServer
  */
-function updatePreviousHighlightedTab(previousIndex, windowId, timeStamp) {
+function updatePreviousHighlightedTab(previousIndex, windowId, timeStamp, url) {
+  if(previousIndex === null){
+    return; 
+  }
+  deactivateTimeTab(user.tabsSortedByWindow[windowId][previousIndex].databaseTabID, url);
 	var allTabs = user.tabsSortedByWindow[windowId];
 	if (allTabs[previousIndex]) {
 		allTabs[previousIndex].highlighted = false;
@@ -253,24 +255,12 @@ chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
 *@param {object} detachInfo  newPosition, newWindowId
 */
 chrome.tabs.onAttached.addListener(function(tabId, attachInfo){
-  console.log('attached', attachInfo)
-  console.log(tabId);
   //if the index of the attached is less than the current active, add 1 to the current active 
   var windowTabs = user.tabsSortedByWindow[attachInfo.newWindowId];
   var currentActiveIndex = user.activeTabIndex[attachInfo.newWindowId];
   if(currentActiveIndex > attachInfo.newPosition){
     user.activeTabIndex[attachInfo.newWindowId] = currentActiveIndex++; 
   }
-  //
-
-  // var tab = user.tabsSortedByWindow[detachInfo.oldWindowId][detachInfo.oldPosition];
-  // var tabIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
-  // user.tabIds[detachInfo.oldWindowId].splice(tabIndex, 1);
-  // user.tabsSortedByWindow[detachInfo.oldWindowId].splice(detachInfo.oldPosition, 1);
-  // if(user.activeTabIndex[detachInfo.oldWindowId] === detachInfo.oldPosition){
-  //   user.activeTabIndex[detachInfo.oldWindowId] = null; 
-  // }
-  // updateIndex(detachInfo.oldPosition, user.tabsSortedByWindow[detachInfo.oldWindowId].length-1, detachInfo.oldWindowId);
 })
 
 /**
@@ -407,7 +397,7 @@ function createNewTabRequest(tabObject) {
 				var result = JSON.parse(xhr.responseText).insertId;
 				activateTimeTab(result);
 				var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index];
-				user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
+        user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
 			} else {
 				console.log('tab was not created');
 			}
@@ -475,6 +465,14 @@ function updateIndex(beginIndex, endIndex, windowId){
 }
 
 
+/**
+ *Returns current time stamp
+ */
+function getTimeStamp(){
+  var date = new Date()
+  return date.getTime();
+}
+
 
 /**
  *Sets key value pair in local storage
@@ -492,8 +490,7 @@ function setLocalStorage(keyName, value) {
  *
  */
 function updatedElaspedDeactivation() {
-	var date = new Date();
-	var currentTime = date.getTime();
+	var currentTime = getTimeStamp();
 	var windows = user.tabsSortedByWindow;
 	for (var window in windows) {
 		for (var index in windows[window]) {
@@ -517,7 +514,7 @@ function getAllTabs() {
 			createNewTab(tab, timeStamp);
 			if (tab.highlighted) {
 				user.activeTabIndex[tab.windowId] = tab.index;
-			}
+      }
 		});
 	});
 }
@@ -605,7 +602,7 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 });
 
 function findCookie() {
-	chrome.cookies.get({ url: 'http://closeyourtabs.com', name: 'connect.sid' }, function(cookie) {
+	chrome.cookies.get({ url: 'http://www.closeyourtabs.com', name: 'connect.sid' }, function(cookie) {
 		if (cookie) {
 			console.log('Sign-in cookie:', cookie);
 		}
