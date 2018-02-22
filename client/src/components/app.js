@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 import LandingPage from "./landing-page";
 import MainPage from "./main-page";

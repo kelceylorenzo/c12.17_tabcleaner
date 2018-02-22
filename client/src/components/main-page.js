@@ -14,7 +14,6 @@ import headerData from "./header-data.js";
 import data from "../assets/data/data";
 import tab from "./tab";
 
-
 class MainPage extends Component {
 	constructor(props) {
 		super(props);
@@ -48,8 +47,7 @@ class MainPage extends Component {
 				console.log("GET RESPONSE for /tabs: ", resp);
 			})
 			.catch(err => {
-				console.log("GET RESPONSE ERROR from /tabs: ",
-					err);
+				console.log("GET RESPONSE ERROR from /tabs: ", err);
 			});
 	}
 	// resp.map(currentItem => {
@@ -62,6 +60,17 @@ class MainPage extends Component {
 	// 	},
 	// 	() => this.handleSort("window")
 	// );
+
+	handleRefresh() {
+		console.log("refresh button clicked");
+		// axios.get("/tabs").then(resp => {
+		// 	console.log("Refresh button clicked: ", resp);
+		// 	// this.setState({
+		// 	// 	...this.state,
+		// 	// 	tabList: tabsList
+		// 	// }, () => this.handleSort("window") )
+		// });
+	}
 
 	handleIndividualSelect(item) {
 		let { tabsList, selectedTabs } = this.state;
@@ -188,7 +197,7 @@ class MainPage extends Component {
 			selectedIDs.push(tab.id);
 		}
 
-		tabsList = tabsList.filter(function (tab) {
+		tabsList = tabsList.filter(function(tab) {
 			if (selectedIDs.indexOf(tab.id) === -1) {
 				return true;
 			}
@@ -280,6 +289,7 @@ class MainPage extends Component {
 							tabData={this.state.tabsList}
 							select={this.handleIndividualSelect}
 							utilityClick={this.handleUtilityClick}
+							handleRefresh={this.handleRefresh}
 							sort={sortType => this.handleSort(sortType)}
 						/>
 					</div>
