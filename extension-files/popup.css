@@ -3,11 +3,25 @@
 	margin: 0;
 }
 
+button {
+	border: none;
+}
+
+button:focus,
+a:focus {
+	outline: 0;
+}
+
+.hidden {
+	display: none;
+}
+
 .container {
-	width: 250px;
+	width: 270px;
 	height: 400px;
 	padding: 5px;
 	background-color: rgb(26, 54, 74);
+	overflow: scroll;
 }
 
 .popup-title-container {
@@ -27,9 +41,11 @@
 }
 
 #tag-titles {
-	height: 79%;
-	overflow: scroll;
-	margin: 5px 0;
+	height: 78%;
+	width: 100%;
+	margin: 1% 0;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 .tab-container {
@@ -108,8 +124,25 @@
 	border: 2px solid white;
 }
 
-button:focus {
-	outline: 0;
+#signup {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#signup:hover {
+	cursor: pointer;
+	color: white;
+}
+
+#signup {
+	text-decoration: none;
+	color: rgb(26, 54, 74);
+}
+
+#webpage,
+#logout {
+	display: none;
 }
 
 #refresh {
@@ -122,11 +155,6 @@ button:focus {
 	color: rgb(143, 182, 179);
 	cursor: pointer;
 }
-
-/* Functionality classes */
-/* .green {
-	color: green;
-} */
 
 .yellow {
 	background-color: rgb(233, 229, 153);
