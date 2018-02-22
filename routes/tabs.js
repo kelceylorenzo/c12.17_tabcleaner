@@ -164,8 +164,10 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
-            const storedActiveTime = results.activatedTime;
+            let storedActiveTime = results.activatedTime;
             let newActiveTime = time - storedActiveTime;
+
+            console.log('1 newActiveTime: ', newActiveTime);
 
             const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
             "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY," +
@@ -181,13 +183,13 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
                 db.query(activeTimeSQL, (err, results) => {
-                    newActiveTime = results.totalActiveTime + newActiveTime;
-                    console.log('STORED ACTIVE TIME: ', storedActiveTime);
-                    console.log('TIME: ', time);
-                    console.log('newActiveTime: ', newActiveTime);
+
                     if (results.length > 0) {
 
-                        
+                        newActiveTime = results.totalActiveTime + newActiveTime;
+                        console.log('STORED ACTIVE TIME: ', storedActiveTime);
+                        console.log('TIME: ', time);
+                        console.log('2 newActiveTime: ', newActiveTime);
 
                         const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ? LIMIT 1';
                         const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
@@ -199,6 +201,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                         });
 
                     } else {
+                        console.log('3 newActiveTime: ', newActiveTime);
 
                         const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (? ? ?))'
                         const insertUrlInsert = [req.user, domain, newActiveTime];
