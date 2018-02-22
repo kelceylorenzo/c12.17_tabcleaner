@@ -5,14 +5,16 @@ const router = express.Router();
 
 router.use(express.static(path.join(__dirname, 'client', 'dist')));
 
-router.get('/', passport.authenticate('google', {scope: ['profile', 'email']}), (req, res));
+router.get('/', passport.authenticate('google', { scope: ['profile', 'email'] }), (req, res) => {
 
-router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }) ,(req, res) => {
+});
+
+router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
     res.redirect('/dashboard');
 });
 
-router.get('/verify', (req, res)=>{
-    if(req.isAuthenticated()){
+router.get('/verify', (req, res) => {
+    if (req.isAuthenticated()) {
         res.send(true);
         console.log(req.user, ' is authenticated');
     } else {
@@ -21,9 +23,9 @@ router.get('/verify', (req, res)=>{
     }
 });
 
-router.get('/logout', (req, res)=>{
-  req.logout();
-  res.redirect('/');
+router.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
 });
 
 module.exports = router;

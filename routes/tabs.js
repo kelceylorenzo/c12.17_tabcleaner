@@ -12,7 +12,6 @@ db.connect((err) => {
     console.log("Connected to remote DB");
 });
 
-
 router.get('/', ensureAuthenticated, (req, res) => {
 
     const query = 'SELECT * FROM tabs WHERE googleID=?';
