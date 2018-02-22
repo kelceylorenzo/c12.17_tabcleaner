@@ -1,10 +1,10 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const cookieSession = require('cookie-session');
 const passport = require('passport');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
 
 // Google Passport Config
 require('./config/googlePassport')(passport);
