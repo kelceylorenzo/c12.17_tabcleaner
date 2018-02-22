@@ -49,6 +49,7 @@ function createDomElement(tabObject) {
 	} else {
 		tabObject.color = 'red';
 	}
+
 	var tab = document.createElement('div');
 	var trashcanContainer = document.createElement('div');
 	trashcanContainer.className = 'trashcan-container';
@@ -84,8 +85,11 @@ function sendMessageToGetTabInfo() {
 }
 
 function hideLoginButtons() {
+	document.getElementById('webpage').style.display = 'block';
+	document.getElementById('logout').style.display = 'block';
 	document.getElementById('signup').style.display = 'none';
 	document.getElementById('login').style.display = 'none';
+	document.getElementById('signup-button').style.display = 'none';
 }
 
 function refreshContent() {
@@ -101,7 +105,10 @@ function highlightTab(index, windowId, event) {
 
 function logoutUser() {
 	port.postMessage({ type: 'logout' });
+	document.getElementById('webpage').style.display = 'none';
+	document.getElementById('logout').style.display = 'none';
 	document.getElementById('signup').style.display = 'block';
+	document.getElementById('signup-button').style.display = 'block';
 	document.getElementById('login').style.display = 'block';
 }
 
