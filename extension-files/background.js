@@ -61,9 +61,11 @@ function createNewTab(tab, currentTime){
   } 
   
   var tabArray = user.tabsSortedByWindow[tab.windowId]; 
-  if(tabArray.indexOf(tab.index) !== -1){
-    console.log('spot taken ')
-    //updates the indexes for all the tabs 
+  if(tabObject.index < tabArray.length){
+    user.tabsSortedByWindow[tabObject.windowId].splice(tabObject.index, 0, tabObject);
+    var nextIndex = tab.index + 1; 
+    console.log(user);
+    updateIndex(nextIndex, (user.tabsSortedByWindow[tabObject.windowId].length - 1), tabObject.windowId);
   } else {
     user.tabsSortedByWindow[tab.windowId].push(tabObject);
   }
@@ -78,7 +80,7 @@ function createNewTab(tab, currentTime){
 *@return {object} dataForServer
 */
 
-function updateTabInformation(tab, timeStamp){
+function updateTabInformation(tab){
   //if the site changed, get the elapsed time during active state and save to its url
   var currentInfo = user.tabsSortedByWindow[tab.windowId][tab.index]; 
   var updatedInfo = {...currentInfo, 
@@ -152,7 +154,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 
     //check to see if tab already exists
     if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
-      var dataForServer = updateTabInformation(tab, timeStamp);
+      var dataForServer = updateTabInformation(tab);
       if(user.loggedIn){
         sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
       }
@@ -212,12 +214,19 @@ function updatePreviousHighlightedTab(previousIndex, windowId,  timeStamp){
 /**
 * Listens to for when a tab moves in a window
 *@param { integer } tabId id of tab moved
-*@param { object } moveInfo movedTo, movedFrom
+*@param { object } moveInfo fromIndex, toIndex, windowId
 */
 chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
-  //update the database with all new indexes
-  //call get all tabs, to get all the new
-  console.log(moveInfo)
+  var tab = user.tabsSortedByWindow[moveInfo.windowId][moveInfo.fromIndex];
+  user.tabsSortedByWindow[moveInfo.windowId].splice(moveInfo.fromIndex, 1);
+  user.tabsSortedByWindow[moveInfo.windowId].splice(moveInfo.toIndex, 0, tab);
+  user.activeTabIndex[tab.windowId] = moveInfo.toIndex; 
+  if(moveInfo.fromIndex > moveInfo.toIndex){
+    updateIndex(moveInfo.toIndex, moveInfo.fromIndex, moveInfo.windowId);
+  } else{
+    updateIndex(moveInfo.fromIndex, moveInfo.toIndex, moveInfo.windowId);
+
+  }
 })
 
 
@@ -400,6 +409,23 @@ function checkForUserAccount(){
 */
 function clearPreviousTabData(){
   requestToServerNoData('DELETE', 'http://www.closeyourtabs.com/tabs/google');
+}
+
+/**
+*updated index by 1 from beginning to ending index
+*@param {integer} beginIndex
+*@param {integer} endIndex
+*/
+function updateIndex(beginIndex, endIndex, windowId){
+  
+  for(var index = beginIndex ; index <= endIndex ; index++){
+    var tabObject = user.tabsSortedByWindow[windowId][index];
+    tabObject.index = index;  
+    var dataForServer = updateTabInformation(tabObject);
+    if(user.loggedIn){
+      sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs', dataForServer)
+    }
+  }
 }
 
 
