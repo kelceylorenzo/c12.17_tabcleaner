@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 // Google Passport Config
 require('./config/googlePassport')(passport);
 
+
+
 // Load Routes
 const googleAuth = require('./routes/googleAuth');
 const tabs = require('./routes/tabs');
@@ -16,6 +18,8 @@ const tabs = require('./routes/tabs');
 const keys = require('./config/keys');
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 // ALLOWS THE EXTENSION TO INTERACT WITH DB, REQUIRES ATTENTION FOR DEPLOYMENT
 app.use((req, res, next) => {
@@ -47,7 +51,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 // Use Routes
 app.use('/auth/google', googleAuth);
