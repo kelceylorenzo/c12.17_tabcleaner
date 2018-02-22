@@ -45,7 +45,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
         };
         const json_output = JSON.stringify(output);
         res.send(json_output);
-        console.log('GET from: ', req.body.googleID);
+        console.log('GET from: ', req.user);
     });
 });
 
