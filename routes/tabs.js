@@ -169,10 +169,10 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
             let newActiveTime = time - storedActiveTime;
 
             const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
-            "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-            "googleID DOUBLE NULL," +
-            "url VARCHAR(200) NULL," +
-            "totalActiveTime INT(20) NULL);";
+                "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+                "googleID DOUBLE NULL," +
+                "url VARCHAR(200) NULL," +
+                "totalActiveTime INT(20) NULL);";
 
             db.query(createUrlTableSQL, (err) => {
                 if (err) console.log(err);
@@ -181,31 +181,24 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
                 const activeTimeInsert = [req.user, domain];
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
-                console.log(newActiveTime);
-
                 db.query(activeTimeSQL, (err, results) => {
+
                     if (results.length > 0) {
-
                         newActiveTime = results[0].totalActiveTime + newActiveTime;
-
                         const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ? LIMIT 1';
                         const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
                         const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
-
                         db.query(updateActiveTimeSQL, (err) => {
                             if (err) console.log(err)
                             console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
                         });
 
                     } else {
-
                         const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
                         const insertUrlInsert = [req.user, domain, newActiveTime];
                         const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
-
                         db.query(insertUrlSQL, (err, results) => {
                             if (err) console.log(err);
-                            console.log(results);
                             console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
                         });
                     }

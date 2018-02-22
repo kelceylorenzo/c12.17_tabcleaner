@@ -7,7 +7,7 @@ const db = mysql.createConnection(mysqlCredentials);
 
 router.get('/', (req, res) => {
 
-    const query = "SELECT * FROM urls WHERE googleid=";
+    const query = "SELECT * FROM urls WHERE googleID = ?";
     const insert = [req.user];
     const sql = mysql.format(query, insert);
 
@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
         if (err) console.log(err);
         console.log('URLS GET REQUEST FROM: ', user.req, ' data: ', results);
         res.send(results);
-    })
+    });
 });
 
 
