@@ -4,6 +4,9 @@ const mysql = require('mysql');
 const mysqlCredentials = require('../mysqlCredentials.js');
 const db = mysql.createConnection(mysqlCredentials);
 
+
+
+
 module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: keys.googleClientID,
@@ -37,9 +40,9 @@ module.exports = function (passport) {
 
                 const { googleID, firstName, lastName, email, image } = newUser;
 
-                let insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
-                let insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
-                let insertUser = mysql.format(insertUserSQL, insertUserInsert);
+                const insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
+                const insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
+                const insertUser = mysql.format(insertUserSQL, insertUserInsert);
 
                 db.query("CREATE TABLE IF NOT EXISTS users (" +
                         "googleID double NOT NULL PRIMARY KEY," +
@@ -60,7 +63,6 @@ module.exports = function (passport) {
         });
     }));
 
-
     passport.serializeUser((user, done) => {
         done(null, user.googleID);
     })
@@ -71,8 +73,10 @@ module.exports = function (passport) {
         const findUser = mysql.format(findUserSQL, findUserInsert);
 
         db.query(findUser, (err, results, fields) => {
-            if (err) throw err;
-            done(null, id);
+            if (err) console.log(err);
+            const user = results
+            console.log(user);
+            done(null, user);
         })
     })
 };
