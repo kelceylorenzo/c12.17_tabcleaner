@@ -197,7 +197,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
                     } else {
 
-                        const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (? ? ?))'
+                        const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (? ? ?)'
                         const insertUrlInsert = [req.user, domain, newActiveTime];
                         const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
 
