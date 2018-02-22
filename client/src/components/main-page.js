@@ -14,9 +14,6 @@ import headerData from "./header-data.js";
 import data from "../assets/data/data";
 import tab from "./tab";
 
-// import "../assets/css/main-page.css";
-const LOCAL_HOST = "/";
-const BASE_URL = "http://closeyourtabs.com";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -51,7 +48,8 @@ class MainPage extends Component {
 				console.log("GET RESPONSE for /tabs: ", resp);
 			})
 			.catch(err => {
-				console.log("GET RESPONSE ERROR from /tabs: ", err);
+				console.log("GET RESPONSE ERROR from /tabs: ",
+					err);
 			});
 	}
 	// resp.map(currentItem => {
@@ -190,7 +188,7 @@ class MainPage extends Component {
 			selectedIDs.push(tab.id);
 		}
 
-		tabsList = tabsList.filter(function(tab) {
+		tabsList = tabsList.filter(function (tab) {
 			if (selectedIDs.indexOf(tab.id) === -1) {
 				return true;
 			}
