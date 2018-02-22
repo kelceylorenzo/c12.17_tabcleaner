@@ -31,60 +31,33 @@ class MainPage extends Component {
 		this.openSelectedTabs = this.openSelectedTabs.bind(this);
 		this.closeSelectedTabs = this.closeSelectedTabs.bind(this);
 		this.handleSort = this.handleSort.bind(this);
+		this.handleViewChange = this.handleViewChange.bind(this);
+		this.handleRefresh = this.handleRefresh.bind(this);
 	}
 
 	componentDidMount() {
-		//remove data parameter when adjusting code for axios calls
-		// this.getData(data);
 		this.getData();
 	}
 
-	//adjust getData code when ready to make axios/database calls (removing resp parameter and adding axios call
 	getData() {
-		axios
-			.get("/tabs")
-			.then(resp => {
-				console.log("GET response for /tabs: ", resp.data);
-				console.log("Resp.data.data: ", resp.data.data);
-				resp.data.data.map(currentItem => {
-					return (currentItem.selected = false);
-				});
-				this.setState(
-					{
-						...this.state,
-						tabsList: resp.data.data
-					},
-					() => this.handleSort("window")
-				);
-			})
-			.catch(err => {
-				console.log("GET RESPONSE ERROR from /tabs: ", err);
-			});
-	}
-
-	// resp.data.data.map(currentItem => {
-	// 				return (currentItem.selected = false);
-	// 			});
-	// 			this.setState(
-	// 				{
-	// 					...this.state,
-	// 					tabsList: resp
-	// 				},
-	// 				() => this.handleSort("window")
-	// 			);
-
-	handleRefresh() {
-		console.log("refresh button clicked");
 		axios.get("/tabs").then(resp => {
-			console.log("Refresh button clicked: ", resp);
+			console.log("GET response for /tabs: ", resp.data);
+			console.log("Resp.data.data: ", resp.data.data);
+			resp.data.data.map(currentItem => {
+				return (currentItem.selected = false);
+			});
 			this.setState(
 				{
 					...this.state,
-					tabList: resp.data.data
+					tabsList: resp.data.data
 				},
-				() => this.handleSort("window")
+				() => this.handleSort(this.state.sortType)
 			);
 		});
+	}
+
+	handleRefresh() {
+		this.getData();
 	}
 
 	handleViewChange() {
@@ -116,8 +89,8 @@ class MainPage extends Component {
 		switch (sortType) {
 			case "az":
 				tabsList.sort((a, b) => {
-					let titleA = a.title;
-					let titleB = b.title;
+					let titleA = a.tabTitle;
+					let titleB = b.tabTitle;
 
 					if (titleA < titleB) {
 						return -1;
@@ -130,8 +103,8 @@ class MainPage extends Component {
 				break;
 			case "za":
 				tabsList.sort((a, b) => {
-					let titleA = a.title;
-					let titleB = b.title;
+					let titleA = a.tabTitle;
+					let titleB = b.tabTitle;
 
 					if (titleA > titleB) {
 						return -1;
@@ -146,8 +119,8 @@ class MainPage extends Component {
 				//currently sorted from oldest >>> newest in terms of activationTime
 				//glitches out sometimes
 				tabsList.sort((a, b) => {
-					let timeA = a.timeofActivation;
-					let timeB = b.timeofActivation;
+					let timeA = a.activatedTime;
+					let timeB = b.activatedTime;
 
 					if (timeA > timeB) {
 						return -1;
@@ -161,11 +134,11 @@ class MainPage extends Component {
 			case "window":
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
-					if (output[tabsList[i].windowId]) {
-						output[tabsList[i].windowId].push(tabsList[i]);
+					if (output[tabsList[i].windowID]) {
+						output[tabsList[i].windowID].push(tabsList[i]);
 					} else {
-						output[tabsList[i].windowId] = [];
-						output[tabsList[i].windowId].push(tabsList[i]);
+						output[tabsList[i].windowID] = [];
+						output[tabsList[i].windowID].push(tabsList[i]);
 					}
 				}
 
@@ -173,8 +146,8 @@ class MainPage extends Component {
 
 				for (let x in output) {
 					output[x].sort((a, b) => {
-						let indexA = a.index + a.windowId;
-						let indexB = b.index + b.windowId;
+						let indexA = a.browserTabIndex;
+						let indexB = b.browserTabIndex;
 
 						if (indexA < indexB) {
 							return -1;
