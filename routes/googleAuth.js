@@ -5,10 +5,7 @@ const router = express.Router();
 
 router.use(express.static(path.join(__dirname, 'client', 'dist')));
 
-router.get('/', passport.authenticate('google', {scope: ['profile', 'email']}), (req, res)=>{
-    console.log('REQ: ', res);
-    console.log('RES: ', res);
-});
+router.get('/', passport.authenticate('google', {scope: ['profile', 'email']}), (req, res));
 
 router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }) ,(req, res) => {
     res.redirect('/dashboard');

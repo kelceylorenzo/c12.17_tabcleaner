@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const mysqlCredentials = require('../mysqlCredentials.js');
-const {ensureAuthenticated} = require('../helper/auth.js');
+const mysqlCredentials = require('../mysqlCredentials');
+const { ensureAuthenticated } = require('../helper/auth');
+const { checkIfTableExists } = require('../helper/checkIfTableExists');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
@@ -11,24 +12,6 @@ db.connect((err) => {
     console.log("Connected to remote DB");
 });
 
-function checkIfTableExists(req, res, next) {
-    db.query(
-        "CREATE TABLE IF NOT EXISTS tabs (" +
-        "databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-        "windowID MEDIUMINT(8) NULL ," +
-        "tabTitle VARCHAR(200) NULL," +
-        "activatedTime double NULL," +
-        "deactivatedTime double NULL," +
-        "browserTabIndex int(10) NULL," +
-        "googleID double NULL," +
-        "url VARCHAR(2084) NULL," +
-        "favicon VARCHAR(2084) NULL );",
-        (err) => {
-            if (err) throw err;
-        }
-    );
-    next();
-}
 
 router.get('/', ensureAuthenticated, (req, res) => {
 
@@ -36,7 +19,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
     const insert = req.user;
     const sql = mysql.format(query, insert);
 
-    db.query(sql, function (err, results,) {
+    db.query(sql, function (err, results, ) {
         if (err) console.log('Error, GET: ', err);
         const output = {
             type: 'GET',
@@ -51,12 +34,12 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const googleID = req.user;
-    const {windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon} = req.body;
+    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon } = req.body;
 
     const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const inserts = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
+    const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
         windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon];
-    const sql = mysql.format(query, inserts);
+    const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
         if (err) console.log('Error, POST: ', err);
@@ -90,7 +73,7 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
     const query = 'DELETE FROM tabs WHERE ?? = ?';
     const insert = [searchType, searchID];
     const sql = mysql.format(query, insert);
-    
+
     db.query(sql, (err, results, fields) => {
         if (err) console.log('Error, DELETE: ', err);
         const output = {
@@ -106,7 +89,7 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
 });
 
 router.put('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
-    const {databaseTabID, tabTitle, browserTabIndex, url, favicon} = req.body;
+    const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
 
     const query = 'UPDATE tabs SET tabTitle=?, browserTabIndex=?, url=?, favicon=? WHERE databaseTabID = ? LIMIT 1';
     const insert = [tabTitle, browserTabIndex, url, favicon, databaseTabID];
@@ -127,7 +110,7 @@ router.put('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
 });
 
 router.put('/move', ensureAuthenticated, (req, res) => {
-    const {databaseTabID, browserTabIndex} = req.body;
+    const { databaseTabID, browserTabIndex } = req.body;
 
     const query = 'UPDATE tabs SET browserTabIndex=? WHERE databaseTabID = ? LIMIT 1';
     const insert = [browserTabIndex, databaseTabID];
@@ -152,7 +135,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     let time = new Date();
     time = time.getTime();
 
-    const {databaseTabID} = req.body;
+    const { databaseTabID } = req.body;
 
     const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
     const insert = [req.params.time, time, databaseTabID];
