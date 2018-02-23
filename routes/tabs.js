@@ -23,7 +23,7 @@ function checkIfTableExists(req, res, next) {
         "googleID double NULL," +
         "url VARCHAR(2084) NULL," +
         "favicon VARCHAR(2084) NULL,"+
-        "screenshot VARCHAR(65535) NULL);",
+        "screenshot VARCHAR(50000) NULL);",
         (err) => { if (err) throw err }
  
     );
