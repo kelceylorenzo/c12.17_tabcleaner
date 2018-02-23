@@ -12,19 +12,30 @@ class MainTabArea extends Component {
 					key={index}
 					item={item}
 					select={() => this.props.select(item)}
-					utilityClick={(item, selectedType) => this.props.utilityClick(item, selectedType)}
+					utilityClick={(item, selected) => this.props.utilityClick(item, selected)}
+					viewChange={this.props.viewChange}
 				/>
 			);
 		});
+
+		let windowView = {
+			view: "tab-window"
+		};
+
+		if (this.props.viewChange === "grid") {
+			windowView.view = "tab-window";
+		} else {
+			windowView.view = "list-tab-window";
+		}
 
 		return (
 			<div className="main-tab-area">
 				<div className="main-toolbar-container">
 					<div className="tab-view-menu">
-						<div onClick={this.props.handleViewChange} className="tab-view-option">
+						<div onClick={() => this.props.handleViewChange("grid")} className="tab-view-option">
 							<i className="grid-view-button fas fa-th-large" />
 						</div>
-						<div onClick={this.props.handleViewChange} className="tab-view-option">
+						<div onClick={() => this.props.handleViewChange("list")} className="tab-view-option">
 							<i className="list-view-button fas fa-list-ul" />
 						</div>
 						<div onClick={this.props.handleRefresh} className="tab-view-option">
@@ -33,7 +44,9 @@ class MainTabArea extends Component {
 					</div>
 					<Sort sort={(sortType) => this.props.sort(sortType)} sortType={this.props.sortType} />
 				</div>
-				<div className="tab-window">{tabList}</div>
+				<div className="tab-window" className={windowView.view}>
+					{tabList}
+				</div>
 			</div>
 		);
 	}
