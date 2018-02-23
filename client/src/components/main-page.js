@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { Route } from "react-router-dom";
-import axios from "axios";
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import axios from 'axios';
 
-import AboutPage from "./about-page";
-import Header from "./header";
-import StatsPage from "./stats-page";
-import SettingsPage from "./settings";
-import TopTenPage from "./top-ten-page";
-import MainSidebar from "./main-sidebar";
-import MainTabArea from "./main-tab-area";
+import AboutPage from './about-page';
+import Header from './header';
+import StatsPage from './stats-page';
+import SettingsPage from './settings';
+import TopTenPage from './top-ten-page';
+import MainSidebar from './main-sidebar';
+import MainTabArea from './main-tab-area';
 
-import headerData from "./header-data.js";
-import data from "../assets/data/data";
-import tab from "./tab";
+import headerData from './header-data.js';
+import data from '../assets/data/data';
+import tab from './tab';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -20,7 +20,7 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: "window"
+			sortType: 'window'
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -40,10 +40,10 @@ class MainPage extends Component {
 	}
 
 	getData() {
-		axios.get("/tabs").then(resp => {
-			console.log("GET response for /tabs: ", resp.data);
-			console.log("Resp.data.data: ", resp.data.data);
-			resp.data.data.map(currentItem => {
+		axios.get('/tabs').then((resp) => {
+			console.log('GET response for /tabs: ', resp.data);
+			console.log('Resp.data.data: ', resp.data.data);
+			resp.data.data.map((currentItem) => {
 				return (currentItem.selected = false);
 			});
 			this.setState(
@@ -61,15 +61,7 @@ class MainPage extends Component {
 	}
 
 	handleViewChange() {
-		console.log("handle view button clicked");
-	}
-
-	handleRefresh(){
-		console.log("refresh button clicked")
-	}
-
-	handleViewChange() {
-		console.log("handle view button clicked")
+		console.log('handle view button clicked');
 	}
 
 	handleIndividualSelect(item) {
@@ -91,11 +83,10 @@ class MainPage extends Component {
 	}
 
 	handleSort(sortType) {
-		// console.log('handle sort event.target: ', event.target);
 		let { tabsList } = this.state;
 
 		switch (sortType) {
-			case "az":
+			case 'az':
 				tabsList.sort((a, b) => {
 					let titleA = a.tabTitle;
 					let titleB = b.tabTitle;
@@ -109,7 +100,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "za":
+			case 'za':
 				tabsList.sort((a, b) => {
 					let titleA = a.tabTitle;
 					let titleB = b.tabTitle;
@@ -123,7 +114,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "time":
+			case 'time':
 				//currently sorted from oldest >>> newest in terms of activationTime
 				//glitches out sometimes
 				tabsList.sort((a, b) => {
@@ -139,7 +130,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case "window":
+			case 'window':
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
 					if (output[tabsList[i].windowID]) {
@@ -183,7 +174,7 @@ class MainPage extends Component {
 		let { selectedTabs } = this.state;
 
 		for (let tab of selectedTabs) {
-			let newTab = window.open(tab.url, "_blank");
+			let newTab = window.open(tab.url, '_blank');
 			newTab.focus();
 		}
 		this.deselectAll();
@@ -208,22 +199,23 @@ class MainPage extends Component {
 		});
 	}
 
-	handleUtilityClick(item, selected) {
-		item.selected = false;
-		this.handleIndividualSelect(item);
-
-		switch (selected) {
-			case "open":
+	handleUtilityClick(item, selectedType) {
+		switch (selectedType) {
+			case 'open':
+				item.selected = false;
+				this.handleIndividualSelect(item);
 				this.openSingleTab(item);
-			case "close":
+				break;
+			case 'close':
 				this.closeSingleTab(item);
+				break;
 			default:
 				return;
 		}
 	}
 
 	openSingleTab(item) {
-		let newTab = window.open(item.url, "_blank");
+		let newTab = window.open(item.url, '_blank');
 		newTab.focus();
 	}
 
@@ -242,7 +234,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map(index => {
+		tabsList.map((index) => {
 			index.selected = true;
 			selectedTabs.push(index);
 		});
@@ -259,7 +251,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map(index => {
+		tabsList.map((index) => {
 			index.selected = false;
 		});
 
@@ -286,7 +278,7 @@ class MainPage extends Component {
 						/>
 						<MainTabArea
 							select={this.handleIndividualSelect}
-							sort={sortType => this.handleSort(sortType)}
+							sort={(sortType) => this.handleSort(sortType)}
 							sortType={this.state.sortType}
 							tabData={this.state.tabsList}
 							utilityClick={this.handleUtilityClick}
