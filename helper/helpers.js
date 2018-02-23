@@ -3,10 +3,9 @@ const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = {
-    ensureAuthenticated: function (req, res, next) {
-        console.log(req.user);
-        console.log('req.user: ', req.user.googleID);
+    ensureAuthenticated: function (req, res, next) {  
         if (req.user) {
+            console.log('req.user: ', req.user.googleID);
             return next();
         } else {
             console.log('This is the ensureAuthentication saying that the user is not autheticated.');
