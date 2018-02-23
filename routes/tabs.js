@@ -28,6 +28,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
         res.send(json_output);
         console.log('GET from: ', req.user);
     });
+    
 });
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
