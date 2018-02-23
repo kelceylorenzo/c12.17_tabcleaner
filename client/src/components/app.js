@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 import LandingPage from "./landing-page";
 import MainPage from "./main-page";
@@ -11,17 +12,16 @@ import headerData from "./header-data.js";
 
 import "../assets/css/app.css";
 
-const BASE_URL = "http://closeyourtabs.com";
-
 class App extends Component {
 	verifyLogIn() {
-		axios.get(`${BASE_URL}/auth/google/verify`).then(resp => {
+		axios.get(`/auth/google/verify`).then(resp => {
 			console.log("Verify response: ", resp);
 			if (resp.data) {
-				console.log("TRU")
+				console.log("this.props for verify: ", this.props);
+				console.log("Axios Response object: ", resp);
 				// this.props.history.push("/dashboard");
 			} else {
-				console.log("FALSE")
+				console.log("Not logged in");
 				// this.props.history.push("/");
 			}
 		});

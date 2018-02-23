@@ -4,6 +4,9 @@ const mysql = require('mysql');
 const mysqlCredentials = require('../mysqlCredentials.js');
 const db = mysql.createConnection(mysqlCredentials);
 
+
+
+
 module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: keys.googleClientID,
@@ -26,20 +29,18 @@ module.exports = function (passport) {
         const findUser = mysql.format(findUserSQL, findUserInsert);
 
         db.query(findUser, (err, results) => {
-
-            if (err) throw err;
-
+            if (err) console.log(err);
             if (results.length > 0) {
-                console.log('user was in db.....');
+                console.log('User was in db.....');
                 return done(null, newUser);
             } else {
                 console.log('Inserting User.......');
 
                 const { googleID, firstName, lastName, email, image } = newUser;
 
-                let insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
-                let insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
-                let insertUser = mysql.format(insertUserSQL, insertUserInsert);
+                const insertUserSQL = 'INSERT INTO ?? (??, ??, ??, ??, ??)VALUES (?, ?, ?, ?, ?)';
+                const insertUserInsert = ['users', 'googleID', 'firstName', 'lastName', 'email', 'image', googleID, firstName, lastName, email, image];
+                const insertUser = mysql.format(insertUserSQL, insertUserInsert);
 
                 db.query("CREATE TABLE IF NOT EXISTS users (" +
                         "googleID double NOT NULL PRIMARY KEY," +
@@ -48,22 +49,20 @@ module.exports = function (passport) {
                         "email VARCHAR(50) NULL," +
                         "image VARCHAR(200) NULL);",
                         (err) => {
-                            if (err) throw err;
+                            if (err) console.log(err);
                             db.query(insertUser, (err) => {
-                                if (err) throw err;
-                                console.log('user was not in db, but is now');
+                                if (err) console.log(err);
+                                console.log('User was not in db, but is now');
                                 return done(null, newUser);
                             });
-                        });
+                        }
+                );
             }
         });
     }));
 
-
     passport.serializeUser((user, done) => {
-
         done(null, user.googleID);
-
     })
 
     passport.deserializeUser((id, done) => {
@@ -73,9 +72,9 @@ module.exports = function (passport) {
         const findUser = mysql.format(findUserSQL, findUserInsert);
 
         db.query(findUser, (err, results, fields) => {
-            if (err) throw err;
+            if (err) console.log(err);
             done(null, id);
-        })
-    })
+        });
+    });
 };
 

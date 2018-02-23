@@ -5,27 +5,25 @@ const router = express.Router();
 
 router.use(express.static(path.join(__dirname, 'client', 'dist')));
 
-router.get('/', passport.authenticate('google', {scope: ['profile', 'email']}), (req, res)=>{
-  console.log('Made it');
-});
+router.get('/', passport.authenticate('google', { scope: ['profile', 'email'] }), (req, res) => {});
 
-router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }) ,(req, res) => {
+router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
     res.redirect('/dashboard');
 });
 
-router.get('/verify', (req, res)=>{
-  if(req.user){
-    res.send(true);
-    console.log(req.user);
-  } else {
-    console.log('Not Auth');
-    res.send(false);
-  }
+router.get('/verify', (req, res) => {
+    if (req.user) {
+        res.send(true);
+        console.log(req.user, ' is authenticated');
+    } else {
+        console.log('Not Auth');
+        res.send(false);
+    }
 });
 
-router.get('/logout', (req, res)=>{
-  req.logout();
-  res.redirect('/');
+router.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
 });
 
 module.exports = router;
