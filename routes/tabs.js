@@ -67,7 +67,7 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
     if (req.params.deleteID === 'database') {
         searchID = req.body.databaseTabID;
         searchType = 'databaseTabID';
-        updateUrlTable();
+        updateUrlTable(req.body.url);
     }
 
     const query = 'DELETE FROM tabs WHERE ?? = ?';
@@ -138,7 +138,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const { databaseTabID, url } = req.body;
 
     if (req.params.time === 'deactivatedTime' && url) {
-        updateUrlTable();
+        updateUrlTable(url);
     };
 
     const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
