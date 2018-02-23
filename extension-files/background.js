@@ -1,7 +1,7 @@
 var user;
 
 /**
- * User class keeps track of current tab information and whether logged in state
+ * User class keeps track of current tab information and logged in status
  */
 class User {
 	constructor() {
@@ -21,12 +21,20 @@ class User {
 		for (var window in this.tabsSortedByWindow) {
 			for (var tab in this.tabsSortedByWindow[window]) {
 				var currentTab = this.tabsSortedByWindow[window][tab];
-        createNewTabRequest(currentTab);
-        if(!tabObj.highlighted){
-          var previousIndex = user.activeTabIndex[tabObj.windowId];
-          var timeStamp = getTimeStamp();
-          updatePreviousHighlightedTab(previousIndex, tabObj.windowId, timeStamp, tabObj.url);
-        }
+				createNewTabRequest(currentTab);
+				console.log(currentTab)
+			}
+		}
+		// this.deactivateTabs()
+	}
+	deactivateTabs(){
+		for (var window in this.tabsSortedByWindow) {
+			for (var tab in this.tabsSortedByWindow[window]) {
+				var currentTab = this.tabsSortedByWindow[window][tab];
+				if(!currentTab.highlighted){
+					deactivateTimeTab(currentTab.databaseTabID, currentTab.url)
+				}
+			
 
 			}
 		}
@@ -138,6 +146,8 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 		tabObject['databaseTabID'] = tabID;
 		sendDataToServer('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
 	}
+
+	updatedElaspedDeactivation();
 });
 
 /**
@@ -192,7 +202,8 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       }
     }
    
-    updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp, tab.url);
+		updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp, tab.url);
+		updatedElaspedDeactivation();
   });
 })
 
@@ -302,13 +313,23 @@ chrome.runtime.onConnect.addListener(function(port) {
 					console.log(error);
 				});
 		} else if(message.type === 'setBadge'){
-      if(message.number > 0){
-        chrome.browserAction.setBadgeText({text: message.number.toString()});
-        chrome.browserAction.setBadgeBackgroundColor({color: '#FF0000'});
-      }
+			console.log(message.number)
+				// setBadgeNumber(message.number);
+
     }
 	});
 });
+
+/**
+ * Sets new badge number on extension icon
+ *@param {integer} number
+ */
+function setBadgeNumber(number){
+	if(number > 0){
+		chrome.browserAction.setBadgeText({text: number.toString()});
+		chrome.browserAction.setBadgeBackgroundColor({color: '#FF0000'});
+	}
+}
 
 /**
  * Calls database to activate the time for tab
@@ -322,7 +343,6 @@ function activateTimeTab(uniqueID) {
 }
 
 /**
-
 * Calls database to deactivate the time for tab
 *@param {integer} uniqueID 
 *call sendDataToServer
@@ -396,9 +416,13 @@ function createNewTabRequest(tabObject) {
 			console.log(xhr.responseText);
 			if (JSON.parse(xhr.responseText).insertId) {
 				var result = JSON.parse(xhr.responseText).insertId;
-				activateTimeTab(result);
 				var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index];
-        user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
+				user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
+				if(tabObject.highlighted){
+					activateTimeTab(result);
+				} else {
+					deactivateTimeTab(result, tabObj.url)
+				}
 			} else {
 				console.log('tab was not created');
 			}
@@ -491,6 +515,7 @@ function setLocalStorage(keyName, value) {
  *
  */
 function updatedElaspedDeactivation() {
+	var timeExpiredCount = 0; 
 	var currentTime = getTimeStamp();
 	var windows = user.tabsSortedByWindow;
 	for (var window in windows) {
@@ -498,9 +523,13 @@ function updatedElaspedDeactivation() {
 			if (!windows[window][index].highlighted) {
 				windows[window][index].inactiveTimeElapsed =
 					currentTime - windows[window][index].timeOfDeactivation;
+				if(windows[window][index].inactiveTimeElapsed > 25000){
+					timeExpiredCount++;
+				}
 			}
 		}
 	}
+	setBadgeNumber(timeExpiredCount);
 }
 
 /**
