@@ -103,6 +103,7 @@ function hideLoginButtons() {
 
 function refreshContent() {
 	document.getElementById('tag-titles').innerHTML = '';
+	inactiveTabCount = 0;
 	sendMessageToGetTabInfo();
 }
 
@@ -122,7 +123,6 @@ function logoutUser() {
 }
 
 function loginUser() {
-	console.log('login');
 	port.postMessage({ type: 'login' });
 }
 
