@@ -132,9 +132,6 @@ router.put('/move', ensureAuthenticated, (req, res) => {
 
 router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
-    let time = new Date();
-    time = time.getTime();
-
     const { databaseTabID, url } = req.body;
 
     if (req.params.time === 'deactivatedTime' && url) {

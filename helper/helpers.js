@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = {
-    ensureAuthenticated: function (req, res, next) {  
+    ensureAuthenticated: function (req, res, next) {
         if (req.user) {
             console.log('req.user: ', req.user.googleID);
             return next();
@@ -40,8 +40,13 @@ module.exports = {
 
             const { url, activatedTime } = results[0];
 
-            let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/) || (url).match(/^(localhost)/);
+            let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
+                || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
+                || (url).match(/^(localhost)/);
             domain = domain[0];
+
+            let time = new Date();
+            time = time.getTime();
 
             let newActiveTime = time - activatedTime;
 

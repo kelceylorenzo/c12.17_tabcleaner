@@ -16,8 +16,9 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }
 
 router.get('/verify', (req, res) => {
     if (req.user) {
-        res.send(req.user);
-        console.log(req.user, ' is authenticated');
+        res.send({
+            success: true,
+            user: req.user});
     } else {
         console.log('Not Auth');
         res.send(false);
