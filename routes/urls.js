@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const mysqlCredentials = require('../mysqlCredentials');
+const mysqlCredentials = require('../config/mysqlCredentials');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
