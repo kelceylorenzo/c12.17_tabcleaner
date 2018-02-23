@@ -4,7 +4,13 @@ const path = require('path');
 const { mysqlCredentials } = require('../config/keys');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
-const { ensureAuthenticated, checkIfTableExists, updateUrlTable } = require('../helper/helpers');
+const { ensureAuthenticated, 
+        checkIfTableExists, 
+        updateUrlTable, 
+        produceOutput, 
+        getDatabaseTime } = require('../helper/helpers');
+
+
 
 db.connect((err) => {
     if (err) throw err;
