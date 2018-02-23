@@ -22,7 +22,6 @@ class User {
 			for (var tab in this.tabsSortedByWindow[window]) {
 				var currentTab = this.tabsSortedByWindow[window][tab];
 				createNewTabRequest(currentTab);
-				console.log(currentTab)
 			}
 		}
 	}
@@ -299,11 +298,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 				.catch((error) => {
 					console.log(error);
 				});
-		} else if(message.type === 'setBadge'){
-			console.log(message.number)
-				// setBadgeNumber(message.number);
-
-    }
+		} 
 	});
 });
 
