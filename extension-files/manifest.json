@@ -15,17 +15,17 @@
 		"tabs",
 		"<all_urls>",
 		"http://localhost:9000/*",
+		"http://localhost:3000/*",
 		"http://www.closeyourtabs.com/*",
-		"cookies",
-		"http://closeyourtabs.com/*"
+		"http://closeyourtabs.com/*",
+		"cookies"
 	],
 	"background": {
 		"scripts": ["background.js"]
 	},
 	"content_scripts": [
 		{
-			"matches": ["*://*/*"],
-			"js": ["contentscript.js"]
-		}
+			"matches": ["http://closeyourtabs.com/dashboard","http://closeyourtabs.com/dashboard#", "http://localhost:3000/*" ],
+			"js": ["contentscript.js"]		}
 	]
 }
