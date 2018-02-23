@@ -135,8 +135,11 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const { databaseTabID, url } = req.body;
 
     if (req.params.time === 'deactivatedTime' && url) {
-        updateUrlTable(databaseTabID);
+        updateUrlTable(databaseTabID, req);
     };
+
+    let time = new Date();
+    time = time.getTime();
 
     const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
     const insert = [req.params.time, time, databaseTabID];

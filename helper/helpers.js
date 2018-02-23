@@ -30,7 +30,7 @@ module.exports = {
             next();
         });
     },
-    updateUrlTable: function (databaseTabID) {
+    updateUrlTable: function (databaseTabID, req) {
 
         const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ? LIMIT 1';
         const getActiveTimeInsert = databaseTabID;
