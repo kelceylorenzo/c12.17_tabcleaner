@@ -1,6 +1,6 @@
 var lengthOfString = 40;
 var port = chrome.runtime.connect({ name: 'tab' });
-var inactiveTabCount = 0; 
+var inactiveTabCount = 0;
 
 function init() {
 	document.getElementById('refresh').addEventListener('click', refreshContent);
@@ -23,16 +23,16 @@ port.onMessage.addListener(function(response) {
 			for (var item in windows[window]) {
 				var tabInfo = windows[window][item];
 				var tabElement = createDomElement(tabInfo);
-        document.getElementById('tag-titles').appendChild(tabElement);
-        if(tabInfo.inactiveTimeElapsed > 25000){
-          inactiveTabCount++; 
-        }
+				document.getElementById('tag-titles').appendChild(tabElement);
+				if (tabInfo.inactiveTimeElapsed > 25000) {
+					inactiveTabCount++;
+				}
 			}
 			if (response.sessionInfo.userStatus) {
 				hideLoginButtons();
 			}
-    }
-    setBadge(inactiveTabCount);
+		}
+		setBadge(inactiveTabCount);
 	} else if (response.loginStatus) {
 		hideLoginButtons();
 	}
@@ -76,17 +76,16 @@ function createDomElement(tabObject) {
 	return tab;
 }
 
-function setBadge(number){
-  port.postMessage({ type: 'setBadge', number: number });
-
+function setBadge(number) {
+	port.postMessage({ type: 'setBadge', number: number });
 }
 
 function clickEvent(id, event) {
 	chrome.tabs.remove(id);
 	var elem = document.querySelector('.id' + id);
-  elem.parentNode.removeChild(elem);
-  inactiveTabCount--; 
-  setBadge(inactiveTabCount);
+	elem.parentNode.removeChild(elem);
+	inactiveTabCount--;
+	setBadge(inactiveTabCount);
 }
 
 function sendMessageToGetTabInfo() {
@@ -116,9 +115,9 @@ function logoutUser() {
 	port.postMessage({ type: 'logout' });
 	document.getElementById('webpage').style.display = 'none';
 	document.getElementById('logout').style.display = 'none';
-	document.getElementById('signup').style.display = 'block';
-	document.getElementById('signup-button').style.display = 'block';
 	document.getElementById('login').style.display = 'block';
+	document.getElementById('signup').style.display = 'flex';
+	document.getElementById('signup-button').style.display = 'flex';
 }
 
 function loginUser() {
@@ -127,4 +126,3 @@ function loginUser() {
 }
 
 init();
-
