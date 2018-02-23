@@ -20,7 +20,8 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: "window"
+			sortType: "window",
+			viewChange: "grid"
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -37,8 +38,16 @@ class MainPage extends Component {
 	}
 
 	componentDidMount() {
+		// this.getData(data);
 		this.getData();
 	}
+
+	// getData() {
+	// 	data.map(currentItem => {
+	// 		return (currentItem.selected = false);
+	// 	});
+	// 	this.setState({ ...this.state, tabsList: data }, () => this.handleSort(this.state.sortType));
+	// }
 
 	getData() {
 		axios.get("/tabs").then(resp => {
@@ -66,16 +75,11 @@ class MainPage extends Component {
 		this.getData();
 	}
 
-	handleViewChange() {
-		console.log("handle view button clicked");
-	}
-
-	handleRefresh() {
-		console.log("refresh button clicked");
-	}
-
-	handleViewChange() {
-		console.log("handle view button clicked");
+	handleViewChange(view) {
+		this.setState({
+			viewChange:view
+		})
+		console.log("Handle view button clicked: ", view);
 	}
 
 	handleIndividualSelect(item) {
@@ -97,7 +101,6 @@ class MainPage extends Component {
 	}
 
 	handleSort(sortType) {
-		// console.log('handle sort event.target: ', event.target);
 		let { tabsList } = this.state;
 
 		switch (sortType) {
@@ -297,6 +300,7 @@ class MainPage extends Component {
 							tabData={this.state.tabsList}
 							utilityClick={this.handleUtilityClick}
 							handleViewChange={this.handleViewChange}
+							viewChange={this.state.viewChange}
 							handleRefresh={this.handleRefresh}
 						/>
 					</div>
