@@ -24,7 +24,7 @@ class MainTabArea extends Component {
 						<div onClick={this.props.handleViewChange} className="tab-view-option">
 							<i className="grid-view-button fas fa-th-large" />
 						</div>
-						<div className="tab-view-option">
+						<div onClick={this.props.handleViewChange} className="tab-view-option">
 							<i className="list-view-button fas fa-list-ul" />
 						</div>
 						<div onClick={this.props.handleRefresh} className="tab-view-option">
