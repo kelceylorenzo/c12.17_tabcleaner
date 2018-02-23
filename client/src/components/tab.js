@@ -1,18 +1,23 @@
-import React from "react";
-import placeholderImage from "../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png";
-import checkMark from "../assets/images/check-mark.png";
+import React from 'react';
+import placeholderImage from '../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png';
+import checkMark from '../assets/images/check-mark.png';
 
-export default props => {
+export default (props) => {
 	let style = {
-		display: ""
+		display: ''
 	};
 
 	if (props.item.selected) {
-		style.display = "flex";
+		style.display = 'flex';
 	}
 
 	return (
-		<div className="tab-container" onClick={props.select}>
+		<div
+			className="tab-container"
+			data-windowId={props.item.windowID}
+			data-index={props.item.browserTabIndex}
+			onClick={props.select}
+		>
 			<div className="select-overlay-container" style={style}>
 				<img className="select-overlay" src={checkMark} alt="" />
 			</div>
@@ -23,10 +28,16 @@ export default props => {
 					<img src={placeholderImage} alt="" />
 				</div>
 				<div className="tab-utilities-container">
-					<div className="tab-utility open-favicon" onClick={() => props.utilityClick(props.item, "open")}>
+					<div
+						className="tab-utility open-favicon"
+						onClick={() => props.utilityClick(props.item, 'open')}
+					>
 						<i className="fas fa-external-link-alt" />
 					</div>
-					<div className="tab-utility close-favicon" onClick={() => props.utilityClick(props.item, "close")}>
+					<div
+						className="tab-utility close-favicon"
+						onClick={() => props.utilityClick(props.item, 'close')}
+					>
 						<i className="fas fa-times" />
 					</div>
 				</div>
