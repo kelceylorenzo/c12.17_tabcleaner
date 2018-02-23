@@ -1,7 +1,7 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('./keys');
 const mysql = require('mysql');
-const mysqlCredentials = require('./mysqlCredentials.js');
+const mysqlCredentials = require('./mysqlCredentials');
 const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = function (passport) {
