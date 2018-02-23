@@ -22,10 +22,10 @@ function checkIfTableExists(req, res, next) {
         "browserTabIndex int(10) NULL," +
         "googleID double NULL," +
         "url VARCHAR(2084) NULL," +
-        "favicon VARCHAR(2084) NULL );",
-        (err) => {
-            if (err) throw err;
-        }
+        "favicon VARCHAR(2084) NULL,"+
+        "screenshot VARCHAR(MAX) NULL);",
+        (err) => { if (err) throw err }
+ 
     );
     next();
 }
@@ -51,11 +51,11 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const googleID = req.user;
-    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon } = req.body;
+    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon, screenshot } = req.body;
 
     const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
-        windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon];
+    const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
+        windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
