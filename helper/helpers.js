@@ -9,7 +9,7 @@ module.exports = {
             return next();
         } else {
             console.log('This is the ensureAuthentication saying that the user is not autheticated.');
-            res.redirect('auth/google');
+            res.redirect('https://www.closeyourtabs.com/auth/google');
         }
     },
     checkIfTableExists: function (req, res, next) {
@@ -30,13 +30,14 @@ module.exports = {
             next();
         });
     },
-    updateUrlTable: function (databaseTabID, req) {
+    updateUrlTable: function (databaseTabID, user) {
 
         const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ? LIMIT 1';
         const getActiveTimeInsert = databaseTabID;
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
+            if(err) throw err;
 
             const { url, activatedTime } = results[0];
 
@@ -60,7 +61,7 @@ module.exports = {
                 if (err) console.log(err);
 
                 const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=? LIMIT 1';
-                const activeTimeInsert = [req.user.googleID, domain];
+                const activeTimeInsert = [user.googleID, domain];
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
                 db.query(activeTimeSQL, (err, results) => {
@@ -77,7 +78,7 @@ module.exports = {
 
                     } else {
                         const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
-                        const insertUrlInsert = [req.user.googleID, domain, newActiveTime];
+                        const insertUrlInsert = [user.googleID, domain, newActiveTime];
                         const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
                         db.query(insertUrlSQL, (err, results) => {
                             if (err) console.log(err);
@@ -87,5 +88,53 @@ module.exports = {
                 })
             })
         })
+    },
+    produceOutput: function (err, result, user, location) {
+        
+        const output = {
+            type: location,
+            user: user,
+            success: false,
+            data: [],
+            code: '500',
+            message: ""
+        };
+        if (err) {
+            res.send()
+        } else {
+            if (results.length > 0) {
+                output.code = '200';
+                output.success = true;
+                output.data = results;
+
+            } else {
+                output.code ='404'
+                output.data = [];
+                output.message = 'No data for user'
+            }
+        }
+        return output;
+        console.log(output);
+    },
+    getDatabaseTime(user, location, done) {
+        return new Promise((resolve, reject) => {
+            function done(err, result) {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(
+                        db.query("SELECT UNIX_TIMESTAMP();", (err, result) => {
+                            if (err) {
+                                done(err)
+                                throw err;
+                            } else {
+                                done(null, result)
+                                console.log(result);
+                            }
+                        })
+                    )
+                }
+            }
+        });
     }
 };
