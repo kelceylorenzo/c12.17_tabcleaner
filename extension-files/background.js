@@ -25,19 +25,6 @@ class User {
 				console.log(currentTab)
 			}
 		}
-		// this.deactivateTabs()
-	}
-	deactivateTabs(){
-		for (var window in this.tabsSortedByWindow) {
-			for (var tab in this.tabsSortedByWindow[window]) {
-				var currentTab = this.tabsSortedByWindow[window][tab];
-				if(!currentTab.highlighted){
-					deactivateTimeTab(currentTab.databaseTabID, currentTab.url)
-				}
-			
-
-			}
-		}
 	}
 }
 
