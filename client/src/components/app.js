@@ -1,26 +1,28 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
-import LandingPage from './landing-page';
-import MainPage from './main-page';
-import AboutPage from './about-page';
-import StatsPage from './stats-page';
-import TopTenPage from './top-ten-page';
-import headerData from './header-data.js';
+import LandingPage from "./landing-page";
+import MainPage from "./main-page";
+import AboutPage from "./about-page";
+import StatsPage from "./stats-page";
+import TopTenPage from "./top-ten-page";
+import headerData from "./header-data.js";
 
-import '../assets/css/app.css';
+import "../assets/css/app.css";
 
 class App extends Component {
 	verifyLogIn() {
-		axios.get(`/auth/google/verify`).then((resp) => {
-			console.log('Verify response: ', resp);
+		axios.get(`/auth/google/verify`).then(resp => {
+			console.log("Verify response: ", resp);
 			if (resp.data) {
-				console.log('TRU');
-				this.props.history.push('/');
+				console.log("this.props for verify: ", this.props);
+				console.log("Axios Response object: ", resp);
+				// this.props.history.push("/dashboard");
 			} else {
-				console.log('FALSE');
-				this.props.history.push('/');
+				console.log("Not logged in");
+				// this.props.history.push("/");
 			}
 		});
 	}
