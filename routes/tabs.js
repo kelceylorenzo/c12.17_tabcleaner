@@ -12,16 +12,13 @@ const { ensureAuthenticated,
 
 
 
+        
 db.connect((err) => {
     if (err) throw err;
     console.log("Connected to remote DB");
 });
 
-// Check SLOW QUERY LOGGING
-// Paginating Data 
-
 router.get('/', ensureAuthenticated, (req, res) => {
-
     getDatabaseTime()
         .then((currentTime) => {
             const query = 'SELECT * FROM tabs WHERE googleID = ?';
@@ -46,6 +43,7 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const { windowID, tabTitle, browserTabIndex, url, favicon, screenshot } = req.body;
 
     getDatabaseTime()
+
         .then((currentTime) => {
             const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
             const insert = ['tabs', 'windowID', 'tabTitle', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
@@ -57,6 +55,7 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
                 res.send(json_output);
             });
         })
+
         .catch((error) => {
             res.send({ status: '400', message: "Bad Request" });
         })
@@ -123,7 +122,6 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
         updateUrlTable(databaseTabID, req.user);
     };
 
-
     getDatabaseTime()
         .then((currentTime) =>{
             const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
@@ -139,7 +137,6 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
         .catch((error) => {
             res.send({ status: '400', message: 'Bad Request' })
         })
-
 });
 
 module.exports = router;

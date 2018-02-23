@@ -9,7 +9,7 @@ module.exports = {
             return next();
         } else {
             console.log('This is the ensureAuthentication saying that the user is not autheticated.');
-            res.redirect('https://www.closeyourtabs.com/auth/google');
+            res.redirect('/auth/google');
         }
     },
     checkIfTableExists: function (req, res, next) {
@@ -90,7 +90,6 @@ module.exports = {
         })
     },
     produceOutput: function (err, result, user, location) {
-        
         const output = {
             type: location,
             user: user,
@@ -100,7 +99,7 @@ module.exports = {
             message: ""
         };
         if (err) {
-            res.send()
+            res.send('Failed to get tab info');
         } else {
             if (results.length > 0) {
                 output.code = '200';
@@ -118,20 +117,21 @@ module.exports = {
     },
     getDatabaseTime(user, location, done) {
         return new Promise((resolve, reject) => {
+            db.query("SELECT UNIX_TIMESTAMP();", (err, result) => {
+                if (err) {
+                    done(err)
+                    throw err;
+                } else {
+                    done(null, result)
+                    console.log(result);
+                }
+            })
             function done(err, result) {
                 if (err) {
                     reject(err)
                 } else {
                     resolve(
-                        db.query("SELECT UNIX_TIMESTAMP();", (err, result) => {
-                            if (err) {
-                                done(err)
-                                throw err;
-                            } else {
-                                done(null, result)
-                                console.log(result);
-                            }
-                        })
+                        result
                     )
                 }
             }
