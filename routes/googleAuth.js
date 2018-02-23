@@ -21,7 +21,7 @@ router.get('/verify', (req, res) => {
             user: req.user});
     } else {
         console.log('Not Auth');
-        res.send(false);
+        res.send({success: false});
     }
 });
 
