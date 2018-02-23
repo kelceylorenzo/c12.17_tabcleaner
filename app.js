@@ -40,7 +40,8 @@ app.use(cookieParser());
 app.use(session({
     secret: 'secret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true,
+    cookie: {maxAge: 30 * 24 * 60 * 60 * 1000}
 }));
 
 // Body Parser Middleware
