@@ -11,7 +11,7 @@ export default props => {
 			</div>
 
 			<div className="login-button-container">
-				<a className="login-button" href="http://closeyourtabs.com/auth/google/">
+				<a className="login-button" href="/auth/google/">
 					LOG IN
 				</a>
 			</div>
