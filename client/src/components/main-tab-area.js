@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import Tab from "./tab";
-import Sort from "./main-sort";
+import Tab from './tab';
+import Sort from './main-sort';
 
 class MainTabArea extends Component {
 	render() {
@@ -42,7 +42,7 @@ class MainTabArea extends Component {
 							<i className="refresh-button fas fa-sync-alt" />
 						</div>
 					</div>
-					<Sort sort={sortType => this.props.sort(sortType)} sortType={this.props.sortType} />
+					<Sort sort={(sortType) => this.props.sort(sortType)} sortType={this.props.sortType} />
 				</div>
 				<div className="tab-window" className={windowView.view}>
 					{tabList}

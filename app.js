@@ -10,8 +10,10 @@ const bodyParser = require("body-parser");
 require("./config/googlePassport")(passport);
 
 // Load Routes
-const googleAuth = require("./routes/googleAuth");
-const tabs = require("./routes/tabs");
+
+const googleAuth = require('./routes/googleAuth');
+const tabs = require('./routes/tabs');
+const urls = require('./routes/urls');
 
 // Load Keys
 const keys = require("./config/keys");
@@ -29,19 +31,20 @@ app.use((req, res, next) => {
 });
 
 // app.use(cookieSession({
+//     name: 'tabsSession',
 //     maxAge: 30 * 24 * 60 * 60 * 1000,
 //     keys: [keys.cookieKey]
-// }))
+// }));
 
 // Authentication Middleware
 app.use(cookieParser());
-app.use(
-	session({
-		secret: "secret",
-		resave: false,
-		saveUninitialized: false
-	})
-);
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {maxAge: 30 * 24 * 60 * 60 * 1000}
+}));
 
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -58,8 +61,10 @@ app.use((req, res, next) => {
 });
 
 // Use Routes
-app.use("/auth/google", googleAuth);
-app.use("/tabs", tabs);
+
+app.use('/auth/google', googleAuth);
+app.use('/tabs', tabs);
+app.use('/urls', urls);
 
 app.get("*", (req, res) => {
 	res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
