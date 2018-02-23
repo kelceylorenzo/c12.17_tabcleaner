@@ -3,22 +3,37 @@ import placeholderImage from '../assets/images/e9492f0f82721e4998b1360e409e6fe8a
 import checkMark from '../assets/images/check-mark.png';
 
 export default (props) => {
-	let style = {
+	let selectStyle = {
 		display: ''
 	};
 
+	let tabStyle = {
+		backgroundColor: ''
+	};
+
 	if (props.item.selected) {
-		style.display = 'flex';
+		selectStyle.display = 'flex';
+	}
+
+	let currentTime = new Date();
+	currentTime = currentTime.getTime();
+	let inactiveElapsedTime = currentTime - props.item.deactivatedTime;
+	console.log('deactivated time: ', props.item.deactivatedTime);
+	console.log('inactive elapsed time: ', inactiveElapsedTime);
+	console.log('less than 100000: ', inactiveElapsedTime < 100000);
+	console.log('less than 250000: ', inactiveElapsedTime < 250000);
+
+	if (inactiveElapsedTime < 100000) {
+		tabStyle.backgroundColor = '';
+	} else if (inactiveElapsedTime < 250000) {
+		tabStyle.backgroundColor = 'rgba(215, 213, 170, 0.5)';
+	} else {
+		tabStyle.backgroundColor = 'rgba(156, 95, 88, 0.5)';
 	}
 
 	return (
-		<div
-			className="tab-container"
-			data-windowId={props.item.windowID}
-			data-index={props.item.browserTabIndex}
-			onClick={props.select}
-		>
-			<div className="select-overlay-container" style={style}>
+		<div className="tab-container" onClick={props.select} style={tabStyle}>
+			<div className="select-overlay-container" style={selectStyle}>
 				<img className="select-overlay" src={checkMark} alt="" />
 			</div>
 
