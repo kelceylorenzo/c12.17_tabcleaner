@@ -36,7 +36,7 @@ export default (props) => {
 					</div>
 					<div
 						className="tab-utility close-favicon"
-						onClick={() => props.utilityClick(props.item, 'close')}
+						// onClick={() => props.utilityClick(props.item, 'close')}
 					>
 						<i className="fas fa-times" />
 					</div>
