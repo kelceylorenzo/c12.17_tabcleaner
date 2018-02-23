@@ -2,6 +2,9 @@ const express = require('express');
 const passport = require('passport');
 const path = require('path');
 const router = express.Router();
+const { mysqlCredentials } = require('../config/keys');
+const mysql = require('mysql');
+const db = mysql.createConnection(mysqlCredentials);
 
 router.use(express.static(path.join(__dirname, 'client', 'dist')));
 
@@ -13,7 +16,7 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }
 
 router.get('/verify', (req, res) => {
     if (req.user) {
-        res.send(true);
+        res.send(req.user);
         console.log(req.user, ' is authenticated');
     } else {
         console.log('Not Auth');

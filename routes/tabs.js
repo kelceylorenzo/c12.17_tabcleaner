@@ -1,39 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const mysqlCredentials = require('../mysqlCredentials');
+const { mysqlCredentials } = require('../config/keys');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
-const { ensureAuthenticated } = require('../helper/auth');
+const { ensureAuthenticated, checkIfTableExists, updateUrlTable } = require('../helper/helpers');
 
 db.connect((err) => {
     if (err) throw err;
     console.log("Connected to remote DB");
 });
 
-function checkIfTableExists (req, res, next){
-    db.query(
-        "CREATE TABLE IF NOT EXISTS tabs (" +
-        "databaseTabID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-        "windowID MEDIUMINT(8) NULL ," +
-        "tabTitle VARCHAR(200) NULL," +
-        "activatedTime double NULL," +
-        "deactivatedTime double NULL," +
-        "browserTabIndex int(10) NULL," +
-        "googleID double NULL," +
-        "url VARCHAR(2084) NULL," +
-        "favicon VARCHAR(2084) NULL );",
-        (err) => {
-            if (err) throw err;
-        }
-    );
-    next();
-}
-
 router.get('/', ensureAuthenticated, (req, res) => {
 
     const query = 'SELECT * FROM tabs WHERE googleID=?';
-    const insert = req.user;
+    const insert = req.user.googleID;
     const sql = mysql.format(query, insert);
 
     db.query(sql, function (err, results) {
@@ -45,17 +26,18 @@ router.get('/', ensureAuthenticated, (req, res) => {
         };
         const json_output = JSON.stringify(output);
         res.send(json_output);
-        console.log('GET from: ', req.user);
+        console.log('GET from: ', req.user.googleID);
     });
+
 });
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
-    const googleID = req.user;
-    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon } = req.body;
+    const googleID = req.user.googleID;
+    const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon, screenshot } = req.body;
 
-    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon',
-        windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon];
+    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
+        windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
@@ -79,12 +61,13 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
     let searchID;
 
     if (req.params.deleteID === 'google') {
-        searchID = req.user;
+        searchID = req.user.googleID;
         searchType = 'googleID'
     }
     if (req.params.deleteID === 'database') {
         searchID = req.body.databaseTabID;
         searchType = 'databaseTabID';
+        updateUrlTable(req.body.databaseTabID);
     }
 
     const query = 'DELETE FROM tabs WHERE ?? = ?';
@@ -152,7 +135,11 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     let time = new Date();
     time = time.getTime();
 
-    const { databaseTabID } = req.body;
+    const { databaseTabID, url } = req.body;
+
+    if (req.params.time === 'deactivatedTime' && url) {
+        updateUrlTable(databaseTabID);
+    };
 
     const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
     const insert = [req.params.time, time, databaseTabID];
@@ -171,30 +158,6 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
-
-
-    // db.query("CREATE TABLE IF NOT EXISTS urls (" +
-    //         "googleID double NOT NULL PRIMARY KEY," +
-    //         "url VARCHAR(30) NULL," +
-    //         "totalActive INT(20) NULLl);", 
-    //         (err) => {
-    //             if (err) console.log(err);
-    //             db.query(insertUser, (err) => {
-    //                 if (err) console.log(err);
-    //                 console.log('User was not in db, but is now');
-    //                 return done(null, newUser);
-    //             });
-    //         }
-    // );
-
-
-    // db.query()
-
-
-
-
-
-
 });
 
 module.exports = router;
