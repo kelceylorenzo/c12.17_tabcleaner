@@ -33,6 +33,7 @@ class MainPage extends Component {
 		this.handleSort = this.handleSort.bind(this);
 		this.handleViewChange = this.handleViewChange.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
+		this.logOut = this.logOut.bind(this);
 	}
 
 	componentDidMount() {
@@ -56,6 +57,11 @@ class MainPage extends Component {
 		});
 	}
 
+	async logOut() {
+		await axios.get("auth/google/logout");
+		console.log("you are logged out");
+	}
+
 	handleRefresh() {
 		this.getData();
 	}
@@ -64,12 +70,12 @@ class MainPage extends Component {
 		console.log("handle view button clicked");
 	}
 
-	handleRefresh(){
-		console.log("refresh button clicked")
+	handleRefresh() {
+		console.log("refresh button clicked");
 	}
 
 	handleViewChange() {
-		console.log("handle view button clicked")
+		console.log("handle view button clicked");
 	}
 
 	handleIndividualSelect(item) {
@@ -275,7 +281,7 @@ class MainPage extends Component {
 			<div className="main-page-container">
 				<div className="dashboard-container">
 					<div className="header-container">
-						<Header routes={headerData} />
+						<Header routes={headerData} logOut={this.logOut} />
 					</div>
 					<div className="dashboard">
 						<MainSidebar
