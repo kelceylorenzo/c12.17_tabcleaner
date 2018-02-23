@@ -18,14 +18,10 @@ export default (props) => {
 	let currentTime = new Date();
 	currentTime = currentTime.getTime();
 	let inactiveElapsedTime = currentTime - props.item.deactivatedTime;
-	console.log('deactivated time: ', props.item.deactivatedTime);
-	console.log('inactive elapsed time: ', inactiveElapsedTime);
-	console.log('less than 100000: ', inactiveElapsedTime < 100000);
-	console.log('less than 250000: ', inactiveElapsedTime < 250000);
 
-	if (inactiveElapsedTime < 100000) {
+	if (inactiveElapsedTime < 10000 || props.item.tabTitle === 'Close Your Tabs') {
 		tabStyle.backgroundColor = '';
-	} else if (inactiveElapsedTime < 250000) {
+	} else if (inactiveElapsedTime < 25000) {
 		tabStyle.backgroundColor = 'rgba(215, 213, 170, 0.5)';
 	} else {
 		tabStyle.backgroundColor = 'rgba(156, 95, 88, 0.5)';
