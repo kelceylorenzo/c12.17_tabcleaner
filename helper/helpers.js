@@ -1,10 +1,10 @@
-const mysqlCredentials = require('../config/mysqlCredentials');
+const { mysqlCredentials } = require('../config/keys');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = {
     ensureAuthenticated: function (req, res, next) {
-        console.log('req.user: ', req.user);
+        console.log('req.user: ', req.user.googleID);
         if (req.user) {
             return next();
         } else {
@@ -30,9 +30,7 @@ module.exports = {
             next();
         });
     },
-    updateUrlTable: function (url) {
-        let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/) || (url).match(/^(localhost)/);
-        domain = domain[0];
+    updateUrlTable: function (databaseTabID) {
 
         const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ? LIMIT 1';
         const getActiveTimeInsert = databaseTabID;
@@ -40,8 +38,12 @@ module.exports = {
 
         db.query(getActiveTimeSQL, (err, results) => {
 
-            let storedActiveTime = results[0].activatedTime;
-            let newActiveTime = time - storedActiveTime;
+            const { url, activatedTime } = results[0];
+
+            let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/) || (url).match(/^(localhost)/);
+            domain = domain[0];
+
+            let newActiveTime = time - activatedTime;
 
             const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
                 "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
@@ -53,7 +55,7 @@ module.exports = {
                 if (err) console.log(err);
 
                 const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=? LIMIT 1';
-                const activeTimeInsert = [req.user, domain];
+                const activeTimeInsert = [req.user.googleID, domain];
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
                 db.query(activeTimeSQL, (err, results) => {
@@ -70,7 +72,7 @@ module.exports = {
 
                     } else {
                         const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
-                        const insertUrlInsert = [req.user, domain, newActiveTime];
+                        const insertUrlInsert = [req.user.googleID, domain, newActiveTime];
                         const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
                         db.query(insertUrlSQL, (err, results) => {
                             if (err) console.log(err);

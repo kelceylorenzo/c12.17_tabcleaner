@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const mysqlCredentials = require('../config/mysqlCredentials');
+const { mysqlCredentials } = require('../config/keys');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
-const { ensureAuthenticated, checkIfTableExists, updateUrlTable } = require('../helper/h');
+const { ensureAuthenticated, checkIfTableExists, updateUrlTable } = require('../helper/helpers');
 
 db.connect((err) => {
     if (err) throw err;
@@ -14,7 +14,7 @@ db.connect((err) => {
 router.get('/', ensureAuthenticated, (req, res) => {
 
     const query = 'SELECT * FROM tabs WHERE googleID=?';
-    const insert = req.user;
+    const insert = req.user.googleID;
     const sql = mysql.format(query, insert);
 
     db.query(sql, function (err, results) {
@@ -26,13 +26,13 @@ router.get('/', ensureAuthenticated, (req, res) => {
         };
         const json_output = JSON.stringify(output);
         res.send(json_output);
-        console.log('GET from: ', req.user);
+        console.log('GET from: ', req.user.googleID);
     });
-    
+
 });
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
-    const googleID = req.user;
+    const googleID = req.user.googleID;
     const { windowID, tabTitle, activatedTime, deactivatedTime, browserTabIndex, url, favicon, screenshot } = req.body;
 
     const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
@@ -61,13 +61,13 @@ router.delete('/:deleteID', ensureAuthenticated, (req, res) => {
     let searchID;
 
     if (req.params.deleteID === 'google') {
-        searchID = req.user;
+        searchID = req.user.googleID;
         searchType = 'googleID'
     }
     if (req.params.deleteID === 'database') {
         searchID = req.body.databaseTabID;
         searchType = 'databaseTabID';
-        updateUrlTable(req.body.url);
+        updateUrlTable(req.body.databaseTabID);
     }
 
     const query = 'DELETE FROM tabs WHERE ?? = ?';
@@ -138,7 +138,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const { databaseTabID, url } = req.body;
 
     if (req.params.time === 'deactivatedTime' && url) {
-        updateUrlTable(url);
+        updateUrlTable(databaseTabID);
     };
 
     const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
