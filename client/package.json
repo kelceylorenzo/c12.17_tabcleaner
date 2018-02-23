@@ -9,6 +9,9 @@
 		},
 		"/tabs/*": {
 			"target": "http://localhost:5000"
+		},
+		"/urls/*": {
+			"target": "http://localhost:5000"
 		}
 	},
 	"scripts": {
