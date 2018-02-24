@@ -80,11 +80,15 @@ class AboutPage extends Component {
 						<div className="description-container" style={this.state.descriptionStyling}>
 							<div className="about-content-title">We make tabs work for you.</div>
 							<p className="description">
-								<b>DESCRIPTION OF OUR TEAM</b> In exercitation enim consequat incididunt aute
-								consectetur. Non exercitation et cupidatat veniam sint ex non culpa excepteur
-								cupidatat nostrud non velit nulla. Ea in adipisicing enim magna do aute in aliquip
-								commodo exercitation. Cupidatat tempor excepteur anim tempor non ex nostrud
-								aliquip.
+								<b>THE IDEA WAS SIMPLE: </b>create a tool that would encourage people to close
+								their tabs. What started off as a simple extension developed into a full web
+								application with the future of allowing users to take their tabs across browsers
+								and devices. Even as our app grows, we hope to our users to control their tabs.
+								<br />
+								<br />
+								<b>TECHNOLOGIES USED:</b> Chrome Platform APIs, Chrome Extension, Chrome Developer
+								Tools, Google OAuth, ReactJS, React-Router-DOM, Axios, XMLHTTPRequests, JavaScript,
+								HTML5, CSS3, Flexbox, NodeJS, MySQL, Amazon Web Services, Passport, Express
 							</p>
 						</div>
 						<div className="team-members-container" style={this.state.teamLinksStyling}>
