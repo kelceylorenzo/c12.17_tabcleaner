@@ -405,7 +405,6 @@ function requestToServerNoData(method, route) {
 	xhr.onerror = function() {
 		user.logout();
 		console.log('connect error');
-		reject(false);
 	};
 	xhr.send();
 }
