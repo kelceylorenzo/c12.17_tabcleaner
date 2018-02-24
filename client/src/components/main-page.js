@@ -44,7 +44,7 @@ class MainPage extends Component {
 	verifyLogIn() {
 		axios.get(`/auth/google/verify`).then(resp => {
 			console.log("Verify response: ", resp);
-			if (resp.data) {
+			if (resp.data.success) {
 				console.log("this.props for verify: ", this.props);
 				console.log("Axios Response object: ", resp);
 				console.log("getData called");
@@ -74,11 +74,11 @@ class MainPage extends Component {
 		});
 	}
 
-	async logOut() {
-		await axios.get("auth/google/logout");
-		this.props.history.push("/");
-		console.log("you are logged out");
-	}
+	// async logOut() {
+	// 	await axios.get("auth/google/logout");
+	// 	this.props.history.push("/");
+	// 	console.log("you are logged out");
+	// }
 
 	handleRefresh() {
 		this.getData();
