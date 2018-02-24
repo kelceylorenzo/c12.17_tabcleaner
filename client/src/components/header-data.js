@@ -14,10 +14,5 @@ export default [
 	{
 		name: "FAQ",
 		to: '/FAQ'
-	},
-	// {
-	// 	name: 'LOG OUT',
-	// 	to: '/',
-	// 	id: 'log-out-button',
-	// }
+	}
 ];
