@@ -124,8 +124,8 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     getDatabaseTime()
         .then((currentTime) =>{
-            const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ? LIMIT 1';
-            const insert = [timeType, time, databaseTabID];
+            const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ?';
+            const insert = [timeType, currentTime, databaseTabID];
             const sql = mysql.format(query, insert);
 
             db.query(sql, (err, result) => {

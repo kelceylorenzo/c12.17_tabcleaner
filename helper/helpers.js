@@ -32,7 +32,7 @@ module.exports = {
     },
     updateUrlTable: function (databaseTabID, user) {
 
-        const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ? LIMIT 1';
+        const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ?';
         const getActiveTimeInsert = databaseTabID;
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
@@ -60,7 +60,7 @@ module.exports = {
             db.query(createUrlTableSQL, (err) => {
                 if (err) console.log(err);
 
-                const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=? LIMIT 1';
+                const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
                 const activeTimeInsert = [user.googleID, domain];
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
@@ -68,7 +68,7 @@ module.exports = {
 
                     if (results.length > 0) {
                         newActiveTime = results[0].totalActiveTime + newActiveTime;
-                        const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ? LIMIT 1';
+                        const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
                         const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
                         const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
                         db.query(updateActiveTimeSQL, (err) => {
