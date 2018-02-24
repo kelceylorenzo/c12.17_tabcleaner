@@ -94,7 +94,7 @@ module.exports = {
             type: location,
             user: user,
             success: false,
-            data: [],
+            data: result,
             code: '500',
             message: ""
         };
@@ -104,12 +104,9 @@ module.exports = {
             if (result.length > 0) {
                 output.code = '200';
                 output.success = true;
-                output.data = result;
-
             } else {
-                output.code ='404'
-                output.data = [];
-                output.message = 'No data for user'
+                output.code ='404';
+                output.message = 'No data for user';
             }
         }
         return output;

@@ -34,7 +34,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
             });
         })
         .catch((error) => {
-            res.send({ status: '400', message: "Bad Request" });
+            res.send({ success: false, status: '400', message: "Bad Request" });
         })
 });
 
