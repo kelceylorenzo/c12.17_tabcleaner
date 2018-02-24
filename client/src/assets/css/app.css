@@ -278,8 +278,8 @@ body {
 	color: rgba(87, 87, 87, 0.4);
 }
 
-.page-switches{
-	width: 5%
+.page-switches {
+	width: 5%;
 }
 
 .page-switch:hover {
@@ -339,6 +339,39 @@ body {
 	color: rgba(26, 54, 74, 1);
 	margin: auto;
 	border-radius: 5px;
+}
+
+.side-bar-container > button:hover {
+	background-color: rgb(44, 91, 124);
+
+	color: rgba(255, 255, 255, 0.9);
+	border: 2px solid rgba(255, 255, 255, 0.9);
+}
+
+.side-bar-container > button:nth-child(1):hover {
+	background-color: rgb(86, 135, 132);
+}
+
+.side-bar-container > button:nth-child(2):hover {
+	background-color: rgb(156, 95, 88);
+}
+
+.side-bar-container > button:nth-child(1):active {
+	background-color: rgba(86, 135, 132, 0.5);
+}
+
+.side-bar-container > button:nth-child(2):active {
+	background-color: rgba(156, 95, 88, 0.75);
+
+}
+
+.side-bar-container > button:nth-child(3):active,
+button:nth-child(4):active {
+		background-color: rgba(26, 54, 74, 1);
+}
+
+.side-bar-container > button:focus {
+	outline: 0;
 }
 
 .main-tab-area {
@@ -408,6 +441,71 @@ body {
 	align-items: flex-start;
 	height: 100%;
 }
+/* List View Styling */
+
+.list-tab-window {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	width: 95%;
+	height: 100%;
+}
+
+.list-tab-container {
+	display: flex;
+	position: relative;
+	margin-bottom: 5%;
+	height: 10%;
+	width: 100%;
+	margin: 0.5%;
+	border: 3px solid rgba(26, 54, 74, 0.4);
+	cursor: pointer;
+}
+
+.list-tab {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	height: 100%;
+	width: 100%;
+}
+
+.list-tab-screenshot {
+	display: none;
+}
+
+.list-tab-title {
+	height: 100%;
+	width: 90%;
+	display: flex;
+	align-items: center;
+	padding-left: 2%;
+}
+
+.list-utilities-container {
+	width: 10%;
+	height: 100%;
+	margin: auto;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.list-select-overlay-container {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(104, 104, 104, 0.3);
+	position: absolute;
+	display: none;
+}
+
+.list-select-overlay-container > img {
+	display: none;
+}
+
+/* Grid View Styling */
 
 .tab-container {
 	display: flex;
@@ -466,6 +564,7 @@ body {
 	align-items: center;
 	padding: 0 15%;
 }
+
 
 .tab-utility {
 	font-size: 20px;
