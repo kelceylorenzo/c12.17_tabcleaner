@@ -109,7 +109,12 @@ module.exports = {
                 output.message = 'No data for user';
             }
         }
-        console.log(output);
+        if(location === 'GET'){
+            console.log(output.success);
+        } else {
+            console.log(output);
+        }
+        
         return output;  
     },
 };
