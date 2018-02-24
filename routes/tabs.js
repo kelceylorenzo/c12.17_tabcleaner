@@ -19,44 +19,31 @@ db.connect((err) => {
 });
 
 router.get('/', ensureAuthenticated, (req, res) => {
-    getDatabaseTime()
-        .then((currentTime) => {
-            const query = 'SELECT *, NOW() AS currentTime FROM tabs WHERE googleID = ?';
-            const insert = req.user.googleID;
-            const sql = mysql.format(query, insert);
-            db.query(sql, function (err, result) {
-                const output = produceOutput(err, result, req.user, 'GET');
-                output.currentTime = currentTime;
-                const json_output = JSON.stringify(output);
-                res.send(json_output);
-            });
-        })
-        .catch((error) => {
-            res.send({ success: false, status: '400', message: "Bad Request" });
-        })
+
+        const query = 'SELECT *, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE googleID = ?';
+        const insert = req.user.googleID;
+        const sql = mysql.format(query, insert);
+
+        db.query(sql, function (err, result) {
+            const output = produceOutput(err, result, req.user, 'GET');
+            const json_output = JSON.stringify(output);
+            res.send(json_output);
+        });
 });
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const googleID = req.user.googleID;
     const { windowID, tabTitle, browserTabIndex, url, favicon, screenshot } = req.body;
 
-    getDatabaseTime()
-
-        .then((currentTime) => {
-            const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-            const insert = ['tabs', 'windowID', 'tabTitle', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
-                windowID, tabTitle, currentTime, browserTabIndex, googleID, url, favicon, screenshot];
-            const sql = mysql.format(query, insert);
-            db.query(sql, (err, results) => {
-                const output = produceOutput(err, results, req.user, 'POST');
-                const json_output = JSON.stringify(output);
-                res.send(json_output);
-            });
-        })
-
-        .catch((error) => {
-            res.send({ status: '400', message: "Bad Request" });
-        })
+    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const insert = ['tabs', 'windowID', 'tabTitle', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
+        windowID, tabTitle, 'ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)', browserTabIndex, googleID, url, favicon, screenshot];
+    const sql = mysql.format(query, insert);
+    db.query(sql, (err, results) => {
+        const output = produceOutput(err, results, req.user, 'POST');
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    });
 });
 
 router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
@@ -120,21 +107,16 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
         updateUrlTable(databaseTabID, req.user);
     };
 
-    getDatabaseTime()
-        .then((currentTime) =>{
-            const query = 'Update tabs SET ?? = ? WHERE databaseTabID = ?';
-            const insert = [timeType, currentTime, databaseTabID];
-            const sql = mysql.format(query, insert);    
+    const query = 'Update tabs SET ?? = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) WHERE databaseTabID = ?';
+    const insert = [timeType, databaseTabID];
+    const sql = mysql.format(query, insert);    
 
-            db.query(sql, (err, result) => {
-                output = produceOutput(err, results, user, timeType);
-                const json_output = JSON.stringify(output);
-                res.send(json_output);
-            });
-        })
-        .catch((error) => {
-            res.send({ status: '400', message: 'Bad Request' })
-        })
+    db.query(sql, (err, result) => {
+        output = produceOutput(err, results, user, timeType);
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    });
+      
 });
 
 module.exports = router;

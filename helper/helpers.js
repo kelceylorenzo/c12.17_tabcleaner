@@ -112,26 +112,4 @@ module.exports = {
         console.log(output);
         return output;  
     },
-    getDatabaseTime(user, location, done) {
-        return new Promise((resolve, reject) => {
-            db.query("SELECT UNIX_TIMESTAMP();", (err, result) => {
-                if (err) {
-                    done(err)
-                    throw err;
-                } else {
-                    done(null, result)
-                    console.log(result);
-                }
-            })
-            function done(err, result) {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(
-                        result
-                    )
-                }
-            }
-        });
-    }
 };
