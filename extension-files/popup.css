@@ -145,6 +145,12 @@ a:focus {
 	display: none;
 }
 
+#webpage{
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
 #refresh {
 	font-size: 125%;
 	color: white;
