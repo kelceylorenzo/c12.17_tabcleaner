@@ -5,7 +5,7 @@ var inactiveTabCount = 0;
 function init() {
 	document.getElementById('refresh').addEventListener('click', refreshContent);
 	document.getElementById('logout').addEventListener('click', logoutUser);
-	document.getElementById('login').addEventListener('click', loginUser);
+	// document.getElementById('login').addEventListener('click', loginUser);
 
 	document.body.style.opacity = 0;
 	document.body.style.transition = 'opacity ease-out .4s';
@@ -93,11 +93,9 @@ function sendMessageToGetTabInfo() {
 }
 
 function hideLoginButtons() {
-	document.getElementById('webpage').style.display = 'block';
-	document.getElementById('logout').style.display = 'block';
-	document.getElementById('signup').style.display = 'none';
-	document.getElementById('login').style.display = 'none';
-	document.getElementById('signup-button').style.display = 'none';
+    document.getElementById("webpage").style.display = "flex";
+    document.getElementById("logout").style.display = "block";
+    document.getElementById("login").style.display = "none";
 }
 
 function refreshContent() {
@@ -117,12 +115,11 @@ function logoutUser() {
 	document.getElementById('webpage').style.display = 'none';
 	document.getElementById('logout').style.display = 'none';
 	document.getElementById('login').style.display = 'block';
-	document.getElementById('signup').style.display = 'flex';
 	document.getElementById('signup-button').style.display = 'flex';
 }
 
-function loginUser() {
-	port.postMessage({ type: 'login' });
-}
+// function loginUser() {
+// 	port.postMessage({ type: 'login' });
+// }
 
 init();

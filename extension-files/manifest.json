@@ -14,10 +14,10 @@
 		"storage",
 		"tabs",
 		"<all_urls>",
-		"http://localhost:9000/*",
-		"http://localhost:3000/*",
 		"http://www.closeyourtabs.com/*",
 		"http://closeyourtabs.com/*",
+		"http://localhost:5000/*",
+		"http://localhost:3000/*",
 		"cookies"
 	],
 	"background": {
@@ -25,7 +25,8 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["http://closeyourtabs.com/dashboard","http://closeyourtabs.com/dashboard#", "http://localhost:3000/*" ],
-			"js": ["contentscript.js"]		}
+			"run_at" :"document_end",
+			"matches": ["http://localhost:5000/*", "http://localhost:3000/*", "http://www.closeyourtabs.com/*", "http://closeyourtabs.com/*"],
+			"js": ["dashboard.js"]		}
 	]
 }

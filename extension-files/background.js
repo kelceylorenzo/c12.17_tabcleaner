@@ -1,5 +1,8 @@
+//send what time he thinks it is
+//get time stamp, and check for offset of zulu time
 var user;
 const BASE_URL = 'http://www.closeyourtabs.com';
+const COOKIE_NAME =  'connect.sid' 
 /**
  * User class keeps track of current tab information and logged in status
  */
@@ -13,11 +16,39 @@ class User {
 		this.photo = ''
 	}
 	login() {
-		this.loggedIn = true;
-		this.sendAllTabsToServer();
+		chrome.cookies.get({ url: BASE_URL, name: COOKIE_NAME }, function(cookie) {
+			if(cookie){
+				var date = new Date();
+				var currenttime = date.getTime();
+				var ifExpire = currenttime - cookie.expirationDate; 
+				if(ifExpire > 0){
+					console.log('user logged in');
+					user.loggedIn = true; 
+					clearPreviousTabData();
+					user.sendAllTabsToServer();
+				} else {
+					console.log('user NOT logged in');
+					user.loggedIn = false; 
+				}
+			}else {
+				console.log('user NOT logged in, no cookie');
+				user.loggedIn = false; 
+			}
+		});
 	}
 	logout() {
-		this.loggedIn = false;
+		chrome.cookies.remove({url: BASE_URL, name: COOKIE_NAME }, function(result){
+			console.log(result)
+			if(result.name === COOKIE_NAME){
+				console.log('success logout');
+				user.loggedIn = false;
+				requestToServerNoData('GET', `${BASE_URL}/auth/google/logout`);
+			} else {
+				console.log('fail logout')
+			}
+		})
+
+
 	}
 	sendAllTabsToServer() {
 		for (var window in this.tabsSortedByWindow) {
@@ -127,6 +158,7 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 	}
 
 	user.activeTabIndex[removeInfo.windowId] = null;
+
 
 	if (user.loggedIn) {
 		var tabObject = {};
@@ -276,30 +308,10 @@ chrome.runtime.onConnect.addListener(function(port) {
 		var responseObject = {};
 		responseObject.userStatus = user.loggedIn;
 		responseObject.allTabs = user.tabsSortedByWindow;
-
 		if (message.type == 'popup') {
-			if (user.loggedIn) {
-				//get request from database
 				port.postMessage({ sessionInfo: responseObject });
-			} else {
-				port.postMessage({ sessionInfo: responseObject });
-			}
 		} else if (message.type === 'logout') {
 			user.logout();
-			requestToServerNoData('GET', `${BASE_URL}/auth/google/logout`);
-		} else if (message.type === 'login') {
-			checkForUserAccount()
-				.then((resp) => {
-					if (resp) {
-						user.login();
-						port.postMessage({ loginStatus: true });
-					} else {
-						port.postMessage({ loginStatus: false });
-					}
-				})
-				.catch((error) => {
-					console.log(error);
-				});
 		} 
 	});
 });
@@ -550,19 +562,7 @@ function newExtensionSession() {
 		});
 	});
 	getAllTabs();
-	checkForUserAccount()
-		.then((resp) => {
-			if (resp) {
-				console.log('user logged in');
-				user.login();
-			} else {
-				console.log('user is not logged in ');
-				//show user this info
-			}
-		})
-		.catch((error) => {
-			console.log('ERROR', error);
-		});
+	user.login();
 }
 
 /**
@@ -605,6 +605,10 @@ chrome.windows.onCreated.addListener(function(window) {
 	newWindowForUser(window);
 });
 
+/**
+ * Listens for window removed
+ *@param {object} windowId
+ */
 chrome.windows.onRemoved.addListener(function(windowId) {
 	//remove all tabs from database
 	if (user.loggedIn) {
@@ -619,14 +623,20 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 	delete user.tabIds[windowId];
 });
 
-function findCookie() {
-	chrome.cookies.get({ url: BASE_URL, name: 'connect.sid' }, function(cookie) {
-		if (cookie) {
-			console.log('Sign-in cookie:', cookie);
-		}
-	});
-}
 
-// chrome.webNavigation.onHistoryStateUpdated.addListener(function(){
-// 	chrome.tabs.executeScript(null, { file: "content_script.js" }); 
-// })
+/**
+* Listens for messages from content script
+*@param {object} request
+*@param {object} sender
+*@param {function} sendResponse
+*/
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.type == "removeTab"){
+      console.log('remove tab')
+		} else if (request.type == "logoutUser"){
+      user.logout();
+		} else if(request.type === "checkLogin"){
+			user.login();
+		}
+  });
