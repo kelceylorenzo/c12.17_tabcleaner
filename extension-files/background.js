@@ -452,7 +452,6 @@ function createNewTabRequest(tabObject) {
 	xhr.onerror = function() {
 		user.logout();
 		console.log('connect error');
-		reject(false);
 	};
 	xhr.send(JSON.stringify(dataForServer));
 }
