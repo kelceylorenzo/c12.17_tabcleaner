@@ -104,7 +104,7 @@ module.exports = {
             if (result.length > 0) {
                 output.code = '200';
                 output.success = true;
-                output.data = results;
+                output.data = result;
 
             } else {
                 output.code ='404'
