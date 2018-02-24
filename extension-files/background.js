@@ -41,8 +41,10 @@ class User {
 			console.log(result)
 			if(result.name === COOKIE_NAME){
 				console.log('success logout');
-				user.loggedIn = false;
-				requestToServerNoData('GET', `${BASE_URL}/auth/google/logout`);
+				if(user.loggedIn){
+					window.open(`${BASE_URL}/auth/google/logout`);
+					user.loggedIn = false;
+				}
 			} else {
 				console.log('fail logout')
 			}
@@ -367,9 +369,18 @@ function sendDataToServer(method, action, data) {
 	xhr.open(method, action);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onreadystatechange = function() {
-		if ((xhr.readyState == 4) & (xhr.status === 200)) {
-			console.log(xhr.responseText);
+		if (xhr.readyState == 4) {
+			if(xhr.status === 200){
+				console.log(xhr.responseText);
+			} else {
+				user.logout();
+				console.log('connect error');
+			}
 		}
+	};
+	xhr.onerror = function() {
+		user.logout();
+		console.log('connect error');
 	};
 	xhr.send(JSON.stringify(data));
 }
@@ -383,9 +394,18 @@ function requestToServerNoData(method, route) {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
 			if (xhr.status === 200) {
-				console.log(xhr.responseText);
+				console.log(result, 'route ', route)
+				var result = JSON.parse(xhr.responseText);
+			} else {
+				user.logout();
+				console.log('no server')
 			}
 		}
+	};
+	xhr.onerror = function() {
+		user.logout();
+		console.log('connect error');
+		reject(false);
 	};
 	xhr.send();
 }
@@ -408,60 +428,33 @@ function createNewTabRequest(tabObject) {
 	xhr.open('POST', `${BASE_URL}/tabs`);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onreadystatechange = function() {
-		if ((xhr.readyState == 4) & (xhr.status === 200)) {
-			console.log(xhr.responseText);
-			if (JSON.parse(xhr.responseText).insertId) {
-				var result = JSON.parse(xhr.responseText).insertId;
-				var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index];
-				user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
-				if(tabObject.highlighted){
-					activateTimeTab(result);
+		if (xhr.readyState == 4) {
+			if (xhr.status === 200) {
+				var result = JSON.parse(xhr.responseText)
+				if (result.success) {
+					console.log('server connect', xhr.responseText)
+					var result = JSON.parse(xhr.responseText).insertId;
+					var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index];
+					user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
+					if(tabObject.highlighted){
+						activateTimeTab(result);
+					} else {
+						deactivateTimeTab(result, tabObj.url)
+					}
+				
 				} else {
-					deactivateTimeTab(result, tabObj.url)
+					user.logout();
+					console.log('server connect fail', xhr.responseText)
 				}
-			} else {
-				console.log('tab was not created');
 			}
 		}
 	};
 	xhr.onerror = function() {
-		reject('error');
+		user.logout();
+		console.log('connect error');
+		reject(false);
 	};
 	xhr.send(JSON.stringify(dataForServer));
-}
-
-/**
- *Check if user has an account
- */
-function checkForUserAccount() {
-	return new Promise((resolve, reject) => {
-		var xhr = new XMLHttpRequest();
-		xhr.open('GET',  `${BASE_URL}/auth/google/verify`, true);
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4) {
-				if (xhr.status == '200') {
-					var result = JSON.parse(xhr.responseText);
-					console.log(result);
-					if (result.success) {
-						userInfo = result.user;
-						user.name = userInfo.firstName; 
-						user.photo = userInfo.image; 
-						clearPreviousTabData();
-						resolve(true);
-					} else {
-						resolve(false);
-					}
-				} else {
-					resolve(false);
-				}
-			}
-		};
-		xhr.onerror = function() {
-			console.log('connect error');
-			reject(false);
-		};
-		xhr.send();
-	});
 }
 
 /**
