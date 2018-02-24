@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
+import axios from "axios";
 
-import AboutPage from './about-page';
-import Header from './header';
-import StatsPage from './stats-page';
-import SettingsPage from './settings';
-import TopTenPage from './top-ten-page';
-import MainSidebar from './main-sidebar';
-import MainTabArea from './main-tab-area';
+import AboutPage from "./about-page";
+import Header from "./header";
+import StatsPage from "./stats-page";
+import SettingsPage from "./settings";
+import TopTenPage from "./top-ten-page";
+import MainSidebar from "./main-sidebar";
+import MainTabArea from "./main-tab-area";
 
-import headerData from './header-data.js';
-import data from '../assets/data/data';
-import tab from './tab';
+import headerData from "./header-data.js";
+import data from "../assets/data/data";
+import tab from "./tab";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -20,8 +20,8 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: 'window',
-			viewChange: 'grid'
+			sortType: "window",
+			viewChange: "grid"
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -42,26 +42,26 @@ class MainPage extends Component {
 	}
 
 	verifyLogIn() {
-		axios.get(`/auth/google/verify`).then((resp) => {
-			console.log('Verify response: ', resp);
-			if (resp.data) {
-				console.log('this.props for verify: ', this.props);
-				console.log('Axios Response object: ', resp);
-				console.log('getData called');
+		axios.get(`/auth/google/verify`).then(resp => {
+			console.log("Verify response: ", resp);
+			if (resp.data.success) {
+				console.log("this.props for verify: ", this.props);
+				console.log("Axios Response object: ", resp);
+				console.log("getData called");
 				this.getData();
-				this.props.history.push('/dashboard');
+				this.props.history.push("/dashboard");
 			} else {
-				console.log('Not logged in');
-				this.props.history.push('/');
+				console.log("Not logged in");
+				this.props.history.push("/");
 			}
 		});
 	}
 
 	getData() {
-		axios.get('/tabs').then((resp) => {
-			console.log('GET response for /tabs: ', resp.data);
-			console.log('Resp.data.data: ', resp.data.data);
-			resp.data.data.map((currentItem) => {
+		axios.get("/tabs").then(resp => {
+			console.log("GET response for /tabs: ", resp.data);
+			console.log("Resp.data.data: ", resp.data.data);
+			resp.data.data.map(currentItem => {
 				return (currentItem.selected = false);
 			});
 			this.setState(
@@ -75,8 +75,8 @@ class MainPage extends Component {
 	}
 
 	async logOut() {
-		await axios.get('auth/google/logout');
-		console.log('you are logged out');
+		await axios.get("auth/google/logout");
+		console.log("you are logged out");
 	}
 
 	handleRefresh() {
@@ -87,7 +87,7 @@ class MainPage extends Component {
 		this.setState({
 			viewChange: view
 		});
-		console.log('Handle view button clicked: ', view);
+		console.log("Handle view button clicked: ", view);
 	}
 
 	handleIndividualSelect(item) {
@@ -112,7 +112,7 @@ class MainPage extends Component {
 		let { tabsList } = this.state;
 
 		switch (sortType) {
-			case 'az':
+			case "az":
 				tabsList.sort((a, b) => {
 					let titleA = a.tabTitle;
 					let titleB = b.tabTitle;
@@ -126,7 +126,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'za':
+			case "za":
 				tabsList.sort((a, b) => {
 					let titleA = a.tabTitle;
 					let titleB = b.tabTitle;
@@ -140,7 +140,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'time':
+			case "time":
 				//currently sorted from oldest >>> newest in terms of activationTime
 				//glitches out sometimes
 				tabsList.sort((a, b) => {
@@ -156,7 +156,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'window':
+			case "window":
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
 					if (output[tabsList[i].windowID]) {
@@ -200,7 +200,7 @@ class MainPage extends Component {
 		let { selectedTabs } = this.state;
 
 		for (let tab of selectedTabs) {
-			let newTab = window.open(tab.url, '_blank');
+			let newTab = window.open(tab.url, "_blank");
 			newTab.focus();
 		}
 		this.deselectAll();
@@ -227,12 +227,12 @@ class MainPage extends Component {
 
 	handleUtilityClick(item, selectedType) {
 		switch (selectedType) {
-			case 'open':
+			case "open":
 				item.selected = false;
 				this.handleIndividualSelect(item);
 				this.openSingleTab(item);
 				break;
-			case 'close':
+			case "close":
 				this.closeSingleTab(item);
 				break;
 			default:
@@ -241,7 +241,7 @@ class MainPage extends Component {
 	}
 
 	openSingleTab(item) {
-		let newTab = window.open(item.url, '_blank');
+		let newTab = window.open(item.url, "_blank");
 		newTab.focus();
 	}
 
@@ -260,7 +260,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = true;
 			selectedTabs.push(index);
 		});
@@ -277,7 +277,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = false;
 		});
 
@@ -304,7 +304,7 @@ class MainPage extends Component {
 						/>
 						<MainTabArea
 							select={this.handleIndividualSelect}
-							sort={(sortType) => this.handleSort(sortType)}
+							sort={sortType => this.handleSort(sortType)}
 							sortType={this.state.sortType}
 							tabData={this.state.tabsList}
 							utilityClick={this.handleUtilityClick}
