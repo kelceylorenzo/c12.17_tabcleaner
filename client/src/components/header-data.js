@@ -11,6 +11,10 @@ export default [
 		name: "ABOUT",
 		to: "/about"
 	},
+	{
+		name: "FAQ",
+		to: '/FAQ'
+	},
 	// {
 	// 	name: 'LOG OUT',
 	// 	to: '/',
