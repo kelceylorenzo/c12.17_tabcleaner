@@ -10,7 +10,7 @@ import TopTenPage from './top-ten-page';
 import headerData from './header-data.js';
 
 import '../assets/css/app.css';
-  
+
 class App extends Component {
 	render() {
 		return (
