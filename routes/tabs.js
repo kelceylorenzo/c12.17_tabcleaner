@@ -115,7 +115,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results) => {
-        output = produceOutput(err, results, user, timeType);
+        output = produceOutput(err, results, req.user, req.params.time);
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
