@@ -21,7 +21,7 @@ db.connect((err) => {
 router.get('/', ensureAuthenticated, (req, res) => {
     getDatabaseTime()
         .then((currentTime) => {
-            const query = 'SELECT * FROM tabs WHERE googleID = ?';
+            const query = 'SELECT *, NOW() AS currentTime FROM tabs WHERE googleID = ?';
             const insert = req.user.googleID;
             const sql = mysql.format(query, insert);
             db.query(sql, function (err, result) {
@@ -48,7 +48,7 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
                 windowID, tabTitle, currentTime, browserTabIndex, googleID, url, favicon, screenshot];
             const sql = mysql.format(query, insert);
             db.query(sql, (err, results) => {
-                const output = produceOutput(err, result, req.user, 'POST');
+                const output = produceOutput(err, results, req.user, 'POST');
                 const json_output = JSON.stringify(output);
                 res.send(json_output);
             });
