@@ -35,11 +35,12 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const googleID = req.user.googleID;
     const { windowID, tabTitle, browserTabIndex, url, favicon, screenshot } = req.body;
 
-    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const insert = ['tabs', 'windowID', 'tabTitle', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
         windowID, tabTitle, 'ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)', browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
     db.query(sql, (err, results) => {
+        console.log(err);
         const output = produceOutput(err, results, req.user, 'POST');
         const json_output = JSON.stringify(output);
         res.send(json_output);

@@ -92,11 +92,8 @@ module.exports = {
     produceOutput: function (err, result, user, location) {
         const output = {
             type: location,
-            user: user,
             success: false,
             data: result,
-            code: '500',
-            message: ""
         };
         if (err) {
             output.message = 'Failed to get tab info';
