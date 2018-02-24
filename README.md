@@ -5,11 +5,15 @@
 > (Name Pending) seeks to organize your tabs and display usage of active and inactive tabs in order to improve your productivity.
 
 ## keys.js.template
-> googleClientID : From google api credentials
-> googleClientSecret : From google api credentials
 
-## mysqlCredentials.js
->   host: ip of server hosting mysql server
->   user: username of mysql server user
->   password: password of mysql server user
->   database: name of database in mysql server
+### googleCredentials:
+>   googleClientID : From google api credentials <br>
+>   googleClientSecret : From google api credentials <br>
+
+
+### mysqlCredentials:
+>   host: ip of server hosting mysql server <br>
+>   user: username of mysql server user <br>
+>   password: password of mysql server user <br>
+>   database: name of database in mysql server <br>
+

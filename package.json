@@ -1,33 +1,33 @@
 {
-  "name": "ctrl-tab-del",
-  "version": "1.0.0",
-  "description": "App to share public or write private stories",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "server": "nodemon app.js",
-    "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "acho \"Error: no test specified\" && exit1 "
-  },
-  "author": "James Kirsch",
-  "license": "ISC",
-  "dependencies": {
-    "bfg": "^0.3.0",
-    "body-parser": "^1.18.2",
-    "bundle": "^2.1.0",
-    "concurrently": "^3.5.1",
-    "cookie-parser": "^1.4.3",
-    "cookie-session": "^2.0.0-beta.3",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "mysql": "^2.15.0",
-    "nodemon": "^1.14.12",
-    "passport": "^0.4.0",
-    "passport-google-oauth20": "^1.0.0"
-  },
-  "devDependegncies": {
-    "concurrently": "^3.5.1",
-    "nodemon": "^1.14.12"
-  }
+	"name": "close-your-tabs",
+	"version": "1.0.0",
+	"description": "App to share public or write private stories",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js",
+		"server": "nodemon app.js",
+		"client": "npm run start --prefix client",
+		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"test": "acho \"Error: no test specified\" && exit1 "
+	},
+	"author": "James Kirsch",
+	"license": "ISC",
+	"dependencies": {
+		"bfg": "^0.3.0",
+		"body-parser": "^1.18.2",
+		"bundle": "^2.1.0",
+		"concurrently": "^3.5.1",
+		"cookie-parser": "^1.4.3",
+		"cookie-session": "^2.0.0-beta.3",
+		"express": "^4.16.2",
+		"express-session": "^1.15.6",
+		"mysql": "^2.15.0",
+		"nodemon": "^1.14.12",
+		"passport": "^0.4.0",
+		"passport-google-oauth20": "^1.0.0"
+	},
+	"devDependegncies": {
+		"concurrently": "^3.5.1",
+		"nodemon": "^1.14.12"
+	}
 }
