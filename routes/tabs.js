@@ -25,10 +25,8 @@ router.get('/', ensureAuthenticated, (req, res) => {
             const insert = req.user.googleID;
             const sql = mysql.format(query, insert);
             db.query(sql, function (err, result) {
-                const output = {
-                    data: produceOutput(err, result, req.user, 'GET'),
-                    currentTime: currentTime
-                }
+                const output = produceOutput(err, result, req.user, 'GET');
+                output.currentTime = currentTime;
                 const json_output = JSON.stringify(output);
                 res.send(json_output);
             });
