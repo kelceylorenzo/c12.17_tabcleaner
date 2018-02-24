@@ -12,7 +12,7 @@ import headerData from './header-data.js';
 import '../assets/css/app.css';
   
 class App extends Component {
-	render() {\
+	render() {
 		return (
 			<div className="app">
 				<Switch>
