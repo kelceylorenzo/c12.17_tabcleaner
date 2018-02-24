@@ -109,8 +109,8 @@ module.exports = {
                 output.message = 'No data for user';
             }
         }
-        return output;
         console.log(output);
+        return output;  
     },
     getDatabaseTime(user, location, done) {
         return new Promise((resolve, reject) => {
