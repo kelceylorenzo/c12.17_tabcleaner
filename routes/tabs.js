@@ -35,9 +35,9 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const googleID = req.user.googleID;
     const { windowID, tabTitle, browserTabIndex, url, favicon, screenshot } = req.body;
 
-    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000), ?, ?, ?, ?, ?)';
     const insert = ['tabs', 'windowID', 'tabTitle', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
-        windowID, tabTitle, 'ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)', browserTabIndex, googleID, url, favicon, screenshot];
+        windowID, tabTitle, browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
     db.query(sql, (err, results) => {
         console.log(err);
@@ -109,7 +109,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     };
 
     const query = 'Update tabs SET ?? = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) WHERE databaseTabID = ?';
-    const insert = [timeType, databaseTabID];
+    const insert = [req.params.time, databaseTabID];
     const sql = mysql.format(query, insert);    
 
     db.query(sql, (err, result) => {
