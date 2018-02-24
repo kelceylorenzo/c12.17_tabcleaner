@@ -99,7 +99,7 @@ module.exports = {
             message: ""
         };
         if (err) {
-            res.send('Failed to get tab info');
+            output.message = 'Failed to get tab info';
         } else {
             if (result.length > 0) {
                 output.code = '200';
