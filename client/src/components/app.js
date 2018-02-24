@@ -8,6 +8,7 @@ import MainPage from './main-page';
 import AboutPage from './about-page';
 import TopTenPage from './top-ten-page';
 import headerData from './header-data.js';
+import FAQpage from './faq';
 
 import '../assets/css/app.css';
 
@@ -20,6 +21,7 @@ class App extends Component {
 					<Route path="/dashboard" component={MainPage} />
 					<Route path="/about" component={AboutPage} />
 					<Route path="/top-ten" component={TopTenPage} />
+					<Route path="/FAQ" component={FAQpage} />
 					<Redirect to="/" />
 				</Switch>
 			</div>

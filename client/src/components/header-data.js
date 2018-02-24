@@ -11,4 +11,8 @@ export default [
 		name: "ABOUT",
 		to: "/about"
 	},
+	{
+		name: "FAQ",
+		to: '/FAQ'
+	}
 ];
