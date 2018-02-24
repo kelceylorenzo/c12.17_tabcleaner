@@ -4,15 +4,15 @@ const path = require('path');
 const { mysqlCredentials } = require('../config/keys');
 const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
-const { ensureAuthenticated, 
-        checkIfTableExists, 
-        updateUrlTable, 
-        produceOutput, 
-        getDatabaseTime } = require('../helper/helpers');
+const { ensureAuthenticated,
+    checkIfTableExists,
+    updateUrlTable,
+    produceOutput,
+    getDatabaseTime } = require('../helper/helpers');
 
 
 
-        
+
 db.connect((err) => {
     if (err) throw err;
     console.log("Connected to remote DB");
@@ -20,15 +20,15 @@ db.connect((err) => {
 
 router.get('/', ensureAuthenticated, (req, res) => {
 
-        const query = 'SELECT *, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE googleID = ?';
-        const insert = req.user.googleID;
-        const sql = mysql.format(query, insert);
+    const query = 'SELECT *, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE googleID = ?';
+    const insert = req.user.googleID;
+    const sql = mysql.format(query, insert);
 
-        db.query(sql, function (err, result) {
-            const output = produceOutput(err, result, req.user, 'GET');
-            const json_output = JSON.stringify(output);
-            res.send(json_output);
-        });
+    db.query(sql, (err, results) => {
+        const output = produceOutput(err, results, req.user, 'GET');
+        const json_output = JSON.stringify(output);
+        res.send(json_output);
+    });
 });
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
@@ -51,14 +51,16 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
 
     let sql;
 
+    const { databaseTabID } = req.body;
+
     if (req.params.deleteSource === 'google') {
         const query = 'DELETE FROM tabs WHERE googleID = ?';
         sql = mysql.format(query, req.user.googleID);
     }
     if (req.params.deleteSource === 'database') {
         const query = 'DELETE FROM tabs WHERE databaseTabID = ? AND googleID = ?';
-        sql = mysql.format(query, [req.body.databaseTabID, req.user.googleID])
-        updateUrlTable(req.body.databaseTabID);
+        sql = mysql.format(query, [databaseTabID, req.user.googleID])
+        updateUrlTable(databaseTabID, req.user);
     }
 
     db.query(sql, (err, results) => {
@@ -110,14 +112,14 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     const query = 'Update tabs SET ?? = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) WHERE databaseTabID = ?';
     const insert = [req.params.time, databaseTabID];
-    const sql = mysql.format(query, insert);    
+    const sql = mysql.format(query, insert);
 
-    db.query(sql, (err, result) => {
+    db.query(sql, (err, results) => {
         output = produceOutput(err, results, user, timeType);
         const json_output = JSON.stringify(output);
         res.send(json_output);
     });
-      
+
 });
 
 module.exports = router;
