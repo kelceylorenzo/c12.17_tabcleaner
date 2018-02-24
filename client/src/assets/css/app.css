@@ -126,8 +126,13 @@ body {
 }
 
 .nav-link {
-	color: inherit;
+	color: lightgrey;
 	margin: auto;
+}
+
+.log-out-link {
+	text-decoration: none;
+	color: lightgrey;
 }
 
 #log-out-button:hover {
@@ -362,12 +367,11 @@ body {
 
 .side-bar-container > button:nth-child(2):active {
 	background-color: rgba(156, 95, 88, 0.75);
-
 }
 
 .side-bar-container > button:nth-child(3):active,
 button:nth-child(4):active {
-		background-color: rgba(26, 54, 74, 1);
+	background-color: rgba(26, 54, 74, 1);
 }
 
 .side-bar-container > button:focus {
@@ -395,6 +399,22 @@ button:nth-child(4):active {
 .list-view-button,
 .refresh-button {
 	cursor: pointer;
+}
+
+.grid-view-button,
+.list-view-button {
+	color: black;
+}
+
+#grid-view-button-active,
+#list-view-button-active {
+	color: black;
+}
+
+.grid-view-button:hover,
+.list-view-button:hover,
+.refresh-button:hover {
+	color: rgba(212, 167, 129, 1);
 }
 
 .sort-by-menu {
@@ -565,7 +585,6 @@ button:nth-child(4):active {
 	padding: 0 15%;
 }
 
-
 .tab-utility {
 	font-size: 20px;
 }
@@ -672,4 +691,16 @@ button:nth-child(4):active {
 
 .page:hover .screenshot-container > img {
 	filter: blur(1px);
+}
+
+.icon-color {
+	color: inherit;
+}
+
+.selected {
+	color: black;
+}
+
+.notselected {
+	color: lightgrey;
 }

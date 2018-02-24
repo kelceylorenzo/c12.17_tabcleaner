@@ -24,7 +24,7 @@ export default props => {
 					//  onClick={props.logOut}
 					 >
 						<div className="nav-link">
-							<a href="/auth/google/logout">LOG OUT</a>
+							<a className="log-out-link"href="/auth/google/logout">LOG OUT</a>
 						</div>
 					</div>
 				</div>
