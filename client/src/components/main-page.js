@@ -143,7 +143,7 @@ class MainPage extends Component {
 			case 'time':
 				tabsList.sort((a, b) => {
 					let timeA = a.currentTime - a.deactivatedTime;
-					let timeB = b.currentTime - b.activatedTime;
+					let timeB = b.currentTime - b.deactivatedTime;
 
 					if (timeA > timeB) {
 						return -1;
