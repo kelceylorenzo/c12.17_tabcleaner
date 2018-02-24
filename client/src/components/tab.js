@@ -15,9 +15,7 @@ export default (props) => {
 		selectStyle.display = 'flex';
 	}
 
-	let currentTime = new Date();
-	currentTime = currentTime.getTime();
-	let inactiveElapsedTime = currentTime - props.item.deactivatedTime;
+	let inactiveElapsedTime = props.item.currentTime - props.item.deactivatedTime;
 
 	if (inactiveElapsedTime < 10000 || props.item.tabTitle === 'Close Your Tabs') {
 		tabStyle.backgroundColor = '';
