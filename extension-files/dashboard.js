@@ -1,6 +1,6 @@
 const BASE_URL = 'www.closeyourtabs.com';
 const COOKIE_NAME =  'connect.sid'; 
-console.log('CROUTON 4 PREZ');
+console.log('give Nick a high five');
 
 function init(){
     checkUserLoginStatus();
