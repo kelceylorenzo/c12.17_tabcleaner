@@ -101,7 +101,7 @@ module.exports = {
         if (err) {
             res.send('Failed to get tab info');
         } else {
-            if (results.length > 0) {
+            if (result.length > 0) {
                 output.code = '200';
                 output.success = true;
                 output.data = results;
