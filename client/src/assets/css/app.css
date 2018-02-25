@@ -31,10 +31,23 @@ body {
 	width: 6%;
 }
 
+.home-showcase-selected{
+	color: rgba(44, 91, 124, 1);
+}
+
+.home-showcase-notselected{
+	color: rgba(44, 91, 124, .3);
+}
+
+.showcase {
+	color:inherit
+}
+
 .home-showcase {
 	margin: auto;
 	height: 20%;
-	color: rgb(44, 91, 124);
+	/* color: rgba(44, 91, 124, 1); */
+	cursor: pointer
 }
 
 .landing-page-container,
@@ -747,3 +760,4 @@ button:nth-child(4):active {
 .page:hover .screenshot-container > img {
 	filter: blur(1px);
 }
+
