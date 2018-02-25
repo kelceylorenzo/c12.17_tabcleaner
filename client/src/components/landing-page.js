@@ -26,23 +26,23 @@ class LandingPage extends Component {
 	render() {
 		return (
 			<div className="home-page-container">
-				<div className="home-showcase-container">
-					<div className="home-showcase">
-						<i className="fas fa-circle" />
+					 <div className="home-showcase-container"> 
+						<div className="home-showcase">
+							<i className="fas fa-circle" />
+						</div>
+						<div className="home-showcase">
+							<i className="fas fa-circle" />
+						</div>
+						<div className="home-showcase">
+							<i className="fas fa-circle" />
+						</div>
+						<div className="home-showcase">
+							<i className="fas fa-circle" />
+						</div>
 					</div>
-					<div className="home-showcase">
-						<i className="fas fa-circle" />
-					</div>
-					<div className="home-showcase">
-						<i className="fas fa-circle" />
-					</div>
-					<div className="home-showcase">
-						<i className="fas fa-circle" />
-					</div>
-				</div>
 				<div className="landing-page-container">
 					<div className="landing-page-title-container">
-						<img className="logo" src={image} alt="" />{' '}
+						<img className="logo" src={image} alt="" />
 						<p className="landing-page-title">CLOSE YOUR TABS</p>
 						<p className="landing-page-subtitle">Keep tabs on your tabs</p>
 					</div>
@@ -56,6 +56,7 @@ class LandingPage extends Component {
 						</a>
 					</div>
 				</div>
+			
 				<div className="next-section-button intro">
 					<p>What is Close Your Tabs?</p>
 				</div>
