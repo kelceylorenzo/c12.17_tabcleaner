@@ -20,10 +20,14 @@ port.onMessage.addListener(function(response) {
 	if (response.sessionInfo) {
 		var windows = response.sessionInfo.allTabs;
 		for (var window in windows) {
+			var windowSpacer = document.createElement('br');
+			document.getElementById('tag-titles').appendChild(windowSpacer);
+			var windowTabContainer = document.createElement('div');
+
 			for (var item in windows[window]) {
 				var tabInfo = windows[window][item];
 				var tabElement = createDomElement(tabInfo);
-				document.getElementById('tag-titles').appendChild(tabElement);
+				windowTabContainer.appendChild(tabElement);
 				if (tabInfo.inactiveTimeElapsed > 25000) {
 					inactiveTabCount++;
 				}
@@ -31,6 +35,14 @@ port.onMessage.addListener(function(response) {
 			if (response.sessionInfo.userStatus) {
 				hideLoginButtons();
 			}
+
+			if(window == response.sessionInfo.currentWindow){
+				console.log('current window ', window)
+				document.getElementById('tag-titles').prepend(windowTabContainer);
+			}else {
+				document.getElementById('tag-titles').appendChild(windowTabContainer);
+			}
+
 		}
 		setBadge(inactiveTabCount);
 	} else if (response.loginStatus) {

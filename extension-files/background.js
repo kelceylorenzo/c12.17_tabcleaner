@@ -320,12 +320,6 @@ chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
 */
 chrome.tabs.onAttached.addListener(function(tabId, attachInfo){
 	user.tabIds[attachInfo.newWindowId].push(tabId);
-  //if the index of the attached is less than the current active, add 1 to the current active 
-  // var windowTabs = user.tabsSortedByWindow[attachInfo.newWindowId];
-  // var currentActiveIndex = user.activeTabIndex[attachInfo.newWindowId];
-  // if(currentActiveIndex > attachInfo.newPosition){
-  //   user.activeTabIndex[attachInfo.newWindowId] = currentActiveIndex++; 
-  // }
 })
 
 /**
@@ -338,11 +332,14 @@ chrome.runtime.onConnect.addListener(function(port) {
 	console.assert(port.name == 'tab');
 	port.onMessage.addListener(function(message) {
 		updatedElaspedDeactivation();
-		var responseObject = {};
-		responseObject.userStatus = user.loggedIn;
-		responseObject.allTabs = user.tabsSortedByWindow;
 		if (message.type == 'popup') {
+			chrome.windows.getCurrent(function(window){
+				var responseObject = {};
+				responseObject.userStatus = user.loggedIn;
+				responseObject.allTabs = user.tabsSortedByWindow;
+				responseObject.currentWindow = window.id;
 				port.postMessage({ sessionInfo: responseObject });
+			})
 		} else if (message.type === 'logout') {
 			user.logout();
 		} 
@@ -644,7 +641,6 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 	delete user.activeTabIndex[windowId];
 	delete user.tabIds[windowId];
 });
-
 
 /**
 * Listens for messages from content script
