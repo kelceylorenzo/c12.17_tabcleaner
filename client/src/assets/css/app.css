@@ -34,7 +34,12 @@ body {
 .home-showcase {
 	margin: auto;
 	height: 20%;
-	color: rgb(44, 91, 124);
+	color: rgba(44, 91, 124, 0.5);
+	cursor: pointer;
+}
+
+.home-showcase:hover {
+	color: rgba(44, 91, 124, 1);
 }
 
 .landing-page-container,
@@ -89,7 +94,8 @@ body {
 	margin-top: 2%;
 }
 
-.login-button {
+.login-button,
+.getting-started-button {
 	font-size: 1.2em;
 	font-weight: 800;
 	text-decoration: none;
@@ -103,7 +109,8 @@ body {
 	width: 15%;
 }
 
-.login-button:hover {
+.login-button:hover,
+.getting-started-button:hover {
 	border: 3px solid rgba(255, 255, 255, 0.6);
 	color: rgba(255, 255, 255, 0.85);
 	background-color: rgba(86, 135, 132, 1);
@@ -117,6 +124,38 @@ body {
 
 .introduction-content-container {
 	width: 50%;
+}
+
+.landing-page-subtitle.extension-dashboard {
+	margin: auto auto 0 auto;
+}
+
+.extension-dashboard-content {
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+	margin: 2% auto auto auto;
+}
+
+.extension-content,
+.dashboard-content {
+	width: 45%;
+	text-align: justify;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.getting-started-button-container {
+	width: 40%;
+	display: flex;
+	flex-direction: column;
+}
+
+.getting-started-button {
+	width: 50%;
+	margin: 1% auto;
+	padding: 3%;
 }
 
 .next-section-button {
