@@ -93,9 +93,11 @@ class LandingPage extends Component {
 					<div className="introduction-content-container">
 						<p className="landing-page-subtitle">Isn’t it time to close some of those tabs?</p>
 						<p className="landing-page-content">
-							It's simple. Using our Chrome Extension and Dashboard, Close Your Tabs keeps track of the
-							last time you've visited each of your currently open browser tabs and color-codes them
-							accordingly.
+
+							It's simple. Using our Chrome Extension and Dashboard, Close Your Tabs keeps track of
+							the last time you've visited each of your currently open browser tabs across all open
+							windows and color-codes them accordingly.
+
 						</p>
 					</div>
 				</div>
@@ -106,9 +108,30 @@ class LandingPage extends Component {
 					<p>Extension & Dashboard</p>
 				</div>
 
-				<div className="extension-dashboard-container" ref={"extension"}>
-					<div className="landing-page-title-container">
-						<p className="landing-page-subtitle">Two ways to Close Your Tabs</p>
+
+// 				<div className="extension-dashboard-container" ref={"extension"}>
+// 					<div className="landing-page-title-container">
+// 						<p className="landing-page-subtitle">Two ways to Close Your Tabs</p>
+
+				<div className="extension-dashboard-container" ref={"extension}>
+					<p className="landing-page-subtitle extension-dashboard">Two ways to Close Your Tabs</p>
+					<div className="extension-dashboard-content">
+						<div className="extension-content">
+							<p className="landing-page-content">
+								Use the extension and its popup window for quick access to your tabs and their
+								current statuses.
+							</p>
+							<img src={placeholder} alt="" />
+						</div>
+						<div className="dashboard-content">
+							<p className="landing-page-content">
+								Use the dashboard, accessible through our web portal, for more in depth details
+								about your tabs and the ability to open or close multiple tabs with a few simple
+								clicks.
+							</p>
+							<img src={placeholder} alt="" />
+						</div>
+
 					</div>
 				</div>
 				<div
@@ -120,6 +143,20 @@ class LandingPage extends Component {
 				<div className="getting-started-container" ref={"get-started"}>
 					<div className="landing-page-title-container">
 						<p className="landing-page-subtitle">Let's Get Started</p>
+						<p className="landing-page-content">
+							Download the extension, log in, and keep tabs on your tabs.
+						</p>
+					</div>
+					<div className="getting-started-button-container">
+						<a className="getting-started-button" href="">
+							GET THE EXTENSION
+						</a>
+						<a className="getting-started-button" href="/auth/google/">
+							SIGN UP
+						</a>
+						<a className="getting-started-button" href="/auth/google/">
+							LOG IN
+						</a>
 					</div>
 				</div>
 				<div className="next-section-button faq-link">
