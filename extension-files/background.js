@@ -211,6 +211,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 
 
 
+
+
+
 /**
 * Listens for when a tab becomes active by user clicking on the tab
 *@param {object} activeInfo includes props about the tab clicked
