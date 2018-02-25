@@ -4,12 +4,17 @@ const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = {
     ensureAuthenticated: function (req, res, next) {
+        console.log(req);
+        console.log(req.user);
         if (req.user) {
-            console.log('req.user: ', req.user.googleID);
+            console.log('req.user: ', req.user.givenName);
             return next();
         } else {
             console.log('This is the ensureAuthentication saying that the user is not autheticated.');
-            res.redirect('/auth/google');
+            res.send({
+                success: false,
+                message: 'Authentication failed, no user present.'
+            })
         }
     },
     checkIfTableExists: function (req, res, next) {
@@ -89,7 +94,7 @@ module.exports = {
             })
         })
     },
-    produceOutput: function (err, result, user, location) {
+    produceOutput: function (err, result, location) {
         const output = {
             type: location,
             success: false,
@@ -107,11 +112,11 @@ module.exports = {
             }
         }
         if(location === 'GET'){
-            console.log(output.success);
+            console.log('');
         } else {
             console.log(output);
         }
-        
-        return output;  
+        const json_output = JSON.stringify(output);
+        return json_output;  
     },
 };

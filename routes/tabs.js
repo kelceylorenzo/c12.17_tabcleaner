@@ -26,9 +26,9 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
     db.query(sql, (err, results) => {
         const output = produceOutput(err, results, req.user, 'GET');
-        const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(output);
     });
+
 });
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
@@ -39,12 +39,13 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const insert = ['tabs', 'windowID', 'tabTitle', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
         windowID, tabTitle, browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
+
     db.query(sql, (err, results) => {
         console.log(err);
         const output = produceOutput(err, results, req.user, 'POST');
-        const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(output);
     });
+
 });
 
 router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
@@ -57,6 +58,7 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
         const query = 'DELETE FROM tabs WHERE googleID = ?';
         sql = mysql.format(query, req.user.googleID);
     }
+
     if (req.params.deleteSource === 'database') {
         const query = 'DELETE FROM tabs WHERE databaseTabID = ? AND googleID = ?';
         sql = mysql.format(query, [databaseTabID, req.user.googleID])
@@ -65,9 +67,9 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
 
     db.query(sql, (err, results) => {
         const output = produceOutput(err, results, req.user, 'DELETE');
-        const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(output);
     });
+
 });
 
 router.put('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
@@ -80,8 +82,7 @@ router.put('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     db.query(sql, (err, results) => {
         const output = produceOutput(err, results, req.user, 'UPDATE');
-        const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(output);
     });
 
 });
@@ -96,8 +97,7 @@ router.put('/move', ensureAuthenticated, (req, res) => {
 
     db.query(sql, (err, results, fields) => {
         const output = produceOutput(err, results, req.user, 'MOVE');
-        const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(output);
     });
 
 });
@@ -116,8 +116,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     db.query(sql, (err, results) => {
         output = produceOutput(err, results, req.user, req.params.time);
-        const json_output = JSON.stringify(output);
-        res.send(json_output);
+        res.send(output);
     });
 
 });
