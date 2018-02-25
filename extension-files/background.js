@@ -75,8 +75,9 @@ class User {
 *@param {object} currentTime
 */
 function createNewTab(tab, currentTime){
-
-  user.tabIds[tab.windowId].push(tab.id);
+	if(user.tabIds[tab.windowId].indexOf(tab.id) === -1){
+		user.tabIds[tab.windowId].push(tab.id);
+	}
 
   var tabObject = {
     id: tab.id,
@@ -92,25 +93,29 @@ function createNewTab(tab, currentTime){
     highlighted: tab.highlighted
 
   }
-  if(tabObject.highlighted){
-    tabObject.timeOfActivation = currentTime;
-    tabObject.timeOfDeactivation = 0;  
-  } else {
-    tabObject.timeOfActivation = 0;
-    tabObject.timeOfDeactivation = currentTime;  
-  } 
   
   var tabArray = user.tabsSortedByWindow[tab.windowId]; 
   if(tabObject.index < tabArray.length){
-		if(tabObject.highlighted){
-			user.activeTabIndex[tab.windowId]++;
+		var currentActiveTab = user.activeTabIndex[tab.windowId];
+		if(tab.index <= currentActiveTab){
+			user.activeTabIndex[tabObject.windowId]--; 
 		}
     user.tabsSortedByWindow[tabObject.windowId].splice(tabObject.index, 0, tabObject);
 		var nextIndex = tab.index + 1; 
     updateIndex(nextIndex, (user.tabsSortedByWindow[tabObject.windowId].length - 1), tabObject.windowId);
   } else {
     user.tabsSortedByWindow[tab.windowId].push(tabObject);
-  }
+	}
+	
+	if(tabObject.highlighted){
+		user.activeTabIndex[tab.windowId] = tab.index; 
+    tabObject.timeOfActivation = currentTime;
+    tabObject.timeOfDeactivation = 0;  
+  } else {
+    tabObject.timeOfActivation = 0;
+    tabObject.timeOfDeactivation = currentTime;  
+	} 
+	
   return tabObject;
 }
 
@@ -118,7 +123,6 @@ function createNewTab(tab, currentTime){
 
 * Updates a Tab object and returns an object to send to server 
 *@param {object} tab 
-*@param {object} timeStamp
 *@return {object} dataForServer
 */
 
@@ -189,6 +193,7 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
+
 		// chrome.tabs.executeScript(null, { file: "content_script.js" }); 
     chrome.tabs.captureVisibleTab({quality: 50},function(dataUrl){
       tab.screenshot = dataUrl; 
@@ -209,7 +214,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   }
 })
 
+chrome.tabs.onCreated.addListener(function(tab){
+		var timeStamp = getTimeStamp();
+		var newTab = createNewTab(tab, timeStamp);
+		if(user.loggedIn){
+				createNewTabRequest(newTab);
+		}
 
+})
 
 
 
@@ -221,23 +233,27 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
+		console.log('tab highlighted')
+
     var timeStamp = getTimeStamp();
-		var previousIndex = user.activeTabIndex[tab.windowId];
-		updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp);
-    // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
-    if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
-			// var tabUpdated = updateTabInformation(tab, timeStamp);
-			user.activeTabIndex[tab.windowId] = tab.index;
-			user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
+		// var previousIndex = user.activeTabIndex[tab.windowId];
+		updatePreviousHighlightedTab(user.activeTabIndex[tab.windowId], tab.windowId, timeStamp, tab.url);
+
+		// var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
+		if (user.tabsSortedByWindow[tab.windowId].length !== user.tabIds[tab.windowId].length){
+			var timeStamp = getTimeStamp();
+			var newTab = createNewTab(tab, timeStamp);
+			if(user.loggedIn){	
+					createNewTabRequest(newTab);
+			}
+		} else if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
+      // var tabUpdated = updateTabInformation(tab, timeStamp);
+      user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
+      user.activeTabIndex[tab.windowId] = tab.index;
       if(user.loggedIn){
         activateTimeTab(user.tabsSortedByWindow[tab.windowId][tab.index].databaseTabID);
       }
-    } else {
-      // var newTab = createNewTab(tab, timeStamp);
-      if(user.loggedIn){
-          createNewTabRequest(newTab);
-      }
-    }
+    } 
 		updatedElaspedDeactivation();
   });
 })
@@ -288,8 +304,8 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 */
 chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
   var tab = user.tabsSortedByWindow[detachInfo.oldWindowId][detachInfo.oldPosition];
-  var tabIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
-  user.tabIds[detachInfo.oldWindowId].splice(tabIndex, 1);
+  var tabIDIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
+  user.tabIds[detachInfo.oldWindowId].splice(tabIDIndex, 1);
   user.tabsSortedByWindow[detachInfo.oldWindowId].splice(detachInfo.oldPosition, 1);
   if(user.activeTabIndex[detachInfo.oldWindowId] === detachInfo.oldPosition){
     user.activeTabIndex[detachInfo.oldWindowId] = null; 
@@ -303,12 +319,13 @@ chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
 *@param {object} detachInfo  newPosition, newWindowId
 */
 chrome.tabs.onAttached.addListener(function(tabId, attachInfo){
+	user.tabIds[attachInfo.newWindowId].push(tabId);
   //if the index of the attached is less than the current active, add 1 to the current active 
-  var windowTabs = user.tabsSortedByWindow[attachInfo.newWindowId];
-  var currentActiveIndex = user.activeTabIndex[attachInfo.newWindowId];
-  if(currentActiveIndex > attachInfo.newPosition){
-    user.activeTabIndex[attachInfo.newWindowId] = currentActiveIndex++; 
-  }
+  // var windowTabs = user.tabsSortedByWindow[attachInfo.newWindowId];
+  // var currentActiveIndex = user.activeTabIndex[attachInfo.newWindowId];
+  // if(currentActiveIndex > attachInfo.newPosition){
+  //   user.activeTabIndex[attachInfo.newWindowId] = currentActiveIndex++; 
+  // }
 })
 
 /**
