@@ -1,5 +1,8 @@
+//send what time he thinks it is
+//get time stamp, and check for offset of zulu time
 var user;
-
+const BASE_URL = 'http://www.closeyourtabs.com';
+const COOKIE_NAME =  'connect.sid' 
 /**
  * User class keeps track of current tab information and logged in status
  */
@@ -9,13 +12,45 @@ class User {
 		this.tabsSortedByWindow = {};
 		this.activeTabIndex = {};
 		this.tabIds = {};
+		this.name = '',
+		this.photo = ''
 	}
 	login() {
-		this.loggedIn = true;
-		this.sendAllTabsToServer();
+		chrome.cookies.get({ url: BASE_URL, name: COOKIE_NAME }, function(cookie) {
+			if(cookie){
+				var date = new Date();
+				var currenttime = date.getTime();
+				var ifExpire = currenttime - cookie.expirationDate; 
+				if(ifExpire > 0){
+					console.log('user logged in');
+					user.loggedIn = true; 
+					clearPreviousTabData();
+					user.sendAllTabsToServer();
+				} else {
+					console.log('user NOT logged in');
+					user.loggedIn = false; 
+				}
+			}else {
+				console.log('user NOT logged in, no cookie');
+				user.loggedIn = false; 
+			}
+		});
 	}
 	logout() {
-		this.loggedIn = false;
+		chrome.cookies.remove({url: BASE_URL, name: COOKIE_NAME }, function(result){
+			console.log(result)
+			if(result.name === COOKIE_NAME){
+				console.log('success logout');
+				if(user.loggedIn){
+					window.open(`${BASE_URL}/auth/google/logout`);
+					user.loggedIn = false;
+				}
+			} else {
+				console.log('fail logout')
+			}
+		})
+
+
 	}
 	sendAllTabsToServer() {
 		for (var window in this.tabsSortedByWindow) {
@@ -28,7 +63,6 @@ class User {
 }
 
 /**
-
 * Creates a Tab object, if highlighted sets time of activation
 * Checks to see if tab is occupying spot to place new tab
 *@param {object} tab 
@@ -134,10 +168,11 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 
 	user.activeTabIndex[removeInfo.windowId] = null;
 
+
 	if (user.loggedIn) {
 		var tabObject = {};
 		tabObject['databaseTabID'] = tabID;
-		sendDataToServer('DELETE', 'http://www.closeyourtabs.com/tabs/database', tabObject);
+		sendDataToServer('DELETE', `${BASE_URL}/tabs/database`, tabObject);
 	}
 
 	updatedElaspedDeactivation();
@@ -152,8 +187,9 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
-		console.log('tab updated')
-    chrome.tabs.captureVisibleTab({quality: 5},function(dataUrl){
+
+		// chrome.tabs.executeScript(null, { file: "content_script.js" }); 
+    chrome.tabs.captureVisibleTab({quality: 50},function(dataUrl){
       tab.screenshot = dataUrl; 
       var window  = JSON.stringify(tab.windowId);
       var stringId = JSON.stringify(tab.id);
@@ -163,7 +199,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
       if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
         var dataForServer = updateTabInformation(tab);
         if(user.loggedIn){
-          sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/', dataForServer);
+          sendDataToServer('PUT', `${BASE_URL}/tabs`, dataForServer);
         }
       }
     })
@@ -293,30 +329,10 @@ chrome.runtime.onConnect.addListener(function(port) {
 		var responseObject = {};
 		responseObject.userStatus = user.loggedIn;
 		responseObject.allTabs = user.tabsSortedByWindow;
-
 		if (message.type == 'popup') {
-			if (user.loggedIn) {
-				//get request from database
 				port.postMessage({ sessionInfo: responseObject });
-			} else {
-				port.postMessage({ sessionInfo: responseObject });
-			}
 		} else if (message.type === 'logout') {
 			user.logout();
-			requestToServerNoData('GET', 'http://www.closeyourtabs.com/auth/google/logout');
-		} else if (message.type === 'login') {
-			checkForUserAccount()
-				.then((resp) => {
-					if (resp) {
-						user.login();
-						port.postMessage({ loginStatus: true });
-					} else {
-						port.postMessage({ loginStatus: false });
-					}
-				})
-				.catch((error) => {
-					console.log(error);
-				});
 		} 
 	});
 });
@@ -329,6 +345,8 @@ function setBadgeNumber(number){
 	if(number > 0){
 		chrome.browserAction.setBadgeText({text: number.toString()});
 		chrome.browserAction.setBadgeBackgroundColor({color: '#FF0000'});
+	} else {
+		chrome.browserAction.setBadgeText({text: ''});
 	}
 }
 
@@ -340,7 +358,7 @@ function setBadgeNumber(number){
 function activateTimeTab(uniqueID) {
 	var tabObject = {};
 	tabObject['databaseTabID'] = uniqueID;
-	sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/activatedTime', tabObject);
+	sendDataToServer('PUT',  `${BASE_URL}/tabs/activatedTime`, tabObject);
 }
 
 /**
@@ -348,13 +366,11 @@ function activateTimeTab(uniqueID) {
 *@param {integer} uniqueID 
 *call sendDataToServer
 */
-function deactivateTimeTab(uniqueID, url){
+function deactivateTimeTab(uniqueID){
   if(user.loggedIn && uniqueID !== null){
     var tabObject = {};
     tabObject['databaseTabID'] = uniqueID;
-    tabObject['url'] = url;
-
-    sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs/deactivatedTime', tabObject)
+    sendDataToServer('PUT', `${BASE_URL}/tabs/deactivatedTime`, tabObject)
   }
 }
 
@@ -372,9 +388,18 @@ function sendDataToServer(method, action, data) {
 	xhr.open(method, action);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onreadystatechange = function() {
-		if ((xhr.readyState == 4) & (xhr.status === 200)) {
-			console.log(xhr.responseText);
+		if (xhr.readyState == 4) {
+			if(xhr.status === 200){
+				console.log(xhr.responseText);
+			} else {
+				user.logout();
+				console.log('connect error');
+			}
 		}
+	};
+	xhr.onerror = function() {
+		user.logout();
+		console.log('connect error');
 	};
 	xhr.send(JSON.stringify(data));
 }
@@ -388,9 +413,17 @@ function requestToServerNoData(method, route) {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
 			if (xhr.status === 200) {
-				console.log(xhr.responseText);
+				console.log(result, 'route ', route)
+				var result = JSON.parse(xhr.responseText);
+			} else {
+				user.logout();
+				console.log('no server')
 			}
 		}
+	};
+	xhr.onerror = function() {
+		user.logout();
+		console.log('connect error');
 	};
 	xhr.send();
 }
@@ -410,66 +443,42 @@ function createNewTabRequest(tabObject) {
 		favicon: tabObject.favIconUrl
 	};
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', 'http://www.closeyourtabs.com/tabs/');
+	xhr.open('POST', `${BASE_URL}/tabs`);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onreadystatechange = function() {
-		if ((xhr.readyState == 4) & (xhr.status === 200)) {
-			console.log(xhr.responseText);
-			if (JSON.parse(xhr.responseText).insertId) {
-				var result = JSON.parse(xhr.responseText).insertId;
-				var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index];
-				user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
-				if(tabObject.highlighted){
-					activateTimeTab(result);
+		if (xhr.readyState == 4) {
+			if (xhr.status === 200) {
+				var result = JSON.parse(xhr.responseText)
+				if (result.success) {
+					console.log('server connect', xhr.responseText)
+					var result = JSON.parse(xhr.responseText).insertId;
+					var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index];
+					user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
+					if(tabObject.highlighted){
+						activateTimeTab(result);
+					} else {
+						deactivateTimeTab(result, tabObj.url)
+					}
+				
 				} else {
-					deactivateTimeTab(result, tabObj.url)
+					user.logout();
+					console.log('server connect fail', xhr.responseText)
 				}
-			} else {
-				console.log('tab was not created');
 			}
 		}
 	};
 	xhr.onerror = function() {
-		reject('error');
+		user.logout();
+		console.log('connect error');
 	};
 	xhr.send(JSON.stringify(dataForServer));
-}
-
-/**
- *Check if user has an account
- */
-function checkForUserAccount() {
-	return new Promise((resolve, reject) => {
-		var xhr = new XMLHttpRequest();
-		xhr.open('GET', 'http://www.closeyourtabs.com/auth/google/verify', true);
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4) {
-				if (xhr.status == '200') {
-					var result = xhr.responseText;
-					if (result === 'true') {
-						clearPreviousTabData();
-						resolve(true);
-					} else {
-						resolve(false);
-					}
-				} else {
-					resolve(false);
-				}
-			}
-		};
-		xhr.onerror = function() {
-			console.log('connect error');
-			reject(false);
-		};
-		xhr.send();
-	});
 }
 
 /**
  *Deletes user information from database
  */
 function clearPreviousTabData() {
-	requestToServerNoData('DELETE', 'http://www.closeyourtabs.com/tabs/google');
+	requestToServerNoData('DELETE',`${BASE_URL}/tabs/google`);
 }
 
 
@@ -485,7 +494,7 @@ function updateIndex(beginIndex, endIndex, windowId){
     tabObject.index = index;  
     var dataForServer = updateTabInformation(tabObject);
     if(user.loggedIn){
-      sendDataToServer('PUT', 'http://www.closeyourtabs.com/tabs', dataForServer)
+      sendDataToServer('PUT', `${BASE_URL}/tabs`, dataForServer)
     }
   }
 }
@@ -516,21 +525,21 @@ function setLocalStorage(keyName, value) {
  *
  */
 function updatedElaspedDeactivation() {
-	var timeExpiredCount = 0; 
 	var currentTime = getTimeStamp();
 	var windows = user.tabsSortedByWindow;
+	var overdueTabCount = 0; 
 	for (var window in windows) {
 		for (var index in windows[window]) {
 			if (!windows[window][index].highlighted) {
 				windows[window][index].inactiveTimeElapsed =
 					currentTime - windows[window][index].timeOfDeactivation;
 				if(windows[window][index].inactiveTimeElapsed > 25000){
-					timeExpiredCount++;
+					overdueTabCount++;
 				}
 			}
 		}
 	}
-	setBadgeNumber(timeExpiredCount);
+	setBadgeNumber(overdueTabCount);
 }
 
 /**
@@ -563,19 +572,7 @@ function newExtensionSession() {
 		});
 	});
 	getAllTabs();
-	checkForUserAccount()
-		.then((resp) => {
-			if (resp) {
-				console.log('user logged in');
-				user.login();
-			} else {
-				console.log('user is not logged in ');
-				//show user this info
-			}
-		})
-		.catch((error) => {
-			console.log('ERROR', error);
-		});
+	user.login();
 }
 
 /**
@@ -618,6 +615,10 @@ chrome.windows.onCreated.addListener(function(window) {
 	newWindowForUser(window);
 });
 
+/**
+ * Listens for window removed
+ *@param {object} windowId
+ */
 chrome.windows.onRemoved.addListener(function(windowId) {
 	//remove all tabs from database
 	if (user.loggedIn) {
@@ -632,11 +633,20 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 	delete user.tabIds[windowId];
 });
 
-function findCookie() {
-	chrome.cookies.get({ url: 'http://www.closeyourtabs.com', name: 'connect.sid' }, function(cookie) {
-		if (cookie) {
-			console.log('Sign-in cookie:', cookie);
-		}
-	});
-}
 
+/**
+* Listens for messages from content script
+*@param {object} request
+*@param {object} sender
+*@param {function} sendResponse
+*/
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.type == "removeTab"){
+      console.log('remove tab')
+		} else if (request.type == "logoutUser"){
+      user.logout();
+		} else if(request.type === "checkLogin"){
+			user.login();
+		}
+  });
