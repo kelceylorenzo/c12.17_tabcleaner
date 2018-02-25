@@ -4,7 +4,6 @@ const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = {
     ensureAuthenticated: function (req, res, next) {
-        console.log(req);
         console.log(req.user);
         if (req.user) {
             console.log('req.user: ', req.user.givenName);
