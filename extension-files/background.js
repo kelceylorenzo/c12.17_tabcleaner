@@ -62,8 +62,12 @@ function createNewTab(tab, currentTime){
   
   var tabArray = user.tabsSortedByWindow[tab.windowId]; 
   if(tabObject.index < tabArray.length){
+		var currentActiveTab = user.activeTabIndex[tab.windowId];
+		if(tab.index <= currentActiveTab){
+			user.activeTabIndex[tabObject.windowId]--; 
+		}
     user.tabsSortedByWindow[tabObject.windowId].splice(tabObject.index, 0, tabObject);
-    var nextIndex = tab.index + 1; 
+		var nextIndex = tab.index + 1; 
     updateIndex(nextIndex, (user.tabsSortedByWindow[tabObject.windowId].length - 1), tabObject.windowId);
   } else {
     user.tabsSortedByWindow[tab.windowId].push(tabObject);
@@ -75,7 +79,6 @@ function createNewTab(tab, currentTime){
 
 * Updates a Tab object and returns an object to send to server 
 *@param {object} tab 
-*@param {object} timeStamp
 *@return {object} dataForServer
 */
 
@@ -145,6 +148,7 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
+		console.log('tab updated')
     chrome.tabs.captureVisibleTab({quality: 5},function(dataUrl){
       tab.screenshot = dataUrl; 
       var window  = JSON.stringify(tab.windowId);
@@ -162,7 +166,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   }
 })
 
+chrome.tabs.onCreated.addListener(function(tab){
+		var timeStamp = getTimeStamp();
+		var newTab = createNewTab(tab, timeStamp);
+		if(user.loggedIn){
+				createNewTabRequest(newTab);
+		}
 
+})
 
 /**
 * Listens for when a tab becomes active by user clicking on the tab
@@ -171,6 +182,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
+		console.log('tab highlighted')
+
     var timeStamp = getTimeStamp();
     var previousIndex = user.activeTabIndex[tab.windowId];
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
@@ -181,13 +194,7 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
       if(user.loggedIn){
         activateTimeTab(user.tabsSortedByWindow[tab.windowId][tab.index].databaseTabID);
       }
-    } else {
-      var newTab = createNewTab(tab, timeStamp);
-      if(user.loggedIn){
-          createNewTabRequest(newTab);
-      }
     }
-   
 		updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp, tab.url);
 		updatedElaspedDeactivation();
   });
