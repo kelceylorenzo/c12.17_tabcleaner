@@ -53,6 +53,7 @@ function createNewTab(tab, currentTime){
 
   }
   if(tabObject.highlighted){
+		user.activeTabIndex[tab.windowId] = tab.index; 
     tabObject.timeOfActivation = currentTime;
     tabObject.timeOfDeactivation = 0;  
   } else {
@@ -186,8 +187,14 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
 
     var timeStamp = getTimeStamp();
     var previousIndex = user.activeTabIndex[tab.windowId];
-    // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
-    if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
+		// var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
+		if(user.tabsSortedByWindow[tab.windowId].length === 0){
+			var timeStamp = getTimeStamp();
+			var newTab = createNewTab(tab, timeStamp);
+			if(user.loggedIn){
+					createNewTabRequest(newTab);
+			}
+		} else if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
       // var tabUpdated = updateTabInformation(tab, timeStamp);
       user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
       user.activeTabIndex[tab.windowId] = tab.index;
@@ -245,8 +252,8 @@ chrome.tabs.onMoved.addListener(function(tabId, moveInfo){
 */
 chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
   var tab = user.tabsSortedByWindow[detachInfo.oldWindowId][detachInfo.oldPosition];
-  var tabIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
-  user.tabIds[detachInfo.oldWindowId].splice(tabIndex, 1);
+  var tabIDIndex = user.tabIds[detachInfo.oldWindowId].indexOf(tab.id);
+  user.tabIds[detachInfo.oldWindowId].splice(tabIDIndex, 1);
   user.tabsSortedByWindow[detachInfo.oldWindowId].splice(detachInfo.oldPosition, 1);
   if(user.activeTabIndex[detachInfo.oldWindowId] === detachInfo.oldPosition){
     user.activeTabIndex[detachInfo.oldWindowId] = null; 
@@ -260,6 +267,7 @@ chrome.tabs.onDetached.addListener(function(tabId, detachInfo){
 *@param {object} detachInfo  newPosition, newWindowId
 */
 chrome.tabs.onAttached.addListener(function(tabId, attachInfo){
+	// user.tabIds[attachInfo.newWindowId].push(tabId);
   //if the index of the attached is less than the current active, add 1 to the current active 
   var windowTabs = user.tabsSortedByWindow[attachInfo.newWindowId];
   var currentActiveIndex = user.activeTabIndex[attachInfo.newWindowId];
