@@ -24,23 +24,26 @@ class User {
 				if(ifExpire > 0){
 					console.log('user logged in');
 					user.loggedIn = true; 
+					user.changeBrowserIcon('images/extension-green-logo.png')
 					clearPreviousTabData();
 					user.sendAllTabsToServer();
 				} else {
 					console.log('user NOT logged in');
+					user.changeBrowserIcon('images/iconpurple.png')
 					user.loggedIn = false; 
 				}
 			}else {
 				console.log('user NOT logged in, no cookie');
+				user.changeBrowserIcon('images/iconpurple.png')
 				user.loggedIn = false; 
 			}
 		});
 	}
 	logout() {
 		chrome.cookies.remove({url: BASE_URL, name: COOKIE_NAME }, function(result){
-			console.log(result)
 			if(result.name === COOKIE_NAME){
 				console.log('success logout');
+				user.changeBrowserIcon('images/iconpurple.png')
 				if(user.loggedIn){
 					window.open(`${BASE_URL}/auth/google/logout`);
 					user.loggedIn = false;
@@ -59,6 +62,9 @@ class User {
 				createNewTabRequest(currentTab);
 			}
 		}
+	}
+	changeBrowserIcon(imagePath){
+		chrome.browserAction.setIcon({path: imagePath})
 	}
 }
 
@@ -96,8 +102,11 @@ function createNewTab(tab, currentTime){
   
   var tabArray = user.tabsSortedByWindow[tab.windowId]; 
   if(tabObject.index < tabArray.length){
+		if(tabObject.highlighted){
+			user.activeTabIndex[tab.windowId]++;
+		}
     user.tabsSortedByWindow[tabObject.windowId].splice(tabObject.index, 0, tabObject);
-    var nextIndex = tab.index + 1; 
+		var nextIndex = tab.index + 1; 
     updateIndex(nextIndex, (user.tabsSortedByWindow[tabObject.windowId].length - 1), tabObject.windowId);
   } else {
     user.tabsSortedByWindow[tab.windowId].push(tabObject);
@@ -193,7 +202,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
         if(user.loggedIn){
           sendDataToServer('PUT', `${BASE_URL}/tabs`, dataForServer);
         }
-      }
+      } else {
+				var newTab = createNewTab(tab, timeStamp);
+			}
     })
   }
 })
@@ -208,23 +219,22 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
     var timeStamp = getTimeStamp();
-    var previousIndex = user.activeTabIndex[tab.windowId];
+		var previousIndex = user.activeTabIndex[tab.windowId];
+		updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp);
     // var currentDBTab = user.tabsSortedByWindow[tab.windowId][tab.index].googleTabId;
     if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
-      // var tabUpdated = updateTabInformation(tab, timeStamp);
-      user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
-      user.activeTabIndex[tab.windowId] = tab.index;
+			// var tabUpdated = updateTabInformation(tab, timeStamp);
+			user.activeTabIndex[tab.windowId] = tab.index;
+			user.tabsSortedByWindow[tab.windowId][tab.index].highlighted = true; 
       if(user.loggedIn){
         activateTimeTab(user.tabsSortedByWindow[tab.windowId][tab.index].databaseTabID);
       }
     } else {
-      var newTab = createNewTab(tab, timeStamp);
+      // var newTab = createNewTab(tab, timeStamp);
       if(user.loggedIn){
           createNewTabRequest(newTab);
       }
     }
-   
-		updatePreviousHighlightedTab(previousIndex, tab.windowId, timeStamp, tab.url);
 		updatedElaspedDeactivation();
   });
 })
@@ -235,12 +245,13 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
  *@param {integer} uniqueID
  *call sendDataToServer
  */
-function updatePreviousHighlightedTab(previousIndex, windowId, timeStamp, url) {
+function updatePreviousHighlightedTab(previousIndex, windowId, timeStamp) {
   if(previousIndex === null){
     return; 
   }
-  deactivateTimeTab(user.tabsSortedByWindow[windowId][previousIndex].databaseTabID, url);
+  deactivateTimeTab(user.tabsSortedByWindow[windowId][previousIndex].databaseTabID);
 	var allTabs = user.tabsSortedByWindow[windowId];
+	console.log('previous tab: ', allTabs[previousIndex])
 	if (allTabs[previousIndex]) {
 		allTabs[previousIndex].highlighted = false;
 		allTabs[previousIndex].timeOfDeactivation = timeStamp;
@@ -405,7 +416,6 @@ function requestToServerNoData(method, route) {
 	xhr.onerror = function() {
 		user.logout();
 		console.log('connect error');
-		reject(false);
 	};
 	xhr.send();
 }
@@ -439,7 +449,7 @@ function createNewTabRequest(tabObject) {
 					if(tabObject.highlighted){
 						activateTimeTab(result);
 					} else {
-						deactivateTimeTab(result, tabObj.url)
+						deactivateTimeTab(result)
 					}
 				
 				} else {
