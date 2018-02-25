@@ -124,7 +124,7 @@ class LandingPage extends Component {
 						</div>
 						<div className="dashboard-content">
 							<p className="landing-page-content">
-								Use the dashboard, accessible through our web portal, for more in depth details
+								Use the dashboard, accessible through our web portal, for more in-depth details
 								about your tabs and the ability to open or close multiple tabs with a few simple
 								clicks.
 							</p>
@@ -158,7 +158,7 @@ class LandingPage extends Component {
 					</div>
 				</div>
 				<div className="next-section-button faq-link">
-					<p>Still have question? Visit our FAQ.</p>
+					<p>Still have questions? Visit our FAQ.</p>
 				</div>
 			</div>
 		);
