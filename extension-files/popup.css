@@ -195,6 +195,13 @@ a {
 .activetab {
 	font-weight: bold;
 	padding: 5px;
-	background-color: rgb(143, 182, 179);
+	background-color: #b2b2b2;
+	border: 3px solid rgb(143, 182, 179);
 
+}
+
+
+.active-window {
+	color: #ffffff;
+	text-align: center;
 }
