@@ -45,7 +45,7 @@ function createDomElement(tabObject) {
 	if (tabObject.highlighted) {
 		tabObject.color = 'activetab';
 	} else if (tabObject.inactiveTimeElapsed < 10000) {
-		tabObject.color = '';
+		tabObject.color = 'green';
 	} else if (tabObject.inactiveTimeElapsed < 25000) {
 		tabObject.color = 'yellow';
 	} else {

@@ -24,23 +24,26 @@ class User {
 				if(ifExpire > 0){
 					console.log('user logged in');
 					user.loggedIn = true; 
+					user.changeBrowserIcon('images/extension-green-logo.png')
 					clearPreviousTabData();
 					user.sendAllTabsToServer();
 				} else {
 					console.log('user NOT logged in');
+					user.changeBrowserIcon('images/iconpurple.png')
 					user.loggedIn = false; 
 				}
 			}else {
 				console.log('user NOT logged in, no cookie');
+				user.changeBrowserIcon('images/iconpurple.png')
 				user.loggedIn = false; 
 			}
 		});
 	}
 	logout() {
 		chrome.cookies.remove({url: BASE_URL, name: COOKIE_NAME }, function(result){
-			console.log(result)
 			if(result.name === COOKIE_NAME){
 				console.log('success logout');
+				user.changeBrowserIcon('images/iconpurple.png')
 				if(user.loggedIn){
 					window.open(`${BASE_URL}/auth/google/logout`);
 					user.loggedIn = false;
@@ -59,6 +62,9 @@ class User {
 				createNewTabRequest(currentTab);
 			}
 		}
+	}
+	changeBrowserIcon(imagePath){
+		chrome.browserAction.setIcon({path: imagePath})
 	}
 }
 
@@ -201,7 +207,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
         if(user.loggedIn){
           sendDataToServer('PUT', `${BASE_URL}/tabs`, dataForServer);
         }
-      }
+      } else {
+				var newTab = createNewTab(tab, timeStamp);
+			}
     })
   }
 })
@@ -214,6 +222,9 @@ chrome.tabs.onCreated.addListener(function(tab){
 		}
 
 })
+
+
+
 
 /**
 * Listens for when a tab becomes active by user clicking on the tab
@@ -253,12 +264,13 @@ chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
  *@param {integer} uniqueID
  *call sendDataToServer
  */
-function updatePreviousHighlightedTab(previousIndex, windowId, timeStamp, url) {
+function updatePreviousHighlightedTab(previousIndex, windowId, timeStamp) {
   if(previousIndex === null){
     return; 
   }
-  deactivateTimeTab(user.tabsSortedByWindow[windowId][previousIndex].databaseTabID, url);
+  deactivateTimeTab(user.tabsSortedByWindow[windowId][previousIndex].databaseTabID);
 	var allTabs = user.tabsSortedByWindow[windowId];
+	console.log('previous tab: ', allTabs[previousIndex])
 	if (allTabs[previousIndex]) {
 		allTabs[previousIndex].highlighted = false;
 		allTabs[previousIndex].timeOfDeactivation = timeStamp;
@@ -457,7 +469,7 @@ function createNewTabRequest(tabObject) {
 					if(tabObject.highlighted){
 						activateTimeTab(result);
 					} else {
-						deactivateTimeTab(result, tabObj.url)
+						deactivateTimeTab(result)
 					}
 				
 				} else {
