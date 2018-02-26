@@ -25,7 +25,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results) => {
-        const output = produceOutput(err, results, req.user, 'GET');
+        const output = produceOutput(err, results, 'GET');
         res.send(output);
     });
 
@@ -42,7 +42,7 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     db.query(sql, (err, results) => {
         console.log(err);
-        const output = produceOutput(err, results, req.user, 'POST');
+        const output = produceOutput(err, results, 'POST');
         res.send(output);
     });
 
@@ -66,7 +66,7 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
     }
 
     db.query(sql, (err, results) => {
-        const output = produceOutput(err, results, req.user, 'DELETE');
+        const output = produceOutput(err, results, 'DELETE');
         res.send(output);
     });
 
@@ -81,7 +81,7 @@ router.put('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results) => {
-        const output = produceOutput(err, results, req.user, 'UPDATE');
+        const output = produceOutput(err, results, 'UPDATE');
         res.send(output);
     });
 
@@ -96,7 +96,7 @@ router.put('/move', ensureAuthenticated, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results, fields) => {
-        const output = produceOutput(err, results, req.user, 'MOVE');
+        const output = produceOutput(err, results, 'MOVE');
         res.send(output);
     });
 
@@ -115,7 +115,7 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results) => {
-        output = produceOutput(err, results, req.user, req.params.time);
+        output = produceOutput(err, results, req.params.time);
         res.send(output);
     });
 
