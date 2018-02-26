@@ -7,12 +7,24 @@ export default (props) => {
 		display: ''
 	};
 
+	let selectClass = '';
+
 	let tabStyle = {
 		backgroundColor: ''
 	};
 
+	let viewClass = {
+		container: 'tab-container',
+		tab: 'tab',
+		title: 'tab-title',
+		tabScreen: 'tab-screenshot',
+		overlayContainer: 'select-overlay-container',
+		utilityContainer: 'tab-utilities-container'
+	};
+
 	if (props.item.selected) {
 		selectStyle.display = 'flex';
+		selectClass = 'tab-selected';
 	}
 
 	let inactiveElapsedTime = props.item.currentTime - props.item.deactivatedTime;
@@ -25,15 +37,6 @@ export default (props) => {
 		tabStyle.backgroundColor = 'rgba(156, 95, 88, 0.5)';
 	}
 
-	let viewClass = {
-		container: 'tab-container',
-		tab: 'tab',
-		title: 'tab-title',
-		tabScreen: 'tab-screenshot',
-		overlayContainer: 'select-overlay-container',
-		utilityContainer: 'tab-utilities-container'
-	};
-
 	if (props.viewChange === 'list') {
 		(viewClass.container = 'list-tab-container'),
 			(viewClass.tab = 'list-tab'),
@@ -44,7 +47,7 @@ export default (props) => {
 	}
 
 	return (
-		<div className={viewClass.container} onClick={props.select}>
+		<div className={`${viewClass.container} ${selectClass}`} onClick={props.select}>
 			<div className={viewClass.overlayContainer} style={selectStyle}>
 				<img className="select-overlay" src={checkMark} alt="" />
 			</div>

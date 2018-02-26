@@ -1,17 +1,17 @@
 @font-face {
-	font-family: "LemonMilk";
-	src: url("../../assets/fonts/LemonMilk.otf");
+	font-family: 'LemonMilk';
+	src: url('../../assets/fonts/LemonMilk.otf');
 }
 body {
 	margin: 0;
-	font-family: "Lato", sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 .app {
 	height: 100vh;
 	width: 100vw;
 	overflow-x: hidden;
-	background-image: url("https://www.transparenttextures.com/patterns/debut-light.png");
+	background-image: url('https://www.transparenttextures.com/patterns/debut-light.png');
 }
 
 * {
@@ -85,7 +85,7 @@ body {
 }
 
 .landing-page-title {
-	font-family: "LemonMilk", sans-serif;
+	font-family: 'LemonMilk', sans-serif;
 	color: rgba(0, 0, 0, 0.6);
 	font-size: 4em;
 	margin: auto;
@@ -574,6 +574,36 @@ button:nth-child(4):active {
 	align-items: flex-start;
 	height: 100%;
 }
+
+.no-tab-data {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 4;
+	background-color: rgba(0, 0, 0, 0.7);
+	color: white;
+}
+
+.no-data-exclamation {
+	font-size: 500%;
+	margin: 0;
+}
+
+.no-tab-data-title {
+	font-size: 500%;
+	margin: 1%;
+}
+
+.no-tab-data-subtitle {
+	margin: 0;
+	font-size: 200%;
+}
 /* List View Styling */
 
 .list-tab-window {
@@ -643,8 +673,8 @@ button:nth-child(4):active {
 .tab-container {
 	display: flex;
 	margin: 1%;
-	height: 50%;
-	width: 22%;
+	height: 45%;
+	width: 17%;
 	position: relative;
 	border: 3px solid rgba(26, 54, 74, 0.4);
 }
