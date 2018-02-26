@@ -18,6 +18,7 @@ function init() {
 
 port.onMessage.addListener(function(response) {
 	if (response.sessionInfo) {
+		document.getElementById('loading').style.display = 'none';
 		var windows = response.sessionInfo.allTabs;
 		for (var window in windows) {
 			var windowSpacer = document.createElement('br');
