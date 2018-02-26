@@ -1,6 +1,6 @@
 const BASE_URL = 'www.closeyourtabs.com';
 const COOKIE_NAME =  'connect.sid'; 
-console.log('give Nick a high five');
+console.log('script says hi');
 
 function init(){
     checkUserLoginStatus();
@@ -34,20 +34,16 @@ function removeElement(tab){
 
 
 function deleteAllTabs(){
-    //get all tab-contaier
+    //get all tab-container
     //loop through and send message to backgroud page
 }
 
 function logoutUser(){
-    chrome.runtime.sendMessage({type: "logoutUser"}, function(response) {
-        console.log(response);
-    });
+    chrome.runtime.sendMessage({type: "logoutUser"});
 }
 
 function checkUserLoginStatus(){
-    chrome.runtime.sendMessage({type: "checkLogin"}, function(response) {
-        console.log(response);
-    });
+    chrome.runtime.sendMessage({type: "checkLogin"});
 }
 
 init();
