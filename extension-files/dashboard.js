@@ -35,7 +35,8 @@ function removeElement(tab){
 
 function deleteAllTabs(){
     //get all tab-container
-    //loop through and send message to backgroud page
+    //loop through all tabs, looking for class selected
+    //send message to backgroud page to delete if selected
 }
 
 function logoutUser(){
