@@ -6,7 +6,7 @@ module.exports = {
     ensureAuthenticated: function (req, res, next) {
         console.log(req.user);
         if (req.user) {
-            console.log('req.user: ', req.user.givenName);
+            console.log('req.user: ', req.user.firstName);
             return next();
         } else {
             console.log('This is the ensureAuthentication saying that the user is not autheticated.');
@@ -100,9 +100,9 @@ module.exports = {
             data: result,
         };
         if (err) {
-            output.message = 'Failed to get tab info';
+            output.message = 'Failed.';
         } else {
-            if (result.length > 0) {
+            if (result.affectedRows > 0) {
                 output.code = '200';
                 output.success = true;
             } else {

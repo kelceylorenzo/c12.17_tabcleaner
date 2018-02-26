@@ -4,13 +4,11 @@ const session = require("express-session");
 const passport = require("passport");
 const path = require("path");
 const bodyParser = require("body-parser");
-// const cookieSession = require('cookie-session');
 
 // Google Passport Config
 require("./config/googlePassport")(passport);
 
 // Load Routes
-
 const googleAuth = require('./routes/googleAuth');
 const tabs = require('./routes/tabs');
 const urls = require('./routes/urls');
@@ -22,7 +20,6 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "client", "dist")));
 
-// ALLOWS THE EXTENSION TO INTERACT WITH DB, REQUIRES ATTENTION FOR DEPLOYMENT
 app.use((req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
@@ -30,15 +27,8 @@ app.use((req, res, next) => {
 	next();
 });
 
-// app.use(cookieSession({
-//     name: 'tabsSession',
-//     maxAge: 30 * 24 * 60 * 60 * 1000,
-//     keys: [keys.cookieKey]
-// }));
-
 // Authentication Middleware
 app.use(cookieParser());
-
 app.use(session({
     secret: 'secret',
     resave: false,
@@ -59,8 +49,6 @@ app.use((req, res, next) => {
 	res.locals.user = req.user || null;
 	next();
 });
-
-// Use Routes
 
 app.use('/auth/google', googleAuth);
 app.use('/tabs', tabs);
