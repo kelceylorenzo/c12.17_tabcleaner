@@ -11,6 +11,7 @@ class LandingPage extends Component {
 			view: "home"
 		};
 	}
+	
 	verifyLogIn() {
 		axios.get(`/auth/google/verify`).then(resp => {
 			console.log("Verify response: ", resp);
@@ -107,10 +108,6 @@ class LandingPage extends Component {
 				>
 					<p>Extension & Dashboard</p>
 				</div>
-{/*			<div className="extension-dashboard-container" ref={"extension"}>
-				<div className="landing-page-title-container">
-						<p className="landing-page-subtitle">Two ways to Close Your Tabs</p> */}
-
 				<div className="extension-dashboard-container" ref={"extension"}>
 					<p className="landing-page-subtitle extension-dashboard">Two ways to Close Your Tabs</p>
 					<div className="extension-dashboard-content">
