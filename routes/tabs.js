@@ -36,7 +36,7 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
         windowID, tabTitle, browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
-
+   
     db.query(sql, (err, results) => {
         const output = produceOutput(err, results, 'POST');
         res.send(output);
