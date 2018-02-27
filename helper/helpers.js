@@ -48,7 +48,7 @@ module.exports = {
 
             } else {
 
-                if (url, activatedTime, currentTime) {
+                if (typeof(url) != 'undefined' &&  typeof(activatedTime) != 'undefined' && typeof(currentTime) != 'undefined') {
 
                     const { url, activatedTime, currentTime } = results[0];
 
