@@ -34,11 +34,9 @@ class MainPage extends Component {
 		this.handleSort = this.handleSort.bind(this);
 		this.handleViewChange = this.handleViewChange.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
-		// this.logOut = this.logOut.bind(this);
 	}
 
 	componentDidMount() {
-		// this.getData(data);
 		this.getData();
 	}
 
@@ -58,11 +56,6 @@ class MainPage extends Component {
 			);
 		});
 	}
-
-	// async logOut() {
-	// 	await axios.get("auth/google/logout");
-	// 	console.log("you are logged out");
-	// }
 
 	handleRefresh() {
 		this.getData();
@@ -197,15 +190,45 @@ class MainPage extends Component {
 		let selectedIDs = [];
 
 		for (let tab of selectedTabs) {
-			selectedIDs.push(tab.id);
+			selectedIDs.push(tab.databaseTabID);
 		}
 
+<<<<<<< HEAD
+		// for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
+		// 	let tabToDelete = {};
+		// 	tabToDelete['databaseTabID'] = selectedIDs[currentTabIndex];
+		// 	console.log('tabToDelete: ', tabToDelete);
+		// 	axios.delete('/tabs/database', tabToDelete).then((resp) => {
+		// 		if (resp.data.success) {
+		// 			console.log('Tab was deleted', resp);
+		// 			tabsList = tabsList.splice([tabsList.indexOf(selectedTabs[currentTabIndex])], 1);
+		// 		} else {
+		// 			console.log('Server Error; Tab was not deleted ', resp);
+		// 			return;
+		// 		}
+		// 	});
+		// }
+
 		tabsList = tabsList.filter(function(tab) {
-			if (selectedIDs.indexOf(tab.id) === -1) {
+			if (selectedIDs.indexOf(tab.databaseTabID) === -1) {
 				return true;
 			}
 			return false;
 		});
+=======
+		for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
+			axios.delete('/tabs/database', selectedIDs[currentTabIndex]).then((resp) => {
+				if (resp.data.success) {
+					console.log('Tab was deleted', resp);
+					tabsList = tabsList.splice([tabsList.indexOf(selectedTabs[currentTabIndex])], 1);
+				} else {
+					console.log('Server Error; Tab was not deleted ', resp);
+					return;
+				}
+			});
+		}
+>>>>>>> bb6a851ebbddaa3e74652a0680fd1940e537ae95
+
 		this.setState({
 			tabsList: tabsList
 		});
