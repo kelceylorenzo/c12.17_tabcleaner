@@ -4,7 +4,6 @@ const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = {
     ensureAuthenticated: function (req, res, next) {
-        console.log(req.user);
         if (req.user) {
             console.log('req.user: ', req.user.firstName);
             return next();
@@ -50,49 +49,50 @@ module.exports = {
             let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
                 || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
                 || (url).match(/^(localhost)/);
-            domain = domain[0];
 
-            let time = new Date();
-            time = time.getTime();
+            if(domain != null){
 
-            let newActiveTime = time - activatedTime;
+                domain = domain[0];
 
-            const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
-                "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                "googleID DOUBLE NULL," +
-                "url VARCHAR(200) NULL," +
-                "totalActiveTime INT(20) NULL);";
+                let newActiveTime = ;
 
-            db.query(createUrlTableSQL, (err) => {
-                if (err) console.log(err);
+                const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
+                    "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+                    "googleID DOUBLE NULL," +
+                    "url VARCHAR(200) NULL," +
+                    "totalActiveTime INT(20) NULL);";
 
-                const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
-                const activeTimeInsert = [user.googleID, domain];
-                const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
+                db.query(createUrlTableSQL, (err) => {
+                    if (err) console.log(err);
 
-                db.query(activeTimeSQL, (err, results) => {
+                    const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
+                    const activeTimeInsert = [user.googleID, domain];
+                    const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
-                    if (results.length > 0) {
-                        newActiveTime = results[0].totalActiveTime + newActiveTime;
-                        const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
-                        const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
-                        const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
-                        db.query(updateActiveTimeSQL, (err) => {
-                            if (err) console.log(err)
-                            console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
-                        });
+                    db.query(activeTimeSQL, (err, results) => {
 
-                    } else {
-                        const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
-                        const insertUrlInsert = [user.googleID, domain, newActiveTime];
-                        const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
-                        db.query(insertUrlSQL, (err, results) => {
-                            if (err) console.log(err);
-                            console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
-                        });
-                    }
+                        if (results.length > 0) {
+                            newActiveTime = results[0].totalActiveTime + newActiveTime;
+                            const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
+                            const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
+                            const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
+                            db.query(updateActiveTimeSQL, (err) => {
+                                if (err) console.log(err)
+                                console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
+                            });
+
+                        } else {
+                            const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
+                            const insertUrlInsert = [user.googleID, domain, newActiveTime];
+                            const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
+                            db.query(insertUrlSQL, (err, results) => {
+                                if (err) console.log(err);
+                                console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
+                            });
+                        }
+                    })
                 })
-            })
+            }
         })
     },
     produceOutput: function (err, result, location) {
