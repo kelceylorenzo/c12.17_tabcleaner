@@ -263,8 +263,13 @@ body {
 }
 
 .nav-link {
-	color: inherit;
+	color: lightgrey;
 	margin: auto;
+}
+
+.log-out-link {
+	text-decoration: none;
+	color: lightgrey;
 }
 
 #log-out-button:hover {
@@ -528,6 +533,22 @@ button:nth-child(4):active {
 .list-view-button,
 .refresh-button {
 	cursor: pointer;
+}
+
+.grid-view-button,
+.list-view-button {
+	color: black;
+}
+
+#grid-view-button-active,
+#list-view-button-active {
+	color: black;
+}
+
+.grid-view-button:hover,
+.list-view-button:hover,
+.refresh-button:hover {
+	color: rgba(212, 167, 129, 1);
 }
 
 .sort-by-menu {
@@ -833,4 +854,49 @@ button:nth-child(4):active {
 
 .page:hover .screenshot-container > img {
 	filter: blur(1px);
+}
+
+
+/* FAQ Page Styling */
+.faq-page-container {
+	padding-top: 8%;
+	margin: 0 20%;
+	font-family: 'Lato', sans-serif;
+}
+
+.faq-page-container h1{
+	text-align: center;
+}
+
+.faq-page-container img{
+	width: 50%;
+}
+
+.faq-main-info img, .faq-main-info div{
+	display: inline-block;
+	width: 49%;
+	vertical-align:top;
+}
+
+.faq-main-info div{
+	padding: 0 20px;
+}
+
+.faq-main-info div h2{
+	text-align: center;
+}
+
+.faq-page-container p{
+	padding-left: 15px;
+}
+.icon-color {
+	color: inherit;
+}
+
+.selected {
+	color: black;
+}
+
+.notselected {
+	color: lightgrey;
 }

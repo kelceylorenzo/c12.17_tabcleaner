@@ -3,13 +3,13 @@ const mysql = require('mysql');
 const db = mysql.createConnection(mysqlCredentials);
 
 module.exports = {
-    ensureAuthenticated: function (req, res, next) {  
+    ensureAuthenticated: function (req, res, next) {
         if (req.user) {
             console.log('req.user: ', req.user.googleID);
             return next();
         } else {
             console.log('This is the ensureAuthentication saying that the user is not autheticated.');
-            res.redirect('auth/google');
+            res.redirect('/auth/google');
         }
     },
     checkIfTableExists: function (req, res, next) {
@@ -30,18 +30,24 @@ module.exports = {
             next();
         });
     },
-    updateUrlTable: function (databaseTabID) {
+    updateUrlTable: function (databaseTabID, user) {
 
-        const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ? LIMIT 1';
+        const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ?';
         const getActiveTimeInsert = databaseTabID;
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
+            if(err) throw err;
 
             const { url, activatedTime } = results[0];
 
-            let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g) || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/) || (url).match(/^(localhost)/);
+            let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
+                || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
+                || (url).match(/^(localhost)/);
             domain = domain[0];
+
+            let time = new Date();
+            time = time.getTime();
 
             let newActiveTime = time - activatedTime;
 
@@ -54,15 +60,15 @@ module.exports = {
             db.query(createUrlTableSQL, (err) => {
                 if (err) console.log(err);
 
-                const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=? LIMIT 1';
-                const activeTimeInsert = [req.user.googleID, domain];
+                const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
+                const activeTimeInsert = [user.googleID, domain];
                 const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
                 db.query(activeTimeSQL, (err, results) => {
 
                     if (results.length > 0) {
                         newActiveTime = results[0].totalActiveTime + newActiveTime;
-                        const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ? LIMIT 1';
+                        const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
                         const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
                         const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
                         db.query(updateActiveTimeSQL, (err) => {
@@ -72,7 +78,7 @@ module.exports = {
 
                     } else {
                         const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
-                        const insertUrlInsert = [req.user.googleID, domain, newActiveTime];
+                        const insertUrlInsert = [user.googleID, domain, newActiveTime];
                         const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
                         db.query(insertUrlSQL, (err, results) => {
                             if (err) console.log(err);
@@ -82,5 +88,30 @@ module.exports = {
                 })
             })
         })
-    }
+    },
+    produceOutput: function (err, result, user, location) {
+        const output = {
+            type: location,
+            success: false,
+            data: result,
+        };
+        if (err) {
+            output.message = 'Failed to get tab info';
+        } else {
+            if (result.length > 0) {
+                output.code = '200';
+                output.success = true;
+            } else {
+                output.code ='404';
+                output.message = 'No data for user';
+            }
+        }
+        if(location === 'GET'){
+            console.log(output.success);
+        } else {
+            console.log(output);
+        }
+        
+        return output;  
+    },
 };
