@@ -12,6 +12,10 @@ class LandingPage extends Component {
 		};
 	}
 
+	componentDidMount() {
+		this.verifyLogIn();
+	}
+
 	verifyLogIn() {
 		axios.get(`/auth/google/verify`).then(resp => {
 			console.log("Verify response: ", resp);
@@ -31,10 +35,6 @@ class LandingPage extends Component {
 		this.setState({
 			view: place
 		});
-	}
-
-	componentDidMount() {
-		this.verifyLogIn();
 	}
 
 	handleWheelScroll(scroll) {
