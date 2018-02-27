@@ -37,20 +37,22 @@ class LandingPage extends Component {
 		this.verifyLogIn();
 	}
 
-	handleWheelScroll(e) {
+	handleWheelScroll(scroll) {
 		let pageArray = ["home", "introduction", "extension", "get-started"];
 		let { view } = this.state;
 
 		let currentLocation = pageArray.indexOf(view);
 
-		if (e.deltaY > 12 && e.deltaY < 15 && currentLocation !== 3) {
-			console.log("scrolling down ", e.deltaY);
-			this.refs[pageArray[currentLocation + 1]].scrollIntoView();
+		if (scroll.deltaY >= 12 && scroll.deltaY <= 14 && currentLocation !== 3) {
+			console.log("scrolling down @ ", scroll.deltaY);
+			this.refs[pageArray[currentLocation + 1]].scrollIntoView({ behavior: "smooth" });
 			this.handleScroll(pageArray[currentLocation + 1]);
-		} else if (e.deltaY < -10 && e.deltaY < 0 && currentLocation !== 0) {
-			console.log("scrolling up ", e.deltaY);
-			this.refs[pageArray[currentLocation - 1]].scrollIntoView();
+			scroll.deltaY = 0;
+		} else if (scroll.deltaY > -13 && scroll.deltaY < -10 && currentLocation !== 0) {
+			console.log("scrolling up @ ", scroll.deltaY);
+			this.refs[pageArray[currentLocation - 1]].scrollIntoView({ behavior: "smooth" });
 			this.handleScroll(pageArray[currentLocation - 1]);
+			scroll.deltaY = 0;
 		}
 	}
 
