@@ -45,59 +45,57 @@ module.exports = {
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
+            if (err) {
+                console.log(err);
+            } else if(results.length>0){
 
-            if (err) console.log(err);
-            else {
-                if (typeof (url) != 'undefined' && typeof (activatedTime) != 'undefined' && typeof (currentTime) != 'undefined') {
+                const { url, activatedTime, currentTime } = results[0];
 
-                    const { url, activatedTime, currentTime } = results[0];
+                let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
+                    || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
+                    || (url).match(/^(localhost)/);
 
-                    let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
-                        || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
-                        || (url).match(/^(localhost)/);
+                if (domain != null) {
+                    domain = domain[0];
 
-                    if (domain != null) {
-                        domain = domain[0];
+                    let newActiveTime = currentTime - activatedTime;
 
-                        let newActiveTime = currentTime - activatedTime;
+                    const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
+                        "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+                        "googleID DOUBLE NULL," +
+                        "url VARCHAR(200) NULL," +
+                        "totalActiveTime INT(20) NULL);";
 
-                        const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
-                            "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                            "googleID DOUBLE NULL," +
-                            "url VARCHAR(200) NULL," +
-                            "totalActiveTime INT(20) NULL);";
+                    db.query(createUrlTableSQL, (err) => {
+                        if (err) console.log(err);
 
-                        db.query(createUrlTableSQL, (err) => {
-                            if (err) console.log(err);
+                        const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
+                        const activeTimeInsert = [user.googleID, domain];
+                        const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
-                            const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
-                            const activeTimeInsert = [user.googleID, domain];
-                            const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
+                        db.query(activeTimeSQL, (err, results) => {
 
-                            db.query(activeTimeSQL, (err, results) => {
+                            if (results.length > 0) {
+                                newActiveTime = results[0].totalActiveTime + newActiveTime;
+                                const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
+                                const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
+                                const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
+                                db.query(updateActiveTimeSQL, (err) => {
+                                    if (err) console.log(err);
+                                    else console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
+                                });
 
-                                if (results.length > 0) {
-                                    newActiveTime = results[0].totalActiveTime + newActiveTime;
-                                    const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
-                                    const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
-                                    const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
-                                    db.query(updateActiveTimeSQL, (err) => {
-                                        if (err) console.log(err);
-                                        else console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
-                                    });
-
-                                } else {
-                                    const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
-                                    const insertUrlInsert = [user.googleID, domain, newActiveTime];
-                                    const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
-                                    db.query(insertUrlSQL, (err, results) => {
-                                        if (err) console.log(err);
-                                        else console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
-                                    });
-                                }
-                            })
+                            } else {
+                                const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
+                                const insertUrlInsert = [user.googleID, domain, newActiveTime];
+                                const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
+                                db.query(insertUrlSQL, (err, results) => {
+                                    if (err) console.log(err);
+                                    else console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
+                                });
+                            }
                         })
-                    }
+                    })
                 } 
             }
         })

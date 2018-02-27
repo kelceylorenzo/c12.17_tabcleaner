@@ -36,7 +36,7 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
         windowID, tabTitle, browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
-   
+
     db.query(sql, (err, results) => {
         const output = produceOutput(err, results, 'POST');
         res.send(output);
@@ -68,7 +68,9 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
 
 });
 
-router.put('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
+router.put('/', ensureAuthenticated, checkIfTableExists, async (req, res) => {
+
+    await updateUrlTable(req);
 
     const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
 
@@ -100,7 +102,7 @@ router.put('/move', ensureAuthenticated, (req, res) => {
 
 router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
-    const { databaseTabID} = req.body;
+    const { databaseTabID } = req.body;
 
     if (req.params.time === 'deactivatedTime') {
         updateUrlTable(req);
