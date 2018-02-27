@@ -35,20 +35,20 @@ module.exports = {
             }
         });
     },
-    updateUrlTable: function (databaseTabID, user) {
+    updateUrlTable: function (req, res) {
+
+        const { databaseTabID } = req.body;
+        const { user } = req;
 
         const getActiveTimeQuery = 'SELECT url, activatedTime, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE databaseTabID = ?';
         const getActiveTimeInsert = databaseTabID;
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
-            if (err) {
 
-                console.log(err);
-
-            } else {
-
-                if (typeof(url) != 'undefined' &&  typeof(activatedTime) != 'undefined' && typeof(currentTime) != 'undefined') {
+            if (err) console.log(err);
+            else {
+                if (typeof (url) != 'undefined' && typeof (activatedTime) != 'undefined' && typeof (currentTime) != 'undefined') {
 
                     const { url, activatedTime, currentTime } = results[0];
 
@@ -99,7 +99,7 @@ module.exports = {
                         })
                     }
                 } else {
-                    res.send({success: false, code: '422'});
+                    res.send({ success: false, code: '422' });
                 }
             }
         })
