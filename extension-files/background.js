@@ -445,6 +445,7 @@ function requestToServerNoData(method, route) {
 	xhr.send();
 }
 
+
 /**
  * POST request for new tab, saves tabId to user, activates tab when completed
  *@param {object} tabObject the data that will be sent
@@ -452,7 +453,7 @@ function requestToServerNoData(method, route) {
 function createNewTabRequest(tabObject) {
 	if(tabObject.url === ''){
 		return;
-	})
+	}
 	var dataForServer = {
 		windowID: tabObject.windowId,
 		tabTitle: tabObject.title,
