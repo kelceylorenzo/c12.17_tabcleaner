@@ -45,8 +45,8 @@ class User {
 				console.log('success logout');
 				user.changeBrowserIcon('images/iconpurple.png')
 				if(user.loggedIn){
-					window.open(`${BASE_URL}/auth/google/logout`);
 					clearPreviousTabData();
+					window.open(`${BASE_URL}/auth/google/logout`);
 					user.loggedIn = false;
 				}
 			} else {
