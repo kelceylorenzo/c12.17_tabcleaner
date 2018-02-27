@@ -653,6 +653,7 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.type == "removeTab"){
       console.log('remove tab')
+
 		} else if (request.type == "logoutUser"){
 			if(user.loggedIn){
 				user.logout();
@@ -662,4 +663,5 @@ chrome.runtime.onMessage.addListener(
 				user.login();
 			}
 		}
-  });
+	}
+});

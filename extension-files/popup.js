@@ -2,6 +2,9 @@ var lengthOfString = 40;
 var port = chrome.runtime.connect({ name: 'tab' });
 var inactiveTabCount = 0;
 
+
+//event listener on selected to toggle if all selected 
+
 function init() {
 	document.getElementById('refresh').addEventListener('click', refreshContent);
 	document.getElementById('logout').addEventListener('click', logoutUser);
@@ -30,7 +33,6 @@ port.onMessage.addListener(function(response) {
 			}
 
 			if(window == response.sessionInfo.currentWindow){
-				console.log('current window ', window)
 				document.getElementById('tag-titles').prepend(windowTabContainer);
 			}else {
 				document.getElementById('tag-titles').appendChild(windowTabContainer);

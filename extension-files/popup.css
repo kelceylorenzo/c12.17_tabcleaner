@@ -205,3 +205,9 @@ a {
 	color: #ffffff;
 	text-align: center;
 }
+
+#loading {
+	color: #ffffff;
+	font-size: 20px;
+	text-align: center;
+}

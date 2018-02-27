@@ -1,6 +1,6 @@
-const BASE_URL = 'www.closeyourtabs.com';
+const BASE_URL = 'http://www.closeyourtabs.com';
 const COOKIE_NAME =  'connect.sid'; 
-console.log('give Nick a high five');
+console.log('script says hi');
 
 function init(){
     checkUserLoginStatus();
@@ -11,10 +11,9 @@ function init(){
 
 
 function addClickHandlersToTabs(){
-    var closeBtn = document.getElementsByClassName("tab-title");
+    var closeBtn = document.getElementsByClassName("close-favicon");
     for(var index = 0; index < closeBtn.length ; index++ ){
         closeBtn[index].addEventListener('click', removeElement.bind(null, closeBtn[index]), false)
-        console.log('added click listener', closeBtn[index])
     }
 }
 
@@ -34,20 +33,17 @@ function removeElement(tab){
 
 
 function deleteAllTabs(){
-    //get all tab-contaier
-    //loop through and send message to backgroud page
+    //get all tab-container
+    //loop through all tabs, looking for class selected
+    //send message to backgroud page to delete if selected
 }
 
 function logoutUser(){
-    chrome.runtime.sendMessage({type: "logoutUser"}, function(response) {
-        console.log(response);
-    });
+    chrome.runtime.sendMessage({type: "logoutUser"});
 }
 
 function checkUserLoginStatus(){
-    chrome.runtime.sendMessage({type: "checkLogin"}, function(response) {
-        console.log(response);
-    });
+    chrome.runtime.sendMessage({type: "checkLogin"});
 }
 
 init();
