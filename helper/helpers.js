@@ -105,7 +105,7 @@ module.exports = {
         if (err) {
             output.message = "It's dead Jim.";
         } else {
-            if (result.affectedRows > 0 || results.length > 0) {
+            if (result.affectedRows > 0 || result.length > 0) {
                 output.code = '200';
                 output.success = true;
                 output.message = 'Everything went great.';
