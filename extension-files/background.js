@@ -241,8 +241,6 @@ chrome.tabs.onCreated.addListener(function(tab){
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
-		console.log('tab highlighted')
-
     var timeStamp = getTimeStamp();
 		// var previousIndex = user.activeTabIndex[tab.windowId];
 		updatePreviousHighlightedTab(user.activeTabIndex[tab.windowId], tab.windowId, timeStamp, tab.url);
@@ -278,7 +276,6 @@ function updatePreviousHighlightedTab(previousIndex, windowId, timeStamp) {
   }
   deactivateTimeTab(user.tabsSortedByWindow[windowId][previousIndex].databaseTabID);
 	var allTabs = user.tabsSortedByWindow[windowId];
-	console.log('previous tab: ', allTabs[previousIndex])
 	if (allTabs[previousIndex]) {
 		allTabs[previousIndex].highlighted = false;
 		allTabs[previousIndex].timeOfDeactivation = timeStamp;
