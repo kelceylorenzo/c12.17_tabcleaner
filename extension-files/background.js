@@ -15,6 +15,9 @@ class User {
 		this.photo = ''
 	}
 	login() {
+		if(user.loggedIn){
+			return; 
+		}
 		chrome.cookies.get({ url: BASE_URL, name: COOKIE_NAME }, function(cookie) {
 			if(cookie){
 				var date = new Date();
@@ -212,7 +215,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
       //check to see if tab already exists
       if(user.tabIds[tab.windowId].indexOf(tab.id) !== -1){
         var dataForServer = updateTabInformation(tab);
-        if(user.loggedIn){
+        if(user.loggedIn && tab.url !== ''){
           sendDataToServer('PUT', `${BASE_URL}/tabs`, dataForServer);
         }
       } else {
@@ -447,6 +450,9 @@ function requestToServerNoData(method, route) {
  *@param {object} tabObject the data that will be sent
  */
 function createNewTabRequest(tabObject) {
+	if(tabObject.url === ''){
+		return;
+	})
 	var dataForServer = {
 		windowID: tabObject.windowId,
 		tabTitle: tabObject.title,
@@ -507,7 +513,7 @@ function updateIndex(beginIndex, endIndex, windowId){
     var tabObject = user.tabsSortedByWindow[windowId][index];
     tabObject.index = index;  
     var dataForServer = updateTabInformation(tabObject);
-    if(user.loggedIn){
+    if(user.loggedIn && tabObject.url !== ''){
       sendDataToServer('PUT', `${BASE_URL}/tabs`, dataForServer)
     }
   }
