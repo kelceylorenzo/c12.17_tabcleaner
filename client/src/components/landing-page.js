@@ -14,7 +14,7 @@ class LandingPage extends Component {
 	verifyLogIn() {
 		axios.get(`/auth/google/verify`).then((resp) => {
 			console.log('Verify response: ', resp);
-			if (resp.data) {
+			if (resp.data.success) {
 				console.log('this.props for verify: ', this.props);
 				console.log('Axios Response object: ', resp);
 				this.props.history.push('/dashboard');

@@ -34,11 +34,9 @@ class MainPage extends Component {
 		this.handleSort = this.handleSort.bind(this);
 		this.handleViewChange = this.handleViewChange.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
-		// this.logOut = this.logOut.bind(this);
 	}
 
 	componentDidMount() {
-		// this.getData(data);
 		this.getData();
 	}
 
@@ -58,11 +56,6 @@ class MainPage extends Component {
 			);
 		});
 	}
-
-	// async logOut() {
-	// 	await axios.get("auth/google/logout");
-	// 	console.log("you are logged out");
-	// }
 
 	handleRefresh() {
 		this.getData();
@@ -194,6 +187,9 @@ class MainPage extends Component {
 		let { selectedTabs, tabsList } = this.state;
 		let selectedIDs = [];
 
+		console.log('ids to be deleted: ', selectedIDs);
+		// axios.delete('/tabs/database', ).
+
 		for (let tab of selectedTabs) {
 			selectedIDs.push(tab.id);
 		}
@@ -204,6 +200,7 @@ class MainPage extends Component {
 			}
 			return false;
 		});
+
 		this.setState({
 			tabsList: tabsList
 		});

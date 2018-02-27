@@ -613,7 +613,6 @@ button:nth-child(4):active {
 
 .no-data-exclamation {
 	font-size: 500%;
-	margin: 0;
 }
 
 .no-tab-data-title {
@@ -622,7 +621,6 @@ button:nth-child(4):active {
 }
 
 .no-tab-data-subtitle {
-	margin: 0;
 	font-size: 200%;
 }
 /* List View Styling */
@@ -740,7 +738,7 @@ button:nth-child(4):active {
 }
 
 .tab-utilities-container {
-	width: 50%;
+	width: 70%;
 	height: 15%;
 	margin: auto;
 	display: flex;
@@ -751,6 +749,7 @@ button:nth-child(4):active {
 
 .tab-utility {
 	font-size: 20px;
+	z-index: 2;
 }
 
 .tab-utility:hover {
@@ -856,7 +855,6 @@ button:nth-child(4):active {
 	filter: blur(1px);
 }
 
-
 /* FAQ Page Styling */
 .faq-page-container {
 	padding-top: 8%;
@@ -864,29 +862,30 @@ button:nth-child(4):active {
 	font-family: 'Lato', sans-serif;
 }
 
-.faq-page-container h1{
+.faq-page-container h1 {
 	text-align: center;
 }
 
-.faq-page-container img{
+.faq-page-container img {
 	width: 50%;
 }
 
-.faq-main-info img, .faq-main-info div{
+.faq-main-info img,
+.faq-main-info div {
 	display: inline-block;
 	width: 49%;
-	vertical-align:top;
+	vertical-align: top;
 }
 
-.faq-main-info div{
+.faq-main-info div {
 	padding: 0 20px;
 }
 
-.faq-main-info div h2{
+.faq-main-info div h2 {
 	text-align: center;
 }
 
-.faq-page-container p{
+.faq-page-container p {
 	padding-left: 15px;
 }
 .icon-color {
