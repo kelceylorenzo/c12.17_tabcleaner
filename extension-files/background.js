@@ -46,6 +46,7 @@ class User {
 				user.changeBrowserIcon('images/iconpurple.png')
 				if(user.loggedIn){
 					window.open(`${BASE_URL}/auth/google/logout`);
+					clearPreviousTabData();
 					user.loggedIn = false;
 				}
 			} else {
@@ -460,7 +461,7 @@ function createNewTabRequest(tabObject) {
 				var result = JSON.parse(xhr.responseText)
 				if (result.success) {
 					console.log('server connect', xhr.responseText)
-					var result = JSON.parse(xhr.responseText).insertId;
+					var result = JSON.parse(xhr.responseText).data.insertId;
 					var tabObj = user.tabsSortedByWindow[tabObject.windowId][tabObject.index];
 					user.tabsSortedByWindow[tabObj.windowId][tabObj.index] = { ...tabObj, databaseTabID: result };
 					if(tabObject.highlighted){
