@@ -5,6 +5,10 @@ var inactiveTabCount = 0;
 
 //event listener on selected to toggle if all selected 
 
+
+/**
+* Function called on page load, sets click handlers to DOM, get all the data from extension
+*/
 function init() {
 	document.getElementById('refresh').addEventListener('click', refreshContent);
 	document.getElementById('logout').addEventListener('click', logoutUser);
@@ -12,6 +16,11 @@ function init() {
 	sendMessageToGetTabInfo();
 }
 
+/**
+* Port messaging between script and extension, catches response from extension 
+* If response is array of data, render all tabs to dom
+*@param {object} response 
+*/
 port.onMessage.addListener(function(response) {
 	if (response.sessionInfo) {
 		var windows = response.sessionInfo.allTabs;
@@ -45,6 +54,10 @@ port.onMessage.addListener(function(response) {
 	}
 });
 
+/**
+* Create and return a DOM element for a tab
+*@param {object} tabObject 
+*/
 function createDomElement(tabObject) {
 	if (!tabObject.title) {
 		return;
@@ -82,6 +95,7 @@ function createDomElement(tabObject) {
 	tab.addEventListener('click', highlightTab.bind(this, tabObject.index, tabObject.windowId));
 	return tab;
 }
+
 
 function setBadge(number) {
 	port.postMessage({ type: 'setBadge', number: number });
