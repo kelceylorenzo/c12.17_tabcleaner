@@ -9,13 +9,6 @@ function init() {
 	document.getElementById('refresh').addEventListener('click', refreshContent);
 	document.getElementById('logout').addEventListener('click', logoutUser);
 	// document.getElementById('login').addEventListener('click', loginUser);
-
-	document.body.style.opacity = 0;
-	document.body.style.transition = 'opacity ease-out .4s';
-
-	requestAnimationFrame(function() {
-		document.body.style.opacity = 1;
-	});
 	sendMessageToGetTabInfo();
 }
 
@@ -137,3 +130,10 @@ function logoutUser() {
 // }
 
 init();
+
+document.body.style.opacity = 0;
+document.body.style.transition = 'opacity ease-out .4s';
+
+requestAnimationFrame(function() {
+	document.body.style.opacity = 1;
+});
