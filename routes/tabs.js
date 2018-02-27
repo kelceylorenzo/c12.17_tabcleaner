@@ -10,12 +10,9 @@ const { ensureAuthenticated,
     produceOutput,
     getDatabaseTime } = require('../helper/helpers');
 
-
-
-
 db.connect((err) => {
     if (err) throw err;
-    console.log("Connected to remote DB");
+     else console.log("Connected to remote DB");
 });
 
 router.get('/', ensureAuthenticated, (req, res) => {
@@ -41,7 +38,6 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
     const sql = mysql.format(query, insert);
 
     db.query(sql, (err, results) => {
-        console.log(err);
         const output = produceOutput(err, results, 'POST');
         res.send(output);
     });
