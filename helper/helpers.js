@@ -35,7 +35,7 @@ module.exports = {
             }
         });
     },
-    updateUrlTable: function (req, res) {
+    updateUrlTable: function (req) {
 
         const { databaseTabID } = req.body;
         const { user } = req;
@@ -98,9 +98,7 @@ module.exports = {
                             })
                         })
                     }
-                } else {
-                    res.send({ success: false, code: '422' });
-                }
+                } 
             }
         })
     },
