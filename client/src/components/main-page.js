@@ -193,7 +193,6 @@ class MainPage extends Component {
 			selectedIDs.push(tab.databaseTabID);
 		}
 
-<<<<<<< HEAD
 		// for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
 		// 	let tabToDelete = {};
 		// 	tabToDelete['databaseTabID'] = selectedIDs[currentTabIndex];
@@ -215,19 +214,6 @@ class MainPage extends Component {
 			}
 			return false;
 		});
-=======
-		for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
-			axios.delete('/tabs/database', selectedIDs[currentTabIndex]).then((resp) => {
-				if (resp.data.success) {
-					console.log('Tab was deleted', resp);
-					tabsList = tabsList.splice([tabsList.indexOf(selectedTabs[currentTabIndex])], 1);
-				} else {
-					console.log('Server Error; Tab was not deleted ', resp);
-					return;
-				}
-			});
-		}
->>>>>>> bb6a851ebbddaa3e74652a0680fd1940e537ae95
 
 		this.setState({
 			tabsList: tabsList
