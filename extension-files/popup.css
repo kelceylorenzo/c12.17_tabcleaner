@@ -22,7 +22,7 @@ a:focus {
 
 .container {
 	width: 270px;
-	max-height: 400px;
+	height: 400px;
 	padding: 5px;
 }
 
