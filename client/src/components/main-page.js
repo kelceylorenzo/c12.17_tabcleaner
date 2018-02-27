@@ -20,8 +20,8 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: 'window',
-			viewChange: 'grid'
+			sortType: "window",
+			viewChange: "grid"
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -38,24 +38,16 @@ class MainPage extends Component {
 	}
 
 	componentDidMount() {
-		this.verifyLogIn();
+		// this.getData(data);
+		this.getData();
 	}
 
-	verifyLogIn() {
-		axios.get(`/auth/google/verify`).then((resp) => {
-			console.log('Verify response: ', resp);
-			if (resp.data) {
-				console.log('this.props for verify: ', this.props);
-				console.log('Axios Response object: ', resp);
-				console.log('getData called');
-				this.getData();
-				this.props.history.push('/dashboard');
-			} else {
-				console.log('Not logged in');
-				this.props.history.push('/');
-			}
-		});
-	}
+	// getData() {
+	// 	data.map(currentItem => {
+	// 		return (currentItem.selected = false);
+	// 	});
+	// 	this.setState({ ...this.state, tabsList: data }, () => this.handleSort(this.state.sortType));
+	// }
 
 	getData() {
 		axios.get('/tabs').then((resp) => {
@@ -75,19 +67,21 @@ class MainPage extends Component {
 	}
 
 	async logOut() {
-		await axios.get('auth/google/logout');
-		console.log('you are logged out');
+		await axios.get("auth/google/logout");
+		console.log("you are logged out");
 	}
 
 	handleRefresh() {
 		this.getData();
 	}
 
+
 	handleViewChange(view) {
 		this.setState({
-			viewChange: view
-		});
-		console.log('Handle view button clicked: ', view);
+			viewChange:view
+		})
+		console.log("Handle view button clicked: ", view);
+
 	}
 
 	handleIndividualSelect(item) {
