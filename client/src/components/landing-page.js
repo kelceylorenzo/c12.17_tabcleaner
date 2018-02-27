@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import image from '../assets/images/app-logo.png';
 import placeholder from '../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png';
 import axios from 'axios';
@@ -175,7 +176,7 @@ class LandingPage extends Component {
 					</div>
 				</div>
 				<div className="next-section-button faq-link">
-					<p>Still have questions? Visit our FAQ.</p>
+					<Link to="/faq">Still have questions? Visit our FAQ.</Link>
 				</div>
 			</div>
 		);

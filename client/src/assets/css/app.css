@@ -202,9 +202,10 @@ body {
 	color: white;
 }
 
-.next-section-button.faq-link > p {
+.next-section-button.faq-link > a {
 	color: rgb(117, 117, 117);
 	font-size: 1.3em;
+	text-decoration: none;
 }
 
 /* Header Styling */
@@ -259,6 +260,20 @@ body {
 
 .nav-link-container:hover {
 	border-bottom: 7px solid rgba(86, 135, 132, 1);
+	transition-duration: 0.2s;
+	cursor: pointer;
+}
+
+.back-link-container {
+	height: 100%;
+	width: 10%;
+	display: flex;
+	color: lightgrey;
+	text-decoration: none;
+}
+
+.back-link-container:hover {
+	border-bottom: 7px solid rgba(212, 167, 129, 1);
 	transition-duration: 0.2s;
 	cursor: pointer;
 }

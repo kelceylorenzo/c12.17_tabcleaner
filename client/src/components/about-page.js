@@ -67,7 +67,9 @@ class AboutPage extends Component {
 		return (
 			<div className="about-page">
 				<div className="header-container">
-					<Header routes={headerData} />
+					<a href="/dashboard" className="back-link-container">
+						<div className="nav-link">BACK</div>
+					</a>
 				</div>
 				<div className="about-page-title-container">
 					<div className="about-page-title">MEET THE TABS TEAM</div>
@@ -83,7 +85,8 @@ class AboutPage extends Component {
 								<b>THE IDEA WAS SIMPLE: </b>create a tool that would encourage people to close
 								their tabs. What started off as a simple extension developed into a full web
 								application with the future of allowing users to take their tabs across browsers
-								and devices. Even as our app grows, we hope to our users to control their tabs.
+								and devices. Even as our app grows, we hope to help our users to control their
+								tabs.
 								<br />
 								<br />
 								<b>TECHNOLOGIES USED:</b> Chrome Platform APIs, Chrome Extension, Chrome Developer
