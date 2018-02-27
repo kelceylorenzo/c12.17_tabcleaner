@@ -50,12 +50,15 @@ module.exports = {
                 || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
                 || (url).match(/^(localhost)/);
 
+            console.log('activatedTime: ', activatedTime, ' currentTime: ', currentTime, '*************************************************************');
+
             if (domain != null) {
 
                 domain = domain[0];
 
                 let newActiveTime = currentTime - activatedTime;
 
+                console.log('newActiveTime: ', newActiveTime);
                 const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
                     "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     "googleID DOUBLE NULL," +
