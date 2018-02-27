@@ -6,26 +6,38 @@ import Sort from "./main-sort";
 
 class MainTabArea extends Component {
 	render() {
-		const tabList = this.props.tabData.map((item, index) => {
-			return (
-				<Tab
-					key={index}
-					item={item}
-					select={() => this.props.select(item)}
-					utilityClick={(item, selected) => this.props.utilityClick(item, selected)}
-					viewChange={this.props.viewChange}
-				/>
+		let tabList;
+
+		if (this.props.tabData) {
+			tabList = this.props.tabData.map((item, index) => {
+				return (
+					<Tab
+						key={index}
+						item={item}
+						select={() => this.props.select(item)}
+						utilityClick={(item, selected) => this.props.utilityClick(item, selected)}
+						viewChange={this.props.viewChange}
+					/>
+				);
+			});
+		} else {
+			tabList = (
+				<div className="no-tab-data">
+					<i className="no-data-exclamation fas fa-exclamation-circle" />
+					<p className="no-tab-data-title">NO TABS HERE!</p>
+					<p className="no-tab-data-subtitle">Please try again later</p>
+				</div>
 			);
-		});
+		}
 
 		let windowView = {
-			view: "tab-window"
+			view: 'tab-window'
 		};
 
-		if (this.props.viewChange === "grid") {
-			windowView.view = "tab-window";
+		if (this.props.viewChange === 'grid') {
+			windowView.view = 'tab-window';
 		} else {
-			windowView.view = "list-tab-window";
+			windowView.view = 'list-tab-window';
 		}
 
 		let gridselected = this.props.viewChange === "grid" ? "selected" : "notselected";
