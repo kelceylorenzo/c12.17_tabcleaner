@@ -50,6 +50,8 @@ module.exports = {
                 || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
                 || (url).match(/^(localhost)/);
 
+            console.log('activatedTime: ', activatedTime, ' currentTime: ', currentTime, '*************************************************************');
+
             if (domain != null) {
 
                 domain = domain[0];
