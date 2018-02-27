@@ -1,4 +1,4 @@
-const BASE_URL = 'www.closeyourtabs.com';
+const BASE_URL = 'http://www.closeyourtabs.com';
 const COOKIE_NAME =  'connect.sid'; 
 console.log('script says hi');
 
@@ -11,10 +11,9 @@ function init(){
 
 
 function addClickHandlersToTabs(){
-    var closeBtn = document.getElementsByClassName("tab-title");
+    var closeBtn = document.getElementsByClassName("close-favicon");
     for(var index = 0; index < closeBtn.length ; index++ ){
         closeBtn[index].addEventListener('click', removeElement.bind(null, closeBtn[index]), false)
-        console.log('added click listener', closeBtn[index])
     }
 }
 
