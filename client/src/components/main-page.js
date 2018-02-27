@@ -34,20 +34,13 @@ class MainPage extends Component {
 		this.handleSort = this.handleSort.bind(this);
 		this.handleViewChange = this.handleViewChange.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
-		this.logOut = this.logOut.bind(this);
+		// this.logOut = this.logOut.bind(this);
 	}
 
 	componentDidMount() {
 		// this.getData(data);
 		this.getData();
 	}
-
-	// getData() {
-	// 	data.map(currentItem => {
-	// 		return (currentItem.selected = false);
-	// 	});
-	// 	this.setState({ ...this.state, tabsList: data }, () => this.handleSort(this.state.sortType));
-	// }
 
 	getData() {
 		axios.get('/tabs').then((resp) => {
@@ -66,10 +59,10 @@ class MainPage extends Component {
 		});
 	}
 
-	async logOut() {
-		await axios.get("auth/google/logout");
-		console.log("you are logged out");
-	}
+	// async logOut() {
+	// 	await axios.get("auth/google/logout");
+	// 	console.log("you are logged out");
+	// }
 
 	handleRefresh() {
 		this.getData();
@@ -134,6 +127,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
+
 			case 'time':
 				tabsList.sort((a, b) => {
 					let timeA = a.currentTime - a.deactivatedTime;
@@ -281,6 +275,7 @@ class MainPage extends Component {
 	}
 
 	render() {
+		console.log('state of viewChange', this.state.viewChange);
 		return (
 			<div className="main-page-container">
 				<div className="dashboard-container">
@@ -302,6 +297,7 @@ class MainPage extends Component {
 							utilityClick={this.handleUtilityClick}
 							handleViewChange={this.handleViewChange}
 							viewChange={this.state.viewChange}
+							selectChange={this.state.selectChange}
 							handleRefresh={this.handleRefresh}
 						/>
 					</div>
