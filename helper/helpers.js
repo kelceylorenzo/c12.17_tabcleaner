@@ -47,7 +47,7 @@ module.exports = {
         db.query(getActiveTimeSQL, (err, results) => {
             if (err) {
                 console.log(err);
-            } else if(results.length>0){
+            } else if (results.length > 0) {
 
                 const { url, activatedTime, currentTime } = results[0];
 
@@ -96,7 +96,7 @@ module.exports = {
                             }
                         })
                     })
-                } 
+                }
             }
         })
     },
