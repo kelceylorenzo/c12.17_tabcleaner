@@ -29,9 +29,11 @@ module.exports = {
             "favicon VARCHAR(2084) NULL," +
             "screenshot VARCHAR(50000) NULL);";
         db.query(sql, (err, results) => {
-            if (err) throw err;
-            console.log("results", results);
-            next();
+            if (err) {
+                throw err;
+            } else {
+                next();
+            }
         });
     },
     updateUrlTable: function (databaseTabID, user) {
@@ -41,7 +43,7 @@ module.exports = {
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
-            if(err) throw err;
+            if (err) throw err;
 
             const { url, activatedTime } = results[0];
 
@@ -106,16 +108,12 @@ module.exports = {
                 output.code = '200';
                 output.success = true;
             } else {
-                output.code ='404';
+                output.code = '404';
                 output.message = 'No data for user';
             }
         }
-        if(location === 'GET'){
-            console.log('');
-        } else {
-            console.log(output);
-        }
+        console.log(output);
         const json_output = JSON.stringify(output);
-        return json_output;  
+        return json_output;
     },
 };
