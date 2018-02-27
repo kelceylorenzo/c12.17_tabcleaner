@@ -20,8 +20,8 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: 'window',
-			viewChange: 'grid'
+			sortType: "window",
+			viewChange: "grid"
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -68,11 +68,13 @@ class MainPage extends Component {
 		this.getData();
 	}
 
+
 	handleViewChange(view) {
 		this.setState({
-			viewChange: view
-		});
-		console.log('Handle view button clicked: ', view);
+			viewChange:view
+		})
+		console.log("Handle view button clicked: ", view);
+
 	}
 
 	handleIndividualSelect(item) {
