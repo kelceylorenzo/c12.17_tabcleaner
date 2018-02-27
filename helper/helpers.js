@@ -58,6 +58,7 @@ module.exports = {
 
                 let newActiveTime = currentTime - activatedTime;
 
+                console.log('newActiveTime: ', newActiveTime);
                 const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
                     "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     "googleID DOUBLE NULL," +
