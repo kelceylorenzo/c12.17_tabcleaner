@@ -37,14 +37,14 @@ module.exports = {
     },
     updateUrlTable: function (databaseTabID, user) {
 
-        const getActiveTimeQuery = 'SELECT url, activatedTime FROM tabs WHERE databaseTabID = ?';
+        const getActiveTimeQuery = 'SELECT url, activatedTime, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE databaseTabID = ?';
         const getActiveTimeInsert = databaseTabID;
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
             if (err) throw err;
 
-            const { url, activatedTime } = results[0];
+            const { url, activatedTime, currentTime } = results[0];
 
             let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
                 || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
@@ -54,7 +54,7 @@ module.exports = {
 
                 domain = domain[0];
 
-                let newActiveTime = ;
+                let newActiveTime = currentTime - activatedTime;
 
                 const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
                     "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
