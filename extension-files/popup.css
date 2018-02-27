@@ -136,7 +136,7 @@ a {
 	background-color: rgb(143, 182, 179);
 }
 
-#login {
+#login, #logout {
 	width: 86%;
 }
 

@@ -100,7 +100,6 @@ function sendMessageToGetTabInfo() {
 }
 
 function hideLoginButtons() {
-    document.getElementById("webpage").style.display = "flex";
     document.getElementById("logout").style.display = "block";
     document.getElementById("login").style.display = "none";
 }
