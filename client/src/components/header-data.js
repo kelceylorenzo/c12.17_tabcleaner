@@ -1,18 +1,18 @@
 export default [
 	{
-		name: "HOME",
-		to: "/dashboard"
+		name: 'HOME',
+		to: '/dashboard'
+	},
+	// {
+	// 	name: "TOP TEN",
+	// 	to: "/top-ten"
+	// },
+	{
+		name: 'ABOUT',
+		to: '/about'
 	},
 	{
-		name: "TOP TEN",
-		to: "/top-ten"
-	},
-	{
-		name: "ABOUT",
-		to: "/about"
-	},
-	{
-		name: "FAQ",
+		name: 'FAQ',
 		to: '/FAQ'
 	}
 ];

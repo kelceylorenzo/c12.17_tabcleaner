@@ -20,8 +20,8 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: "window",
-			viewChange: "grid"
+			sortType: 'window',
+			viewChange: 'grid'
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -37,7 +37,21 @@ class MainPage extends Component {
 	}
 
 	componentDidMount() {
-		this.getData();
+		this.verifyLogIn();
+	}
+
+	verifyLogIn() {
+		axios.get(`/auth/google/verify`).then((resp) => {
+			console.log('Verify response: ', resp);
+			if (resp.data.success) {
+				console.log('this.props for verify: ', this.props);
+				console.log('Axios Response object: ', resp);
+				this.getData();
+			} else {
+				console.log('Not logged in');
+				this.props.history.push('/');
+			}
+		});
 	}
 
 	getData() {
@@ -61,13 +75,11 @@ class MainPage extends Component {
 		this.getData();
 	}
 
-
 	handleViewChange(view) {
 		this.setState({
-			viewChange:view
-		})
-		console.log("Handle view button clicked: ", view);
-
+			viewChange: view
+		});
+		console.log('Handle view button clicked: ', view);
 	}
 
 	handleIndividualSelect(item) {
