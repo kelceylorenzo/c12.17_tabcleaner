@@ -32,8 +32,8 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     const { windowID, tabTitle, browserTabIndex, url, favicon, screenshot } = req.body;
 
-    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000), ?, ?, ?, ?, ?)';
-    const insert = ['tabs', 'windowID', 'tabTitle', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
+    const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000), ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000), ?, ?, ?, ?, ?)';
+    const insert = ['tabs', 'windowID', 'tabTitle', 'activatedTime', 'deactivatedTime', 'browserTabIndex', 'googleID', 'url', 'favicon', 'screenshot',
         windowID, tabTitle, browserTabIndex, googleID, url, favicon, screenshot];
     const sql = mysql.format(query, insert);
 
