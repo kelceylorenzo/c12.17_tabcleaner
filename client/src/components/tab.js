@@ -47,7 +47,12 @@ export default (props) => {
 	}
 
 	return (
-		<div className={`${viewClass.container} ${selectClass}`} onClick={props.select}>
+		<div
+			className={`${viewClass.container} ${selectClass}`}
+			data-windowId={props.item.windowID}
+			data-tabIndex={props.item.browserTabIndex}
+			onClick={props.select}
+		>
 			<div className={viewClass.overlayContainer} style={selectStyle}>
 				<img className="select-overlay" src={checkMark} alt="" />
 			</div>
