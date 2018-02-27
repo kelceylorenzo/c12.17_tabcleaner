@@ -1,7 +1,7 @@
 var user;
 const BASE_URL = 'http://www.closeyourtabs.com';
 const COOKIE_NAME =  'connect.sid';
- 
+
 /**
  * User class keeps track of current tab information and logged in status
  */
@@ -163,13 +163,21 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 	var tabArray = user.tabsSortedByWindow[removeInfo.windowId];
 	var indexInIdsArray = user.tabIds[removeInfo.windowId].indexOf(id);
 	var tabID;
+	var tabIndex; 
 	user.tabIds[removeInfo.windowId].splice(indexInIdsArray, 1);
 	for (var tab = 0; tab < tabArray.length; tab++) {
 		if (tabArray[tab].id === id) {
-			tabID = user.tabsSortedByWindow[removeInfo.windowId][tab].databaseTabID;
-			user.tabsSortedByWindow[removeInfo.windowId].splice(tab, 1);
+			var tabToRemoveInfo = user.tabsSortedByWindow[removeInfo.windowId][tab]; 
+			tabID = tabToRemoveInfo.databaseTabID;
+			tabIndex = tabToRemoveInfo.index; 
+			user.tabsSortedByWindow[removeInfo.windowId].splice(tabIndex, 1);
 			break;
 		}
+	}
+
+	//update all the indexes for the tabs
+	if(tabIndex < tabArray.length - 1){
+		updateIndex(tabIndex, user.tabsSortedByWindow[removeInfo.windowId].length-1, removeInfo.windowId);
 	}
 
 	user.activeTabIndex[removeInfo.windowId] = null;
@@ -539,10 +547,11 @@ function updatedElaspedDeactivation() {
 	var overdueTabCount = 0; 
 	for (var window in windows) {
 		for (var index in windows[window]) {
-			if (!windows[window][index].highlighted) {
-				windows[window][index].inactiveTimeElapsed =
-					currentTime - windows[window][index].timeOfDeactivation;
-				if(windows[window][index].inactiveTimeElapsed > 25000){
+			tab = windows[window][index];
+			if (!tab.highlighted) {
+				tab.inactiveTimeElapsed =
+					currentTime - tab.timeOfDeactivation;
+				if(tab.inactiveTimeElapsed > 25000){
 					overdueTabCount++;
 				}
 			}
