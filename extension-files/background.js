@@ -1,8 +1,7 @@
-//send what time he thinks it is
-//get time stamp, and check for offset of zulu time
 var user;
 const BASE_URL = 'http://www.closeyourtabs.com';
-const COOKIE_NAME =  'connect.sid' 
+const COOKIE_NAME =  'connect.sid';
+ 
 /**
  * User class keeps track of current tab information and logged in status
  */
