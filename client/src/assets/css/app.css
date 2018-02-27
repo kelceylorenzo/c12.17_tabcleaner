@@ -1,5 +1,10 @@
+@font-face {
+	font-family: "LemonMilk";
+	src: url("../../assets/fonts/LemonMilk.otf");
+}
 body {
 	margin: 0;
+	font-family: "Lato", sans-serif;
 }
 
 .app {
@@ -15,57 +20,191 @@ body {
 
 /* Landing Page Styling */
 
-.landing-page-container {
+.home-page-container {
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	/* overflow: hidden; */
+}
+
+.home-showcase-container {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: 40%;
+	height: 15%;
+	width: 6%;
+}
+
+.home-showcase-selected {
+	color: rgba(44, 91, 124, 1);
+}
+
+.home-showcase-notselected {
+	color: rgba(44, 91, 124, 0.3);
+}
+
+.showcase {
+	color: inherit;
+}
+
+.home-showcase {
+	margin: auto;
+	height: 20%;
+	/* color: rgba(44, 91, 124, 1); */
+	color: rgba(44, 91, 124, 0.5);
+	cursor: pointer;
+}
+
+.home-showcase:hover {
+	color: rgba(44, 91, 124, 1);
+}
+
+.landing-page-container,
+.introduction-container,
+.extension-dashboard-container,
+.getting-started-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 80%;
+	height: 93%;
+	width: 100%;
 	cursor: default;
+	margin: auto;
 }
+
 .logo {
-	margin-top: 5%;
+	height: 15%;
+	width: 15%;
+	margin: auto;
+}
+
+.landing-page-title-container {
+	display: flex;
+	flex-direction: column;
 }
 
 .landing-page-title {
-	font-family: "Lato", sans-serif;
+	font-family: "LemonMilk", sans-serif;
 	color: rgba(0, 0, 0, 0.6);
+	font-size: 4em;
+	margin: auto;
+}
+
+.landing-page-subtitle {
+	color: rgba(0, 0, 0, 0.6);
+	margin: auto;
 	font-size: 2em;
+}
+
+.landing-page-content {
+	color: rgba(0, 0, 0, 0.6);
+	margin: 3% auto;
+	font-size: 1.2em;
+	text-align: justify;
 }
 
 .login-button-container {
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 5%;
 	width: 100%;
+	margin-top: 2%;
 }
 
-.login-button {
-	font-family: "Lato", sans-serif;
-	font-size: 1.5em;
+.login-button,
+.getting-started-button {
+	font-size: 1.2em;
 	font-weight: 800;
 	text-decoration: none;
 	text-align: center;
 	background-color: rgba(86, 135, 132, 0.2);
 	color: rgba(86, 135, 132, 1);
 	border: 3px solid rgba(86, 135, 132, 1);
-	/* border: 3px solid rgba(255,255,255,1);
-	color: rgba(255,255,255,1);
-	background-color: rgba(86, 135, 132, 1); */
 	border-radius: 5px;
 	padding: 1%;
-	width: 10%;
+	margin: 0 1%;
+	width: 15%;
 }
 
-.login-button:hover {
+.login-button:hover,
+.getting-started-button:hover {
 	border: 3px solid rgba(255, 255, 255, 0.6);
 	color: rgba(255, 255, 255, 0.85);
 	background-color: rgba(86, 135, 132, 1);
-	/* background-color: rgba(86, 135, 132, .2);
-	color: rgba(86, 135, 132, 1);
-	border: 3px solid rgba(86, 135, 132, 1); */
+}
+
+.introduction-container {
+	width: 80%;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.introduction-content-container {
+	width: 50%;
+}
+
+.landing-page-subtitle.extension-dashboard {
+	margin: auto auto 0 auto;
+}
+
+.extension-dashboard-content {
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+	margin: 2% auto auto auto;
+}
+
+.extension-content,
+.dashboard-content {
+	width: 45%;
+	text-align: justify;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.getting-started-button-container {
+	width: 40%;
+	display: flex;
+	flex-direction: column;
+}
+
+.getting-started-button {
+	width: 50%;
+	margin: 1% auto;
+	padding: 3%;
+}
+
+.next-section-button {
+	display: flex;
+	justify-content: center;
+	height: 7%;
+	cursor: pointer;
+}
+
+.next-section-button.intro {
+	background-color: rgb(44, 91, 124);
+}
+
+.next-section-button.extension-dashboard {
+	background-color: rgb(212, 167, 129);
+}
+
+.next-section-button.getting-started {
+	background-color: rgb(86, 135, 132);
+}
+
+.next-section-button > p {
+	margin: auto;
+	font-size: 1.5em;
+	color: white;
+}
+
+.next-section-button.faq-link > p {
+	color: rgb(117, 117, 117);
+	font-size: 1.3em;
 }
 
 /* Header Styling */
@@ -76,7 +215,6 @@ body {
 	top: 0;
 	display: flex;
 	background-color: rgba(26, 54, 74, 1);
-	font-family: "Lato", sans-serif;
 	font-weight: 400;
 	z-index: 5;
 }
@@ -140,7 +278,6 @@ body {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	font-family: "Lato", sans-serif;
 	cursor: default;
 }
 
@@ -190,7 +327,7 @@ body {
 	flex-direction: column;
 	margin: auto;
 	width: 100%;
-	height: 60%;
+	height: 80%;
 }
 
 .about-content-title {
@@ -205,7 +342,7 @@ body {
 .team-members-container {
 	display: flex;
 	width: 100%;
-	height: 60%;
+	height: 80%;
 	justify-content: space-around;
 	margin: auto;
 	flex-direction: column;
@@ -294,7 +431,6 @@ body {
 	flex-direction: column;
 	height: 80%;
 	width: 100%;
-	font-family: "Lato", sans-serif;
 	font-weight: 400;
 }
 
@@ -329,7 +465,6 @@ body {
 }
 
 .side-bar-container > button {
-	font-family: "Lato", sans-serif;
 	font-weight: 600;
 	font-size: 0.8em;
 	height: 15%;
@@ -362,12 +497,11 @@ body {
 
 .side-bar-container > button:nth-child(2):active {
 	background-color: rgba(156, 95, 88, 0.75);
-
 }
 
 .side-bar-container > button:nth-child(3):active,
 button:nth-child(4):active {
-		background-color: rgba(26, 54, 74, 1);
+	background-color: rgba(26, 54, 74, 1);
 }
 
 .side-bar-container > button:focus {
@@ -565,7 +699,6 @@ button:nth-child(4):active {
 	padding: 0 15%;
 }
 
-
 .tab-utility {
 	font-size: 20px;
 }
@@ -616,7 +749,6 @@ button:nth-child(4):active {
 
 .page {
 	display: flex;
-	font-family: "Lato", sans-serif;
 	position: relative;
 	flex-direction: column;
 	border: 3px solid rgba(26, 54, 74, 0.4);
