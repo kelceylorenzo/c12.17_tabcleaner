@@ -38,7 +38,7 @@ module.exports = {
     },
     updateUrlTable: function (databaseTabID, user) {
 
-        const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ?';
+        const getActiveTimeQuery = 'SELECT url, activatedTime FROM tabs WHERE databaseTabID = ?';
         const getActiveTimeInsert = databaseTabID;
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
@@ -100,15 +100,18 @@ module.exports = {
             type: location,
             success: false,
             data: result,
+            code: '503'
         };
         if (err) {
-            output.message = 'Failed.';
+            output.message = "It's dead Jim.";
         } else {
-            if (result.affectedRows > 0) {
+            if (result.affectedRows > 0 || results.length > 0) {
                 output.code = '200';
                 output.success = true;
+                output.message = 'Everything went great.';
             } else {
                 output.code = '404';
+                output.success = false;
                 output.message = 'No data for user';
             }
         }
