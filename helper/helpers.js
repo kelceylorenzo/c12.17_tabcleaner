@@ -50,7 +50,7 @@ module.exports = {
                 || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
                 || (url).match(/^(localhost)/);
 
-            if(domain != null){
+            if (domain != null) {
 
                 domain = domain[0];
 
@@ -78,7 +78,7 @@ module.exports = {
                             const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
                             db.query(updateActiveTimeSQL, (err) => {
                                 if (err) console.log(err)
-                                console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
+                                else console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
                             });
 
                         } else {
@@ -87,7 +87,7 @@ module.exports = {
                             const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
                             db.query(insertUrlSQL, (err, results) => {
                                 if (err) console.log(err);
-                                console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
+                                 else console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
                             });
                         }
                     })

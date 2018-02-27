@@ -7,19 +7,17 @@ const db = mysql.createConnection(mysqlCredentials);
 const { ensureAuthenticated,
     checkIfTableExists,
     updateUrlTable,
-    produceOutput,
-    getDatabaseTime } = require('../helper/helpers');
+    produceOutput } = require('../helper/helpers');
 
 db.connect((err) => {
     if (err) throw err;
-     else console.log("Connected to remote DB");
+    else console.log("Connected to remote DB");
 });
 
 router.get('/', ensureAuthenticated, (req, res) => {
 
     const query = 'SELECT *, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE googleID = ?';
-    const insert = req.user.googleID;
-    const sql = mysql.format(query, insert);
+    const sql = mysql.format(query, req.user.googleID);
 
     db.query(sql, (err, results) => {
         const output = produceOutput(err, results, 'GET');
@@ -29,7 +27,9 @@ router.get('/', ensureAuthenticated, (req, res) => {
 });
 
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
+
     const googleID = req.user.googleID;
+
     const { windowID, tabTitle, browserTabIndex, url, favicon, screenshot } = req.body;
 
     const query = 'INSERT INTO ?? (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000), ?, ?, ?, ?, ?)';
@@ -100,9 +100,9 @@ router.put('/move', ensureAuthenticated, (req, res) => {
 
 router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
-    const { databaseTabID, url } = req.body;
+    const { databaseTabID} = req.body;
 
-    if (req.params.time === 'deactivatedTime' && url) {
+    if (req.params.time === 'deactivatedTime') {
         updateUrlTable(databaseTabID, req.user);
     };
 
