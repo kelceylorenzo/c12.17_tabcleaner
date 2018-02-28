@@ -216,10 +216,10 @@ class MainPage extends Component {
 			}
 			return false;
 		});
-
-		this.setState({
-			tabsList: tabsList
-		});
+		this.getData()
+		// this.setState({
+		// 	tabsList: tabsList
+		// });
 	}
 
 	handleUtilityClick(item, selectedType) {
