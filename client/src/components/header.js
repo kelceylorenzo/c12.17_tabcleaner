@@ -18,7 +18,16 @@ export default (props) => {
 			</Link>
 
 			<div className="navigation-container">
-				<div className="navigation">{navLinks}</div>
+				<div className="navigation">
+					{navLinks}
+					<div className="nav-link-container" id="log-out-button">
+						<div className="nav-link">
+							<a className="log-out-link" href="/auth/google/logout">
+								LOG OUT
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

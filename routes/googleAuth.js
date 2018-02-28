@@ -16,17 +16,20 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/' }
 
 router.get('/verify', (req, res) => {
     if (req.user) {
-        res.send(req.user);
-        console.log(req.user, ' is authenticated');
+        res.send({
+            success: true,
+            user: req.user});
     } else {
         console.log('Not Auth');
-        res.send(false);
+        res.send({
+            success: false
+        });
     }
 });
 
 router.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/');
+    res.redirect('www.closeyourtabs.com/');
 });
 
 module.exports = router;

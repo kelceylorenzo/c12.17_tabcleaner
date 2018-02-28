@@ -68,8 +68,11 @@ module.exports = function (passport) {
         const findUser = mysql.format(findUserSQL, findUserInsert);
 
         db.query(findUser, (err, results, fields) => {
-            if (err) console.log(err);
+            if (err){
+                console.log(err);
+            } else {
             done(null, user);
+            }
         });
     });
 };
