@@ -91,6 +91,10 @@ class User {
 *@param {object} currentTime
 */
 function createNewTab(tab, currentTime){
+	if(user.tabIds.indexOf(tab.id) !== -1){
+		return; 
+	}
+
 	if(user.tabIds[tab.windowId].indexOf(tab.id) === -1){
 		user.tabIds[tab.windowId].push(tab.id);
 	}
