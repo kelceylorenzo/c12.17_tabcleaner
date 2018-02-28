@@ -14,8 +14,8 @@
 		"storage",
 		"tabs",
 		"<all_urls>",
-		"http://www.closeyourtabs.com/*",
-		"http://closeyourtabs.com/*",
+		"http://www.closeyourtabs.com/dashboard*",
+		"http://closeyourtabs.com/dashboard*",
 		"http://localhost:5000/*",
 		"http://localhost:3000/*",
 		"cookies"
@@ -26,7 +26,7 @@
 	"content_scripts": [
 		{
 			"run_at" :"document_end",
-			"matches": ["http://localhost:5000/*", "http://localhost:3000/*", "http://www.closeyourtabs.com/*", "http://closeyourtabs.com/*"],
+			"matches": ["http://localhost:5000/*", "http://localhost:3000/*", "http://www.closeyourtabs.com/dashboard*", "http://closeyourtabs.com/dashboard*"],
 			"js": ["dashboard.js"]		}
 	]
 }
