@@ -5,7 +5,7 @@ console.log('script says hi');
 function init(){
     checkUserLoginStatus();
     var logoutBtn = document.getElementById('log-out-button');
-    logoutBtn.addEventListener('click', logoutUser);
+    // logoutBtn.addEventListener('click', logoutUser);
     setTimeout(function(){addClickHandlersToTabs()}, 500)
 }
 
