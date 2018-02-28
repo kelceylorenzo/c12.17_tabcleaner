@@ -29,7 +29,7 @@ export default (props) => {
 		selectClass = 'tab-selected';
 	}
 
-	let inactiveElapsedTime = props.item.currentTime - props.item.deactivatedTime;
+	let inactiveElapsedTime = props.item.currentTime - props.item.a;
 
 	if (inactiveElapsedTime < 10000) {
 		tabStyle.backgroundColor = '';
@@ -75,10 +75,7 @@ export default (props) => {
 					>
 						<i className="fas fa-external-link-alt" />
 					</div>
-					<div
-						className="tab-utility close-favicon"
-						// onClick={() => props.utilityClick(props.item, 'close')}
-					>
+					<div className="tab-utility close-favicon" onClick={() => setTimeout(props.getNewTabs, 100)}>
 						<i className="fas fa-times" />
 					</div>
 				</div>

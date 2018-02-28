@@ -17,6 +17,7 @@ class MainTabArea extends Component {
 						select={() => this.props.select(item)}
 						utilityClick={(item, selected) => this.props.utilityClick(item, selected)}
 						viewChange={this.props.viewChange}
+						getNewTabs={this.props.handleRefresh}
 					/>
 				);
 			});
