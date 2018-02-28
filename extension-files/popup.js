@@ -150,7 +150,7 @@ function openWebpage(){
 function refreshContent() {
 	document.getElementById('tag-titles').innerHTML = '';
 	inactiveTabCount = 0;
-	sendMessageToGetTabInfo();
+	port.postMessage({ type: 'refresh'});
 }
 
 
