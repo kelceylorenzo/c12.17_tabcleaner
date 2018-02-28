@@ -30,7 +30,7 @@ export default (props) => {
 	let inactiveElapsedTime = props.item.currentTime - props.item.deactivatedTime;
 
 	if (inactiveElapsedTime < 10000) {
-		tabStyle.backgroundColor = '';
+		tabStyle.backgroundColor = ''; 
 	} else if (inactiveElapsedTime < 25000) {
 		tabStyle.backgroundColor = 'rgba(215, 213, 170, 0.5)';
 	} else {

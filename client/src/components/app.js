@@ -11,7 +11,7 @@ import headerData from './header-data.js';
 import FAQpage from './faq';
 
 import '../assets/css/app.css';
-
+  
 class App extends Component {
 	render() {
 		return (
