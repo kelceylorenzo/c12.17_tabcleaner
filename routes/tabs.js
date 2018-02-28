@@ -58,7 +58,7 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
     if (req.params.deleteSource === 'database') {
         const query = 'DELETE FROM tabs WHERE databaseTabID = ? AND googleID = ?';
         sql = mysql.format(query, [databaseTabID, req.user.googleID])
-        updateUrlTable(req);
+        // updateUrlTable(req);
     }
 
     db.query(sql, (err, results) => {
@@ -68,13 +68,13 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
 
 });
 
-router.put('/', ensureAuthenticated, checkIfTableExists, async (req, res) => {
+router.put('/', ensureAuthenticated, checkIfTableExists, /* async */ (req, res) => {
 
-    await updateUrlTable(req);
+    // await updateUrlTable(req);
 
     const { databaseTabID, tabTitle, browserTabIndex, url, favicon } = req.body;
 
-    const query = 'UPDATE tabs SET tabTitle=?, browserTabIndex=?, url=?, favicon=? WHERE databaseTabID = ? AND googleID = ?';
+    const query = 'UPDATE tabs SET tabTitle=?, activatedTime=ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000), browserTabIndex=?, url=?, favicon=? WHERE databaseTabID = ? AND googleID = ?';
     const insert = [tabTitle, browserTabIndex, url, favicon, databaseTabID, req.user.googleID];
     const sql = mysql.format(query, insert);
 
@@ -104,9 +104,9 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     const { databaseTabID } = req.body;
 
-    if (req.params.time === 'deactivatedTime') {
-        updateUrlTable(req);
-    };
+    // if (req.params.time === 'deactivatedTime') {
+    //     updateUrlTable(req);
+    // };
 
     const query = 'Update tabs SET ?? = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) WHERE databaseTabID = ?';
     const insert = [req.params.time, databaseTabID];
