@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import logo from '../assets/images/app-logo.png';
 
 export default (props) => {
@@ -11,6 +12,18 @@ export default (props) => {
 		);
 	});
 
+	function clearData() {
+		console.log('clear data was called');
+		axios
+			.delete('/tabs/google')
+			.then((resp) => {
+				console.log('clearData Response: ', resp);
+			})
+			.catch((err) => {
+				console.log('clearData Error: ', err);
+			});
+	}
+
 	return (
 		<div className="header">
 			<Link className="logo-container" to="/dashboard">
@@ -20,13 +33,16 @@ export default (props) => {
 			<div className="navigation-container">
 				<div className="navigation">
 					{navLinks}
-					<div className="nav-link-container" id="log-out-button">
+					<a
+						className="nav-link-container"
+						id="log-out-button"
+						href="/auth/google/logout"
+						onClick={clearData}
+					>
 						<div className="nav-link">
-							<a className="log-out-link" href="/auth/google/logout">
-								LOG OUT
-							</a>
+							<div className="log-out-link">LOG OUT</div>
 						</div>
-					</div>
+					</a>
 				</div>
 			</div>
 		</div>
