@@ -85,7 +85,7 @@ body {
 .landing-page-title {
 	font-family: 'LemonMilk', sans-serif;
 	color: rgba(0, 0, 0, 0.6);
-	font-size: 4em;
+	font-size: 10vmin;
 	margin: auto;
 }
 
@@ -142,6 +142,14 @@ body {
 
 .introduction-content-container {
 	width: 50%;
+}
+
+.introduction-image {
+	height: 35%;
+}
+
+.introduction-image > img {
+	height: 100%;
 }
 
 .landing-page-subtitle.extension-dashboard {
