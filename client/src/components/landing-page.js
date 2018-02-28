@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import image from '../assets/images/app-logo.png';
-import placeholder from '../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png';
 import axios from 'axios';
+import logo from '../assets/images/app-logo.png';
+import extensionPicture from '../assets/images/extension-picture.png';
+import dashboardPicture from '../assets/images/dashboard-picture.png';
 
 class LandingPage extends Component {
 	constructor(props) {
@@ -93,7 +94,7 @@ class LandingPage extends Component {
 				</div>
 				<div className="landing-page-container" ref={'home'}>
 					<div className="landing-page-title-container">
-						<img className="logo" src={image} alt="" />{' '}
+						<img className="logo" src={logo} alt="" />{' '}
 						<p className="landing-page-title">CLOSE YOUR TABS</p>
 						<p className="landing-page-subtitle">Keep tabs on your tabs</p>
 					</div>
@@ -113,7 +114,7 @@ class LandingPage extends Component {
 
 				<div onScroll={this.props.scroll} className="introduction-container" ref={'introduction'}>
 					<div className="introduction-image">
-						<img src={placeholder} alt="" />
+						<img src={logo} alt="" />
 					</div>
 					<div className="introduction-content-container">
 						<p className="landing-page-subtitle">Isn’t it time to close some of those tabs?</p>
@@ -138,7 +139,7 @@ class LandingPage extends Component {
 								Use the extension and its popup window for quick access to your tabs and their
 								current statuses.
 							</p>
-							<img src={placeholder} alt="" />
+							<img className="extension-picture" src={extensionPicture} alt="" />
 						</div>
 						<div className="dashboard-content">
 							<p className="landing-page-content">
@@ -146,7 +147,7 @@ class LandingPage extends Component {
 								about your tabs and the ability to open or close multiple tabs with a few simple
 								clicks.
 							</p>
-							<img src={placeholder} alt="" />
+							<img className="dashboard-picture" src={dashboardPicture} alt="" />
 						</div>
 					</div>
 				</div>
