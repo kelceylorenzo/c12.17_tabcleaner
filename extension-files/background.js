@@ -370,18 +370,40 @@ chrome.tabs.onAttached.addListener(function(tabId, attachInfo){
  * sends response back to the caller
  */
 chrome.runtime.onConnect.addListener(function(port) {
+  var lastFocused = null;
 	console.assert(port.name == 'tab');
 	port.onMessage.addListener(function(message) {
 		updatedElaspedDeactivation();
 		if (message.type == 'popup') {
-			chrome.windows.getCurrent(function(window){
-				var responseObject = {};
-				responseObject.userStatus = user.loggedIn;
-				responseObject.allTabs = user.tabsSortedByWindow;
-				responseObject.currentWindow = window.id;
-				port.postMessage({ sessionInfo: responseObject });
+      console.log("clicked");
+			chrome.windows.getAll(function(window){
+        for(let array = 0; array<window.length; array++) {
+          console.log("focused" + window[array].focused)
+          if(window[array].focused === true) {
+              var responseObject = {};
+              responseObject.userStatus = user.loggedIn;
+              responseObject.allTabs = user.tabsSortedByWindow;
+              responseObject.currentWindow = window[array].id;
+              lastFocused = window[array].id
+              console.log(window)
+              port.postMessage({ sessionInfo: responseObject });
+              console.log(responseObject)
+          }
+        }
+				
 			})
-		} else if (message.type === 'logout') {
+    } else if(message.type === 'refresh') {
+      chrome.windows.getLastFocused(function(window) {
+        console.log("refreshed", window);
+        console.log("user", user);
+        var responseObject = {};
+        responseObject.userStatus = user.loggedIn;
+        responseObject.allTabs = user.tabsSortedByWindow;
+        responseObject.currentWindow = lastFocused;
+        port.postMessage({ sessionInfo: responseObject});
+        console.log(responseObject);
+      })
+    } else if (message.type === 'logout') {
 			user.logout();
 		} 
 	});
