@@ -4,9 +4,6 @@ import axios from 'axios';
 
 import AboutPage from './about-page';
 import Header from './header';
-import StatsPage from './stats-page';
-import SettingsPage from './settings';
-import TopTenPage from './top-ten-page';
 import MainSidebar from './main-sidebar';
 import MainTabArea from './main-tab-area';
 
@@ -216,7 +213,8 @@ class MainPage extends Component {
 			}
 			return false;
 		});
-		this.getData()
+
+		this.getData();
 		// this.setState({
 		// 	tabsList: tabsList
 		// });
