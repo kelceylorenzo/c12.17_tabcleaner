@@ -13,14 +13,13 @@ export default (props) => {
 	});
 
 	function clearData() {
-		console.log('clear data was called');
 		axios
 			.delete('/tabs/google')
 			.then((resp) => {
-				console.log('clearData Response: ', resp);
+				console.log('clearData Success Response: ', resp);
 			})
 			.catch((err) => {
-				console.log('clearData Error: ', err);
+				console.log('clearData Error Response: ', err);
 			});
 	}
 
