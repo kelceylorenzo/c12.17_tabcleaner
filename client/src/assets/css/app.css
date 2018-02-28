@@ -230,6 +230,7 @@ body {
 	display: flex;
 	background-color: rgba(26, 54, 74, 1);
 	font-weight: 400;
+	font-size: 1.25vmax;
 	z-index: 5;
 }
 
@@ -491,7 +492,8 @@ body {
 
 .side-bar-container > button {
 	font-weight: 600;
-	font-size: 0.8em;
+	font-size: 1vmax;
+	/* font-size: 0.8em; */
 	height: 15%;
 	width: 75%;
 	cursor: pointer;
@@ -503,7 +505,6 @@ body {
 
 .side-bar-container > button:hover {
 	background-color: rgb(44, 91, 124);
-
 	color: rgba(255, 255, 255, 0.9);
 	border: 2px solid rgba(255, 255, 255, 0.9);
 }
@@ -578,10 +579,15 @@ button:nth-child(4):active {
 	width: 40%;
 }
 
+.sort-by-title{
+	font-size: 1.20vmax;
+}
+
 .sort-by-option {
 	color: lightgray;
 	border-bottom: 2px solid transparent;
 	padding-bottom: 2%;
+	font-size: 1.20vmax;
 }
 
 .sort-by-option:hover {
@@ -599,7 +605,8 @@ button:nth-child(4):active {
 
 .tab-view-option {
 	margin: auto;
-	font-size: 115%;
+		font-size: 1.30vmax;
+	/* font-size: 115%; */
 }
 
 .main-tab-area-window {
