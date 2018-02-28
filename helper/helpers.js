@@ -36,7 +36,7 @@ module.exports = {
         });
     },
     updateUrlTable: function (req) {
-
+        
         const { databaseTabID } = req.body;
         const { user } = req;
 
@@ -67,6 +67,7 @@ module.exports = {
                         "totalActiveTime INT(20) NULL);";
 
                     db.query(createUrlTableSQL, (err) => {
+
                         if (err) console.log(err);
 
                         const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';

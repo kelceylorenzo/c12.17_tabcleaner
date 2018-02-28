@@ -29,7 +29,7 @@ router.get('/verify', (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('www.closeyourtabs.com');
+    res.redirect('www.closeyourtabs.com/');
 });
 
 module.exports = router;
