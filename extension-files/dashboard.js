@@ -61,11 +61,7 @@ function removeElement(parent){
     var tabInfo = {};
     tabInfo['window'] = window;
     tabInfo['index'] = index; 
-    chrome.runtime.sendMessage({type: "removeTab", data: tabInfo}, function(response) {
-        if(response.success){
-            parent.style.display = 'none';
-        } 
-    });
+    chrome.runtime.sendMessage({type: "removeTab", data: tabInfo});
 }
 
 /**
