@@ -19,13 +19,9 @@ class LandingPage extends Component {
 
 	verifyLogIn() {
 		axios.get(`/auth/google/verify`).then((resp) => {
-			console.log('Verify response: ', resp);
 			if (resp.data.success) {
-				console.log('this.props for verify: ', this.props);
-				console.log('Axios Response object: ', resp);
 				this.props.history.push('/dashboard');
 			} else {
-				console.log('Not logged in');
 				this.props.history.push('/');
 			}
 		});
@@ -45,12 +41,10 @@ class LandingPage extends Component {
 		let currentLocation = pageArray.indexOf(view);
 
 		if (scroll.deltaY >= 12 && scroll.deltaY <= 14 && currentLocation !== 3) {
-			console.log('scrolling down @ ', scroll.deltaY);
 			this.refs[pageArray[currentLocation + 1]].scrollIntoView({ behavior: 'smooth' });
 			this.handleScroll(pageArray[currentLocation + 1]);
 			scroll.deltaY = 0;
 		} else if (scroll.deltaY > -13 && scroll.deltaY < -10 && currentLocation !== 0) {
-			console.log('scrolling up @ ', scroll.deltaY);
 			this.refs[pageArray[currentLocation - 1]].scrollIntoView({ behavior: 'smooth' });
 			this.handleScroll(pageArray[currentLocation - 1]);
 			scroll.deltaY = 0;
