@@ -737,7 +737,6 @@ button:nth-child(4):active {
 	display: flex;
 	margin: auto;
 	width: 30%;
-	opacity: 0.7;
 }
 
 .tab {
@@ -750,13 +749,15 @@ button:nth-child(4):active {
 
 .tab-title {
 	height: 15%;
+	width: 95%;
 	text-align: center;
 	display: flex;
 	margin: auto;
 	padding: 0.5%;
 	font-weight: 400;
-	font-size: 1em;
+	font-size: 0.8vmax;
 	align-items: center;
+	justify-content: center;
 }
 
 .tab-utilities-container {
@@ -764,7 +765,7 @@ button:nth-child(4):active {
 	height: 15%;
 	margin: auto;
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-around;
 	align-items: center;
 	padding: 0 15%;
 }
@@ -772,6 +773,7 @@ button:nth-child(4):active {
 .tab-utility {
 	font-size: 20px;
 	z-index: 2;
+	font-size: 1.1vmax;
 }
 
 .tab-utility:hover {
@@ -787,7 +789,7 @@ button:nth-child(4):active {
 }
 
 .tab-screenshot {
-	height: 75%;
+	height: 50%;
 	width: 95%;
 	margin: auto;
 	display: flex;
