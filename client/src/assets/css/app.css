@@ -133,6 +133,7 @@ body {
 	border: 3px solid rgba(255, 255, 255, 0.6);
 	color: rgba(255, 255, 255, 0.85);
 	background-color: rgba(86, 135, 132, 1);
+	cursor: pointer;
 }
 
 .introduction-container {
@@ -151,6 +152,7 @@ body {
 
 .extension-dashboard-content {
 	width: 80%;
+	height: 70%;
 	display: flex;
 	justify-content: space-between;
 	margin: 2% auto auto auto;
@@ -159,10 +161,25 @@ body {
 .extension-content,
 .dashboard-content {
 	width: 45%;
+	height: 100%;
 	text-align: justify;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-between;
+}
+
+.dashboard-picture {
+	width: 80%;
+	margin: auto;
+	height: 80%;
+	border: 9px solid rgb(86, 135, 132);
+}
+
+.extension-picture {
+	margin: auto;
+	height: 80%;
+	border: 9px solid rgb(86, 135, 132);
 }
 
 .getting-started-button-container {
