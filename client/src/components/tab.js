@@ -7,25 +7,11 @@ export default (props) => {
 		display: ''
 	};
 
+	let selectClass = '';
+
 	let tabStyle = {
 		backgroundColor: ''
 	};
-
-	if (props.item.selected) {
-		selectStyle.display = 'flex';
-	}
-
-	let currentTime = new Date();
-	currentTime = currentTime.getTime();
-	let inactiveElapsedTime = currentTime - props.item.deactivatedTime;
-
-	if (inactiveElapsedTime < 10000 || props.item.tabTitle === 'Close Your Tabs') {
-		tabStyle.backgroundColor = '';
-	} else if (inactiveElapsedTime < 25000) {
-		tabStyle.backgroundColor = 'rgba(215, 213, 170, 0.5)';
-	} else {
-		tabStyle.backgroundColor = 'rgba(156, 95, 88, 0.5)';
-	}
 
 	let viewClass = {
 		container: 'tab-container',
@@ -35,6 +21,21 @@ export default (props) => {
 		overlayContainer: 'select-overlay-container',
 		utilityContainer: 'tab-utilities-container'
 	};
+
+	if (props.item.selected) {
+		selectStyle.display = 'flex';
+		selectClass = 'tab-selected';
+	}
+
+	let inactiveElapsedTime = props.item.currentTime - props.item.deactivatedTime;
+
+	if (inactiveElapsedTime < 10000) {
+		tabStyle.backgroundColor = ''; 
+	} else if (inactiveElapsedTime < 25000) {
+		tabStyle.backgroundColor = 'rgba(215, 213, 170, 0.5)';
+	} else {
+		tabStyle.backgroundColor = 'rgba(156, 95, 88, 0.5)';
+	}
 
 	if (props.viewChange === 'list') {
 		(viewClass.container = 'list-tab-container'),
@@ -46,7 +47,12 @@ export default (props) => {
 	}
 
 	return (
-		<div className={viewClass.container} onClick={props.select}>
+		<div
+			className={`${viewClass.container} ${selectClass}`}
+			data-windowId={props.item.windowID}
+			data-tabIndex={props.item.browserTabIndex}
+			onClick={props.select}
+		>
 			<div className={viewClass.overlayContainer} style={selectStyle}>
 				<img className="select-overlay" src={checkMark} alt="" />
 			</div>

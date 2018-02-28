@@ -20,8 +20,8 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: "window",
-			viewChange: "grid"
+			sortType: 'window',
+			viewChange: 'grid'
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -34,25 +34,24 @@ class MainPage extends Component {
 		this.handleSort = this.handleSort.bind(this);
 		this.handleViewChange = this.handleViewChange.bind(this);
 		this.handleRefresh = this.handleRefresh.bind(this);
-		this.logOut = this.logOut.bind(this);
 	}
 
 	componentDidMount() {
-		// this.getData(data);
-		this.getData();
+		this.verifyLogIn();
 	}
 
-	// getData() {
-	// 	data.map(currentItem => {
-	// 		return (currentItem.selected = false);
-	// 	});
-	// 	this.setState({ ...this.state, tabsList: data }, () => this.handleSort(this.state.sortType));
-	// }
+	verifyLogIn() {
+		axios.get(`/auth/google/verify`).then((resp) => {
+			if (resp.data.success) {
+				this.getData();
+			} else {
+				this.props.history.push('/');
+			}
+		});
+	}
 
 	getData() {
 		axios.get('/tabs').then((resp) => {
-			console.log('GET response for /tabs: ', resp.data);
-			console.log('Resp.data.data: ', resp.data.data);
 			resp.data.data.map((currentItem) => {
 				return (currentItem.selected = false);
 			});
@@ -66,22 +65,14 @@ class MainPage extends Component {
 		});
 	}
 
-	async logOut() {
-		await axios.get("auth/google/logout");
-		console.log("you are logged out");
-	}
-
 	handleRefresh() {
 		this.getData();
 	}
 
-
 	handleViewChange(view) {
 		this.setState({
-			viewChange:view
-		})
-		console.log("Handle view button clicked: ", view);
-
+			viewChange: view
+		});
 	}
 
 	handleIndividualSelect(item) {
@@ -134,12 +125,11 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
+
 			case 'time':
-				//currently sorted from oldest >>> newest in terms of activationTime
-				//glitches out sometimes
 				tabsList.sort((a, b) => {
-					let timeA = a.activatedTime;
-					let timeB = b.activatedTime;
+					let timeA = a.currentTime - a.deactivatedTime;
+					let timeB = b.currentTime - b.deactivatedTime;
 
 					if (timeA > timeB) {
 						return -1;
@@ -205,15 +195,28 @@ class MainPage extends Component {
 		let selectedIDs = [];
 
 		for (let tab of selectedTabs) {
-			selectedIDs.push(tab.id);
+			selectedIDs.push(tab.databaseTabID);
 		}
 
+		// for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
+		// 	let tabToDelete = {};
+		// 	tabToDelete['databaseTabID'] = selectedIDs[currentTabIndex];
+		// 	axios.delete('/tabs/database', tabToDelete).then((resp) => {
+		// 		if (resp.data.success) {
+		// 			tabsList = tabsList.splice([tabsList.indexOf(selectedTabs[currentTabIndex])], 1);
+		// 		} else {
+		// 			return;
+		// 		}
+		// 	});
+		// }
+
 		tabsList = tabsList.filter(function(tab) {
-			if (selectedIDs.indexOf(tab.id) === -1) {
+			if (selectedIDs.indexOf(tab.databaseTabID) === -1) {
 				return true;
 			}
 			return false;
 		});
+
 		this.setState({
 			tabsList: tabsList
 		});
@@ -304,6 +307,7 @@ class MainPage extends Component {
 							utilityClick={this.handleUtilityClick}
 							handleViewChange={this.handleViewChange}
 							viewChange={this.state.viewChange}
+							selectChange={this.state.selectChange}
 							handleRefresh={this.handleRefresh}
 						/>
 					</div>

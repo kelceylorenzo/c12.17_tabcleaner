@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import logo from "../assets/images/app-logo.png";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../assets/images/app-logo.png';
 
-export default props => {
+export default (props) => {
 	const navLinks = props.routes.map((item, index) => {
 		return (
 			<Link to={item.to} className="nav-link-container" id={item.id} key={index}>
@@ -20,11 +20,11 @@ export default props => {
 			<div className="navigation-container">
 				<div className="navigation">
 					{navLinks}
-					<div className="nav-link-container" id="log-out-button"
-					//  onClick={props.logOut}
-					 >
+					<div className="nav-link-container" id="log-out-button">
 						<div className="nav-link">
-							<a href="/auth/google/logout">LOG OUT</a>
+							<a className="log-out-link" href="/auth/google/logout">
+								LOG OUT
+							</a>
 						</div>
 					</div>
 				</div>
