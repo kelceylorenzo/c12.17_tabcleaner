@@ -31,12 +31,10 @@ function removeSelectedTabs(){
         var parent = tabContainers[tab];
         var descendents = parent.childNodes;
         var title = descendents[1].childNodes[0].innerText;
-        let domain = (title).match(/close your tabs/gi)
-        if(!domain){
-            var classes = tabContainers[tab].className.split(" ");
-            if(classes.indexOf('tab-selected') !== -1){
-                removeElement(tabContainers[tab]);
-            }
+        let domain = (title).match(/close your tabs/gi);
+        var classes = tabContainers[tab].className.split(" ");
+        if(!domain && classes.indexOf('tab-selected') !== -1){
+            removeElement(tabContainers[tab]);
         }
     }
 }
