@@ -240,14 +240,17 @@ class MainPage extends Component {
 		newTab.focus();
 	}
 
-	closeSingleTab(item) {
-		let { tabsList } = this.state;
-		tabsList.splice(tabsList.indexOf(item), 1);
+	closeSingleTab() {
+		console.log('close single tab called');
+		this.getData();
 
-		this.setState({
-			...this.state,
-			tabsList: tabsList
-		});
+		// let { tabsList } = this.state;
+		// tabsList.splice(tabsList.indexOf(item), 1);
+
+		// this.setState({
+		// 	...this.state,
+		// 	tabsList: tabsList
+		// });
 	}
 
 	selectAll() {
