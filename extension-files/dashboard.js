@@ -11,7 +11,6 @@ function init(){
     setTimeout(function(){addClickHandlersToTabs()}, 800)
 }
 
-
 function addClickHandlersToTabs(){
     var closeBtn = document.getElementsByClassName("close-favicon");
     for(var index = 0; index < closeBtn.length ; index++ ){
