@@ -120,7 +120,7 @@ body {
 	background-color: rgba(86, 135, 132, 0.2);
 	color: rgba(86, 135, 132, 1);
 	border: 3px solid rgba(86, 135, 132, 1);
-	border-radius: 5px;
+	/* border-radius: 5px; */
 	padding: 1%;
 	margin: 0 1%;
 	width: 15%;
@@ -477,7 +477,7 @@ body {
 .side-bar-container {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-around;
 	align-items: center;
 	position: fixed;
 	margin-top: 12.5%;
@@ -488,7 +488,6 @@ body {
 	border-top: 6px solid rgb(212, 167, 129);
 	border-bottom: 6px solid rgb(212, 167, 129);
 	border-right: 6px solid rgb(212, 167, 129);
-	*/
 }
 
 .side-bar-container > button {
@@ -718,6 +717,7 @@ button:nth-child(4):active {
 	width: 17%;
 	position: relative;
 	border: 3px solid rgba(26, 54, 74, 0.4);
+	/* border-radius: 5%; */
 }
 
 .tab-container:hover {
@@ -746,6 +746,7 @@ button:nth-child(4):active {
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
+	/* border-radius: 3%; */
 }
 
 .tab-title {
@@ -796,6 +797,8 @@ button:nth-child(4):active {
 .tab-screenshot img {
 	width: 100%;
 	margin: auto;
+	border: 5px solid rgba(255, 255, 255, 0.4);
+	/* border-radius: 10%; */
 }
 
 /* Top Ten Page CSS Styling  */

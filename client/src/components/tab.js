@@ -1,5 +1,5 @@
 import React from 'react';
-import placeholderImage from '../assets/images/e9492f0f82721e4998b1360e409e6fe8affc30bb.png';
+import placeholderImage from '../assets/images/website-placeholder.png';
 import checkMark from '../assets/images/check-mark.png';
 
 export default (props) => {
