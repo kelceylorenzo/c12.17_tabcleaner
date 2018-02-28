@@ -123,11 +123,21 @@ router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
     //     updateUrlTable(req);
     // };
 
-    const query = 'Update tabs SET ?? = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) WHERE databaseTabID = ?';
-    const insert = [req.params.time, databaseTabID];
-    const sql = mysql.format(query, insert);
+    let query, insert, sql;
 
-    db.query(sql, (err, results) => {
+    if(req.params.time === 'activatedTime'){
+        query = 'UPDATE tabs SET deactivatedTime = 0, ?? = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) WHERE databaseTabID = ?';
+        insert = [req.params.time, databaseTabID];
+        sql = mysql.format(query, insert);
+    }
+    
+    if(req.params.time === 'deactivatedTime'){
+        query = 'Update tabs SET ?? = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) WHERE databaseTabID = ?';
+        insert = [req.params.time, databaseTabID];
+        sql = mysql.format(query, insert);
+    }
+
+    db.query(sql, (err, results) => {   
         output = produceOutput(err, results, req.params.time);
         res.send(output);
     });
