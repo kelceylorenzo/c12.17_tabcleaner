@@ -46,9 +46,22 @@ class User {
 			if(result.name === COOKIE_NAME){
 				console.log('success logout');
 				user.changeBrowserIcon('images/iconpurple.png')
+				console.log(user)
 				if(user.loggedIn){
 					clearPreviousTabData();
 					user.loggedIn = false;
+					//loop throuhg all tabs
+					//find cloe you tabs and reload 
+					for (var window in user.tabsSortedByWindow) {
+						for (var tab in user.tabsSortedByWindow[window]) {
+							var matchedTab = user.tabsSortedByWindow[window][tab]; 
+							let domain = (matchedTab.url).match(/closeyourtabs.com/gi)
+							if(domain){
+								chrome.tabs.reload(matchedTab.id);
+							}
+						}
+					}
+
 				}
 			} else {
 				console.log('fail logout')
@@ -237,7 +250,7 @@ function removeTab(id, windowID){
 */
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   if (tab.url !== undefined && changeInfo.status == "complete") {
-
+	console.log('update')
 		// chrome.tabs.executeScript(null, { file: "content_script.js" }); 
     chrome.tabs.captureVisibleTab({quality: 50},function(dataUrl){
       tab.screenshot = dataUrl; 
@@ -258,6 +271,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
   }
 })
 
+
 chrome.tabs.onCreated.addListener(function(tab){
 		var timeStamp = getTimeStamp();
 		var newTab = createNewTab(tab, timeStamp);
@@ -276,6 +290,8 @@ chrome.tabs.onCreated.addListener(function(tab){
 *call setTime, createNewTab
 */
 chrome.tabs.onHighlighted.addListener(function(hightlightInfo){
+	console.log('highlight')
+
   chrome.tabs.get(hightlightInfo.tabIds[0], function(tab){
     var timeStamp = getTimeStamp();
 		// var previousIndex = user.activeTabIndex[tab.windowId];
