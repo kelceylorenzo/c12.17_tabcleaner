@@ -6,14 +6,14 @@
 
 ## keys.js.template
 
-### googleCredentials:
->   googleClientID : From google api credentials <br>
->   googleClientSecret : From google api credentials <br>
 
+#### googleCredentials:
+  *   googleClientID : From google api credentials
+  *   googleClientSecret : From google api credentials 
 
-### mysqlCredentials:
->   host: ip of server hosting mysql server <br>
->   user: username of mysql server user <br>
->   password: password of mysql server user <br>
->   database: name of database in mysql server <br>
+#### mysqlCredentials:
+  *   host: IP of server hosting MySQL server
+  *   user: username of MySQL server user
+  *   password: password of MySQL server user
+  *   database: name of database in MySQL server
 

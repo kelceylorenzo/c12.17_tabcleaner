@@ -3,6 +3,8 @@ const mysql = require('mysql');
 const { mysqlCredentials, googleCredentials } = require('./keys');
 const db = mysql.createConnection(mysqlCredentials);
 
+
+//* Creates user object, determines if the user is in the system and logs the user in */
 module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: googleCredentials.googleClientID,
@@ -57,6 +59,7 @@ module.exports = function (passport) {
         });
     }));
 
+    
     passport.serializeUser((user, done) => {
         done(null, user);
     })
