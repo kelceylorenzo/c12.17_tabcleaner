@@ -64,12 +64,7 @@ class MainTabArea extends Component {
 					</div>
 					<Sort sort={(sortType) => this.props.sort(sortType)} sortType={this.props.sortType} />
 				</div>
-				<div
-					// className="tab-window"
-					className={windowView.view}
-				>
-					{tabList}
-				</div>
+				<div className={windowView.view}>{tabList}</div>
 			</div>
 		);
 	}

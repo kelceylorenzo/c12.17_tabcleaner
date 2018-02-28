@@ -42,13 +42,9 @@ class MainPage extends Component {
 
 	verifyLogIn() {
 		axios.get(`/auth/google/verify`).then((resp) => {
-			console.log('Verify response: ', resp);
 			if (resp.data.success) {
-				console.log('this.props for verify: ', this.props);
-				console.log('Axios Response object: ', resp);
 				this.getData();
 			} else {
-				console.log('Not logged in');
 				this.props.history.push('/');
 			}
 		});
@@ -56,8 +52,6 @@ class MainPage extends Component {
 
 	getData() {
 		axios.get('/tabs').then((resp) => {
-			console.log('GET response for /tabs: ', resp.data);
-			console.log('Resp.data.data: ', resp.data.data);
 			resp.data.data.map((currentItem) => {
 				return (currentItem.selected = false);
 			});
@@ -79,7 +73,6 @@ class MainPage extends Component {
 		this.setState({
 			viewChange: view
 		});
-		console.log('Handle view button clicked: ', view);
 	}
 
 	handleIndividualSelect(item) {
@@ -208,13 +201,10 @@ class MainPage extends Component {
 		// for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
 		// 	let tabToDelete = {};
 		// 	tabToDelete['databaseTabID'] = selectedIDs[currentTabIndex];
-		// 	console.log('tabToDelete: ', tabToDelete);
 		// 	axios.delete('/tabs/database', tabToDelete).then((resp) => {
 		// 		if (resp.data.success) {
-		// 			console.log('Tab was deleted', resp);
 		// 			tabsList = tabsList.splice([tabsList.indexOf(selectedTabs[currentTabIndex])], 1);
 		// 		} else {
-		// 			console.log('Server Error; Tab was not deleted ', resp);
 		// 			return;
 		// 		}
 		// 	});
@@ -296,7 +286,6 @@ class MainPage extends Component {
 	}
 
 	render() {
-		console.log('state of viewChange', this.state.viewChange);
 		return (
 			<div className="main-page-container">
 				<div className="dashboard-container">
