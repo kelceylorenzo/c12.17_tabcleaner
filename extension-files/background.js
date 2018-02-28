@@ -48,7 +48,6 @@ class User {
 				user.changeBrowserIcon('images/iconpurple.png')
 				if(user.loggedIn){
 					clearPreviousTabData();
-					window.open(`${BASE_URL}/auth/google/logout`);
 					user.loggedIn = false;
 				}
 			} else {
@@ -70,6 +69,7 @@ class User {
 		chrome.browserAction.setIcon({path: imagePath})
 	}
 }
+
 
 /**
 * Creates a Tab object, if highlighted sets time of activation
@@ -194,6 +194,39 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 
 	updatedElaspedDeactivation();
 });
+
+function removeTab(id, windowID){
+	var tabArray = user.tabsSortedByWindow[windowID];
+	var indexInIdsArray = user.tabIds[windowID].indexOf(id);
+	var tabID;
+	var tabIndex; 
+	user.tabIds[windowID].splice(indexInIdsArray, 1);
+	for (var tab = 0; tab < tabArray.length; tab++) {
+		if (tabArray[tab].id === id) {
+			var tabToRemoveInfo = user.tabsSortedByWindow[windowID][tab]; 
+			tabID = tabToRemoveInfo.databaseTabID;
+			tabIndex = tabToRemoveInfo.index; 
+			user.tabsSortedByWindow[windowID].splice(tabIndex, 1);
+			break;
+		}
+	}
+
+	//update all the indexes for the tabs
+	if(tabIndex < tabArray.length - 1){
+		updateIndex(tabIndex, user.tabsSortedByWindow[windowID].length-1, windowID);
+	}
+
+	user.activeTabIndex[windowID] = null;
+
+
+	if (user.loggedIn) {
+		var tabObject = {};
+		tabObject['databaseTabID'] = tabID;
+		sendDataToServer('DELETE', `${BASE_URL}/tabs/database`, tabObject);
+	}
+
+	updatedElaspedDeactivation();
+}
 
 /**
 
@@ -664,7 +697,15 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.type == "removeTab"){
-      console.log('remove tab')
+		var window = request.data.window;
+		var index = request.data.index; 
+		var tabID = user.tabsSortedByWindow[window][index].id;
+		if(tabID >= 0 ){
+			chrome.tabs.remove(tabID);
+			sendResponse({success: true})
+		} else {
+			sendResponse({success: false})
+		}
 
 	} else if (request.type == "logoutUser"){
 		if(user.loggedIn){

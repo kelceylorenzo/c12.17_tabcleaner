@@ -1,11 +1,11 @@
 const BASE_URL = 'http://www.closeyourtabs.com';
 const COOKIE_NAME =  'connect.sid'; 
-console.log('script says hi');
+console.log('STAAAAAAAAB');
 
 function init(){
     checkUserLoginStatus();
     var logoutBtn = document.getElementById('log-out-button');
-    // logoutBtn.addEventListener('click', logoutUser);
+    logoutBtn.addEventListener('click', logoutUser);
     setTimeout(function(){addClickHandlersToTabs()}, 500)
 }
 
@@ -13,21 +13,22 @@ function init(){
 function addClickHandlersToTabs(){
     var closeBtn = document.getElementsByClassName("close-favicon");
     for(var index = 0; index < closeBtn.length ; index++ ){
-        closeBtn[index].addEventListener('click', removeElement.bind(null, closeBtn[index]), false)
+        console.log(closeBtn[index])
+        closeBtn[index].addEventListener('click', removeElement)
     }
 }
 
-function removeElement(tab){
-    var container = document.getElementsByClassName('tab-window');
-    var parent = tab.closest('.tab-container');
-    var tabInfo = {}
-    tabInfo.window = parent.getAttribute('data-windowid');
-    tabInfo.index = parent.getAttribute('data-index');
-    console.log(tabInfo);
-    container[0].removeChild(parent);
-    //get the window and index from the element and send to background page to delete
-    chrome.runtime.sendMessage({type: "removeTab"}, function(response) {
-        console.log(response);
+function removeElement(event){
+    var parent = event.target.closest('.tab-container');
+    var window = parent.getAttribute('data-windowid');
+    var index = parent.getAttribute('data-tabindex');
+    var tabInfo = {};
+    tabInfo['window'] = window;
+    tabInfo['index'] = index; 
+    chrome.runtime.sendMessage({type: "removeTab", data: tabInfo}, function(response) {
+        if(response.success){
+            parent.style.display = 'none';
+        } 
     });
 }
 
