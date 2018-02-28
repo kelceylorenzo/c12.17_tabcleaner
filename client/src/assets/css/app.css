@@ -92,14 +92,16 @@ body {
 .landing-page-subtitle {
 	color: rgba(0, 0, 0, 0.6);
 	margin: auto;
-	font-size: 2em;
+	font-size: 2.25vmax;
+	/* font-size: 2em; */
 }
 
 .landing-page-content {
 	color: rgba(0, 0, 0, 0.6);
 	margin: 3% auto;
-	font-size: 1.2em;
+	font-size: 1.5vmax;
 	text-align: justify;
+	/* font-size: 1.2em; */
 }
 
 .login-button-container {
@@ -605,7 +607,7 @@ button:nth-child(4):active {
 
 .tab-view-option {
 	margin: auto;
-		font-size: 1.30vmax;
+	font-size: 1.30vmax;
 	/* font-size: 115%; */
 }
 
