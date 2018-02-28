@@ -23,7 +23,7 @@ body {
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	overflow: hidden;
+	/* overflow: hidden; */
 }
 
 .home-showcase-container {
@@ -488,7 +488,6 @@ body {
 	border-top: 6px solid rgb(212, 167, 129);
 	border-bottom: 6px solid rgb(212, 167, 129);
 	border-right: 6px solid rgb(212, 167, 129);
-	*/
 }
 
 .side-bar-container > button {
