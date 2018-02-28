@@ -581,15 +581,15 @@ button:nth-child(4):active {
 	width: 40%;
 }
 
-.sort-by-title{
-	font-size: 1.20vmax;
+.sort-by-title {
+	font-size: 1.2vmax;
 }
 
 .sort-by-option {
 	color: lightgray;
 	border-bottom: 2px solid transparent;
 	padding-bottom: 2%;
-	font-size: 1.20vmax;
+	font-size: 1.2vmax;
 }
 
 .sort-by-option:hover {
@@ -607,7 +607,7 @@ button:nth-child(4):active {
 
 .tab-view-option {
 	margin: auto;
-	font-size: 1.30vmax;
+	font-size: 1.3vmax;
 	/* font-size: 115%; */
 }
 
@@ -764,7 +764,7 @@ button:nth-child(4):active {
 	margin: auto;
 	padding: 0.5%;
 	font-weight: 400;
-	font-size: 0.8vmax;
+	font-size: 1.8vmin;
 	align-items: center;
 	justify-content: center;
 }
@@ -782,7 +782,7 @@ button:nth-child(4):active {
 .tab-utility {
 	font-size: 20px;
 	z-index: 2;
-	font-size: 1.1vmax;
+	font-size: 2.3vmin;
 }
 
 .tab-utility:hover {
