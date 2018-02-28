@@ -83,7 +83,7 @@ a:focus {
 	height: 100%;
 }
 
-.title {
+#title {
 	font-family: 'Lato', sans-serif;
 	font-size: 1.5em;
 	margin-left: 10px;
@@ -94,8 +94,9 @@ a {
 	text-decoration: none; 
 }
 
-.title:hover {
+#title:hover {
 	color: rgb(212, 167, 129);
+	cursor: pointer; 
 }
 
 .fa-trash-alt {

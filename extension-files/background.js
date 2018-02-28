@@ -26,17 +26,17 @@ class User {
 				if(ifExpire > 0){
 					console.log('user logged in');
 					user.loggedIn = true; 
-					user.changeBrowserIcon('images/extension-green-logo.png')
+					user.changeBrowserIcon('images/extension-green-logo.png');
 					clearPreviousTabData();
 					user.sendAllTabsToServer();
 				} else {
 					console.log('user NOT logged in');
-					user.changeBrowserIcon('images/iconpurple.png')
+					user.changeBrowserIcon('images/iconpurple.png');
 					user.loggedIn = false; 
 				}
 			}else {
 				console.log('user NOT logged in, no cookie');
-				user.changeBrowserIcon('images/iconpurple.png')
+				user.changeBrowserIcon('images/iconpurple.png');
 				user.loggedIn = false; 
 			}
 		});
@@ -383,7 +383,9 @@ chrome.runtime.onConnect.addListener(function(port) {
 			})
 		} else if (message.type === 'logout') {
 			user.logout();
-		} 
+		}  else if (message.type === 'open-webpage'){
+			chrome.tabs.create({url: BASE_URL});
+		}
 	});
 });
 
@@ -463,7 +465,6 @@ function requestToServerNoData(method, route) {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
 			if (xhr.status === 200) {
-				console.log(result, 'route ', route)
 				var result = JSON.parse(xhr.responseText);
 			} else {
 				user.logout();
