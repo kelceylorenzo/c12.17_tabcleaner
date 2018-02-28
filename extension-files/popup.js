@@ -25,9 +25,11 @@ function init() {
 */
 port.onMessage.addListener(function(response) {
 	if (response.sessionInfo) {
+		document.getElementById('tag-titles').innerHTML = '';
 		var windows = response.sessionInfo.allTabs;
 		for (var window in windows) {
-			var windowSpacer = document.createElement('br');
+			var windowSpacer = document.createElement('div');
+			windowSpacer.className = 'windowSpacer';
 			document.getElementById('tag-titles').appendChild(windowSpacer);
 			var windowTabContainer = document.createElement('div');
 

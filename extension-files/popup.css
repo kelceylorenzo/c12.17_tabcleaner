@@ -20,6 +20,10 @@ a:focus {
 	display: none;
 }
 
+.windowSpacer {
+	height: 5px; 
+}
+
 .container {
 	width: 270px;
 	height: 400px;
