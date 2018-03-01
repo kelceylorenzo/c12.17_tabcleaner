@@ -336,7 +336,8 @@ body {
 
 .about-page-title {
 	margin: auto;
-	font-size: 5em;
+	font-size: 8vmin;
+	font-family: 'LemonMilk';
 }
 
 .about-page-container {
@@ -349,13 +350,13 @@ body {
 
 .team-picture-container {
 	margin: auto;
-	width: 40%;
+	width: 45%;
 }
 
 .team-picture {
 	margin: auto;
 	width: 100%;
-	border: 5px solid rgba(26, 54, 74, 1);
+	border: 5px solid rgb(212, 167, 129);
 }
 
 .about-page-content-container {
@@ -375,12 +376,13 @@ body {
 }
 
 .about-content-title {
-	font-size: 2em;
+	font-size: 4vmin;
 	color: rgb(202, 143, 95);
 }
 
 .description {
 	text-align: justify;
+	font-size: 1.2vmax;
 }
 
 .team-members-container {
@@ -425,14 +427,14 @@ body {
 
 .team-member-name {
 	margin: 0 auto;
-	font-size: 1.3em;
+	font-size: 2.5vmin;
 	height: 50%;
 }
 
 .team-member-links-container {
 	display: flex;
 	justify-content: space-between;
-	font-size: 175%;
+	font-size: 3.5vmin;
 	height: 50%;
 	width: 75%;
 	margin: auto;
@@ -453,6 +455,7 @@ body {
 	height: 10%;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	color: rgba(87, 87, 87, 0.4);
 }
 
