@@ -395,39 +395,29 @@ chrome.runtime.onConnect.addListener(function(port) {
 	port.onMessage.addListener(function(message) {
 		updatedElaspedDeactivation();
 		if (message.type == 'popup') {
-      console.log("clicked");
 			chrome.windows.getAll(function(window){
         for(let array = 0; array<window.length; array++) {
-          console.log("focused" + window[array].focused)
           if(window[array].focused === true) {
               var responseObject = {};
               responseObject.userStatus = user.loggedIn;
               responseObject.allTabs = user.tabsSortedByWindow;
               responseObject.currentWindow = window[array].id;
               lastFocused = window[array].id
-              console.log(window)
               port.postMessage({ sessionInfo: responseObject });
-              console.log(responseObject)
           }
-        }
-				
+        }			
 			})
-    } else if(message.type === 'refresh') {
-      chrome.windows.getLastFocused(function(window) {
-        console.log("refreshed", window);
-        console.log("user", user);
-        var responseObject = {};
-        responseObject.userStatus = user.loggedIn;
-        responseObject.allTabs = user.tabsSortedByWindow;
-        responseObject.currentWindow = lastFocused;
-        port.postMessage({ sessionInfo: responseObject});
-        console.log(responseObject);
-      })
-    } else if (message.type === 'logout') {
+		} else if(message.type === 'refresh') {
+			chrome.windows.getLastFocused(function(window) {
+				var responseObject = {};
+				responseObject.userStatus = user.loggedIn;
+				responseObject.allTabs = user.tabsSortedByWindow;
+				responseObject.currentWindow = lastFocused;
+				port.postMessage({ sessionInfo: responseObject});
+			})
+		} else if (message.type === 'logout') {
 			user.logout();
-		}  else if (message.type === 'open-webpage'){
-			chrome.tabs.create({url: BASE_URL});
-		}
+		}  
 	});
 });
 
@@ -757,4 +747,8 @@ chrome.runtime.onMessage.addListener(
 			user.login();
 		}
 	}
+});
+
+chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
+    chrome.tabs.executeScript(null,{file:"dashboard.js"});
 });
