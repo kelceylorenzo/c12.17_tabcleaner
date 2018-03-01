@@ -750,5 +750,7 @@ chrome.runtime.onMessage.addListener(
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
-    chrome.tabs.executeScript(null,{file:"dashboard.js"});
+	if(details.url === 'http://www.closeyourtabs.com/dashboard' || details.url === 'http://www.closeyourtabs.com/dashboard#'){
+		chrome.tabs.executeScript(null,{file:"dashboard.js"});
+	}
 });
