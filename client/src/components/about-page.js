@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from './header';
 import headerData from './header-data';
 
-import teamPicture from '../assets/images/about-us-mainimage.png';
+import teamPicture from '../assets/images/group-picture.png';
 
 class AboutPage extends Component {
 	constructor(props) {
