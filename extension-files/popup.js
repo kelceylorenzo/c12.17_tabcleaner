@@ -128,12 +128,6 @@ function hideLoginButtons() {
     document.getElementById("login").style.display = "none";
 }
 
-/**
-* Send message to extension to open home page
-*/
-// function openWebpage(){
-//     port.postMessage({type: "open-webpage"});
-// }
 
 /**
 * removes all tabs in dom and sends message to extension to get new tab info
@@ -177,4 +171,4 @@ function logoutUser() {
 // 	document.body.style.opacity = 1;
 // });
 
-setTimeout(sendMessageToGetTabInfo, 500)
+sendMessageToGetTabInfo();

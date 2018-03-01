@@ -50,6 +50,7 @@ a:focus {
 	margin: 1% 0;
 	max-height:300px;
 	overflow: auto;
+	position: relative;
 }
 
 .tab-container {
@@ -210,8 +211,9 @@ a {
 	text-align: center;
 }
 
-#loading {
-	color: #ffffff;
-	font-size: 20px;
+#loading-message {
+	position: absolute;
+	color: #c77373;
 	text-align: center;
+	top:30%; 
 }
