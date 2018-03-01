@@ -395,17 +395,17 @@ chrome.runtime.onConnect.addListener(function(port) {
 	port.onMessage.addListener(function(message) {
 		updatedElaspedDeactivation();
 		if (message.type == 'popup') {
+			var responseObject = {};
+			responseObject.userStatus = user.loggedIn;
+			responseObject.allTabs = user.tabsSortedByWindow;
 			chrome.windows.getAll(function(window){
 				for(let array = 0; array<window.length; array++) {
 					if(window[array].focused === true) {
-						var responseObject = {};
-						responseObject.userStatus = user.loggedIn;
-						responseObject.allTabs = user.tabsSortedByWindow;
 						responseObject.currentWindow = window[array].id;
-						lastFocused = window[array].id
-						port.postMessage({ sessionInfo: responseObject });
+						lastFocused = window[array].id;
 					}
-				}			
+				}	
+				port.postMessage({ sessionInfo: responseObject });
 			})
 		} else if(message.type === 'refresh') {
 			chrome.windows.getLastFocused(function(window) {
