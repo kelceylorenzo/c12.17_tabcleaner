@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'LemonMilk';
-	src: url('../../assets/fonts/LemonMilk.otf');
+	src: url('../fonts/LemonMilk.otf');
 }
 body {
 	margin: 0;
@@ -11,7 +11,7 @@ body {
 	height: 100vh;
 	width: 100vw;
 	overflow-x: hidden;
-	background-image: url('https://www.transparenttextures.com/patterns/debut-light.png');
+	background-image: url('../images/background-texture.png');
 }
 
 * {
@@ -915,7 +915,7 @@ button:nth-child(4):active {
 	width: 50%;
 }
 
-.faq-main-info{
+.faq-main-info {
 	display: flex;
 	align-items: center;
 }
@@ -936,7 +936,7 @@ button:nth-child(4):active {
 }
 
 .faq-stock-image {
-	border: 5px solid rgb(86, 135, 132)
+	border: 5px solid rgb(86, 135, 132);
 }
 
 .faq-page-container p {
