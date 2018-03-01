@@ -176,9 +176,9 @@ body {
 }
 
 .dashboard-picture {
-	width: 80%;
+	width: 100%;
 	margin: auto;
-	height: 80%;
+	/* height: 95%; */
 	border: 9px solid rgb(86, 135, 132);
 }
 
@@ -667,9 +667,9 @@ button:nth-child(4):active {
 
 /* List View Styling */
 .list-tab-window {
-	/* display: flex; */
-	/* flex-direction: row; */
-	/* flex-wrap: wrap;
+	/* display: flex; 
+	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start; */
 	width: 95%;
@@ -778,6 +778,7 @@ button:nth-child(4):active {
 	font-size: 1.8vmin;
 	align-items: center;
 	justify-content: center;
+	word-break: break-all;
 }
 
 .tab-utilities-container {
@@ -914,6 +915,11 @@ button:nth-child(4):active {
 	width: 50%;
 }
 
+.faq-main-info{
+	display: flex;
+	align-items: center;
+}
+
 .faq-main-info img,
 .faq-main-info div {
 	display: inline-block;
@@ -927,6 +933,10 @@ button:nth-child(4):active {
 
 .faq-main-info div h2 {
 	text-align: center;
+}
+
+.faq-stock-image {
+	border: 5px solid rgb(86, 135, 132)
 }
 
 .faq-page-container p {

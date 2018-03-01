@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../assets/images/app-logo.png';
-import extensionPicture from '../assets/images/extension-picture.png';
-import dashboardPicture from '../assets/images/dashboard-picture.png';
+import extensionPicture from '../assets/images/extension-picture.gif';
+import dashboardPicture from '../assets/images/dashboard-picture.gif';
 
 class LandingPage extends Component {
 	constructor(props) {

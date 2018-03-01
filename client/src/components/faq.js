@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from './header';
 import headerData from './header-data';
 
-import mainPicture from '../assets/images/faq-mainpic.jpeg';
+import mainPicture from '../assets/images/faq-mainpic.jpg';
 
 export default (props) => {
 	return (
@@ -16,7 +16,7 @@ export default (props) => {
 			<div className="faq-page-container">
 				<h1 className="faq-page-title">Frequently Asked Questions</h1>
 				<div className="faq-main-info">
-					<img src={mainPicture} />
+					<img className="faq-stock-image" src={mainPicture} />
 					<div>
 						<h2>How does it work?</h2>
 						<p>
@@ -56,8 +56,8 @@ export default (props) => {
 
 				<h4>How do I stop using the app?</h4>
 				<p>
-					You can either remove or disable the extension in the Chrome Store or{' '}
-					<a href="chrome://extensions/">here</a>.{' '}
+					You can either remove or disable the extension in the Chrome Store or
+					by right clicking on our extension icon and clicking "Manage Extensions".
 				</p>
 
 				<h4>Can I use this on my phone?</h4>
@@ -70,21 +70,21 @@ export default (props) => {
 				<p>Not currently, but this is a plan for a future version!</p>
 
 				<h4>Is my browser history being saved?</h4>
-				<p>No, except you can access stats such as total website usage time. </p>
+				<p>No, only you can access stats such as total website usage time. </p>
 				<hr />
 
 				<h2>Account Details</h2>
 
 				<h4>Where do I log in?</h4>
 				<p>
-					You can log on using either our website or chrome extension. You will notice the tab icon in
-					the chrome toolbar changes colors depending on your log in status. The purple tabs means you
+					You can log in using either our website or chrome extension. You will notice the tab icon in
+					the Chrome toolbar changes colors depending on your log in status. The purple tabs means you
 					are logged out while the green background means you are logged in!
 				</p>
 
 				<h4>Do I have to make an account to use the app?</h4>
 				<p>
-					No, you can use the chrome extension without an account, but you will not have access to see
+					No, you can use the Chrome extension without an account, but you will not have access to see
 					your Chrome tabs on your phone or another browser. The website is an extension of the
 					extension, including more information about your tab usage, including the total amount of time
 					spend on various websites.
