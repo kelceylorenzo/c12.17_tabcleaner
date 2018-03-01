@@ -15,6 +15,7 @@ document.getElementById('logout').addEventListener('click', logoutUser);
 *@param {object} response 
 */
 port.onMessage.addListener(function(response) {
+	console.log(response)
 	if (response.sessionInfo) {
 		document.getElementById('tag-titles').innerHTML = '';
 		var windows = response.sessionInfo.allTabs;

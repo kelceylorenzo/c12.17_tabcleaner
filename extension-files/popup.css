@@ -48,7 +48,6 @@ a:focus {
 
 #tag-titles {
 	margin: 1% 0;
-	max-height:300px;
 	overflow: auto;
 	position: relative;
 }
@@ -212,8 +211,15 @@ a {
 }
 
 #loading-message {
-	position: absolute;
+	margin-top: 20px; 
 	color: #c77373;
 	text-align: center;
-	top:30%; 
+}
+
+#loading-message img{
+	width: 20%; 
+}
+
+#loading-message p{
+	font-weight: 600; 
 }
