@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../assets/images/app-logo.png';
-import extensionPicture from '../assets/images/extension-picture.png';
-import dashboardPicture from '../assets/images/dashboard-picture.png';
+import extensionPicture from '../assets/images/extension-picture.gif';
+import dashboardPicture from '../assets/images/dashboard-picture.gif';
 
 class LandingPage extends Component {
 	constructor(props) {
@@ -113,9 +113,8 @@ class LandingPage extends Component {
 					<div className="introduction-content-container">
 						<p className="landing-page-subtitle">Isn’t it time to close some of those tabs?</p>
 						<p className="landing-page-content">
-							It's simple. Using our Chrome Extension and Dashboard, Close Your Tabs keeps track of
-							the last time you've visited each of your currently open browser tabs across all open
-							windows and color-codes them accordingly.
+							It's simple. Using our Chrome Extension and dashboard, Close Your Tabs keeps track of
+							your currently open browser tabs across all windows and color-codes them accordingly.
 						</p>
 					</div>
 				</div>

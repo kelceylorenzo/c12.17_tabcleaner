@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from './header';
 import headerData from './header-data';
 
-import teamPicture from '../assets/images/about-us-mainimage.png';
+import teamPicture from '../assets/images/group-picture.png';
 
 class AboutPage extends Component {
 	constructor(props) {
@@ -83,10 +83,10 @@ class AboutPage extends Component {
 							<div className="about-content-title">We make tabs work for you.</div>
 							<p className="description">
 								<b>THE IDEA WAS SIMPLE: </b>create a tool that would encourage people to close
-								their tabs. What started off as a simple extension developed into a full web
+								their tabs. What started off as a simple Chrome extension developed into a full web
 								application with the future of allowing users to take their tabs across browsers
-								and devices. Even as our app grows, we hope to help our users to control their
-								tabs.
+								and devices. Even as our app grows, we hope to help our users take back control of
+								their tabs.
 								<br />
 								<br />
 								<b>TECHNOLOGIES USED:</b> Chrome Platform APIs, Chrome Extension, Chrome Developer
