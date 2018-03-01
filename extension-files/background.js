@@ -527,9 +527,7 @@ function requestToServerNoData(method, route) {
  *@param {object} tabObject the data that will be sent
  */
 function createNewTabRequest(tabObject) {
-	if(tabObject.url === ''){
-		return;
-	}
+	
 	var dataForServer = {
 		windowID: tabObject.windowId,
 		tabTitle: tabObject.title,
