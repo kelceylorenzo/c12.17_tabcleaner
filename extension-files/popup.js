@@ -8,7 +8,6 @@ var inactiveTabCount = 0;
 
 document.getElementById('refresh').addEventListener('click', refreshContent);
 document.getElementById('logout').addEventListener('click', logoutUser);
-sendMessageToGetTabInfo();
 
 /**
 * Port messaging between script and extension, catches response from extension 
@@ -177,3 +176,5 @@ function logoutUser() {
 // requestAnimationFrame(function() {
 // 	document.body.style.opacity = 1;
 // });
+
+setTimeout(sendMessageToGetTabInfo, 500)
