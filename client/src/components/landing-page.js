@@ -171,7 +171,7 @@ class LandingPage extends Component {
 					</div>
 				</div>
 				<div className="next-section-button faq-link">
-					<Link to="/faq">Still have questions? Visit our FAQ.</Link>
+					<a href="/faq">Still have questions? Visit our FAQ.</a>
 				</div>
 			</div>
 		);

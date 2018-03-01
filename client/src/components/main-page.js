@@ -4,9 +4,6 @@ import axios from 'axios';
 
 import AboutPage from './about-page';
 import Header from './header';
-import StatsPage from './stats-page';
-import SettingsPage from './settings';
-import TopTenPage from './top-ten-page';
 import MainSidebar from './main-sidebar';
 import MainTabArea from './main-tab-area';
 
@@ -217,9 +214,10 @@ class MainPage extends Component {
 			return false;
 		});
 
-		this.setState({
-			tabsList: tabsList
-		});
+		this.getData();
+		// this.setState({
+		// 	tabsList: tabsList
+		// });
 	}
 
 	handleUtilityClick(item, selectedType) {
@@ -242,15 +240,15 @@ class MainPage extends Component {
 		newTab.focus();
 	}
 
-	closeSingleTab(item) {
-		let { tabsList } = this.state;
-		tabsList.splice(tabsList.indexOf(item), 1);
+	// closeSingleTab() {
+	// 	let { tabsList } = this.state;
+	// 	tabsList.splice(tabsList.indexOf(item), 1);
 
-		this.setState({
-			...this.state,
-			tabsList: tabsList
-		});
-	}
+	// 	this.setState({
+	// 		...this.state,
+	// 		tabsList: tabsList
+	// 	});
+	// }
 
 	selectAll() {
 		let { tabsList, selectedTabs } = this.state;

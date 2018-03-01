@@ -9,11 +9,13 @@ const { ensureAuthenticated,
     updateUrlTable,
     produceOutput } = require('../helper/helpers');
 
+/** Connect to mySQL server */
 db.connect((err) => {
     if (err) throw err;
     else console.log("Connected to remote DB");
 });
 
+/** Retrieves all tab information for current user */
 router.get('/', ensureAuthenticated, (req, res) => {
 
     const query = 'SELECT *, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE googleID = ?';
@@ -26,6 +28,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
 });
 
+/** Allows the extension to insert tabs for the current user into the tabs table */
 router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     const googleID = req.user.googleID;
@@ -44,6 +47,11 @@ router.post('/', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
 });
 
+/**
+* Listens to for when a tab updates, updates information and sends info to database
+*@param deleteSource Router switch to allow the user to delete by googleID or databaseTabID
+*
+*/
 router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
 
     let sql;
@@ -68,6 +76,7 @@ router.delete('/:deleteSource', ensureAuthenticated, (req, res) => {
 
 });
 
+/** Allows the extension to update informaation for a tab in the tab table */
 router.put('/', ensureAuthenticated, checkIfTableExists, /* async */ (req, res) => {
 
     // await updateUrlTable(req);
@@ -85,6 +94,7 @@ router.put('/', ensureAuthenticated, checkIfTableExists, /* async */ (req, res) 
 
 });
 
+/** Allows the extension to update the position information for a tab in the tabs table */
 router.put('/move', ensureAuthenticated, (req, res) => {
 
     const { databaseTabID, browserTabIndex } = req.body;
@@ -100,6 +110,11 @@ router.put('/move', ensureAuthenticated, (req, res) => {
 
 });
 
+/**
+* Listens to for when a tab updates, updates information and sends info to database
+*@param time Router switch to allow the user to update the activatedTime or deactivatedTime
+*
+*/
 router.put('/:time', ensureAuthenticated, checkIfTableExists, (req, res) => {
 
     const { databaseTabID } = req.body;
