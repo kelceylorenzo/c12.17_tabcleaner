@@ -664,10 +664,11 @@ button:nth-child(4):active {
 
 /* List View Styling */
 .list-tab-window {
-	flex-direction: row;
-	flex-wrap: wrap;
+	/* display: flex; */
+	/* flex-direction: row; */
+	/* flex-wrap: wrap;
 	justify-content: flex-start;
-	align-items: flex-start;
+	align-items: flex-start; */
 	width: 95%;
 	height: 100%;
 }
@@ -761,7 +762,6 @@ button:nth-child(4):active {
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	/* border-radius: 3%; */
 }
 
 .tab-title {
@@ -816,7 +816,6 @@ button:nth-child(4):active {
 	width: 100%;
 	margin: auto;
 	border: 5px solid rgba(255, 255, 255, 0.4);
-	/* border-radius: 10%; */
 }
 
 /* Top Ten Page CSS Styling  */
