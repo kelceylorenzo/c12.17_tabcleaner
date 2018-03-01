@@ -8,7 +8,6 @@ import MainSidebar from './main-sidebar';
 import MainTabArea from './main-tab-area';
 
 import headerData from './header-data.js';
-import data from '../assets/data/data';
 import tab from './tab';
 
 class MainPage extends Component {
