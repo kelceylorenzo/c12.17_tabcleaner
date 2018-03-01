@@ -2,21 +2,13 @@ var lengthOfString = 40;
 var port = chrome.runtime.connect({ name: 'tab' });
 var inactiveTabCount = 0;
 
-
-//event listener on selected to toggle if all selected 
-
-
 /**
 * Function called on page load, sets click handlers to DOM, get all the data from extension
 */
-function init() {
-	// var title = document.getElementById('title');
-	document.getElementById('refresh').addEventListener('click', refreshContent);
-	document.getElementById('logout').addEventListener('click', logoutUser);
-	// title.addEventListener('click', openWebpage);
-	// document.getElementById('login').addEventListener('click', loginUser);
-	sendMessageToGetTabInfo();
-}
+
+document.getElementById('refresh').addEventListener('click', refreshContent);
+document.getElementById('logout').addEventListener('click', logoutUser);
+sendMessageToGetTabInfo();
 
 /**
 * Port messaging between script and extension, catches response from extension 
@@ -175,14 +167,13 @@ function logoutUser() {
 }
 
 
-init();
 
 
 //this is a solution to a Mac issue with extension. Macs animate the extension open, so not having a set width can result in the window not having enough height to show the content
 //found this solution at https://bugs.chromium.org/p/chromium/issues/detail?id=428044 
-document.body.style.opacity = 0;
-document.body.style.transition = 'opacity ease-out .4s';
+// document.body.style.opacity = 0;
+// document.body.style.transition = 'opacity ease-out .4s';
 
-requestAnimationFrame(function() {
-	document.body.style.opacity = 1;
-});
+// requestAnimationFrame(function() {
+// 	document.body.style.opacity = 1;
+// });
