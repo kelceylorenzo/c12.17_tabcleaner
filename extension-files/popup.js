@@ -10,10 +10,10 @@ var inactiveTabCount = 0;
 * Function called on page load, sets click handlers to DOM, get all the data from extension
 */
 function init() {
-	var title = document.getElementById('title');
+	// var title = document.getElementById('title');
 	document.getElementById('refresh').addEventListener('click', refreshContent);
 	document.getElementById('logout').addEventListener('click', logoutUser);
-	title.addEventListener('click', openWebpage);
+	// title.addEventListener('click', openWebpage);
 	// document.getElementById('login').addEventListener('click', loginUser);
 	sendMessageToGetTabInfo();
 }
@@ -140,9 +140,9 @@ function hideLoginButtons() {
 /**
 * Send message to extension to open home page
 */
-function openWebpage(){
-    port.postMessage({type: "open-webpage"});
-}
+// function openWebpage(){
+//     port.postMessage({type: "open-webpage"});
+// }
 
 /**
 * removes all tabs in dom and sends message to extension to get new tab info

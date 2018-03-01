@@ -11,6 +11,7 @@ function init(){
     logoutBtn.addEventListener('click', logoutUser);
     deleteBtn[0].addEventListener('click', removeSelectedTabs);
     setTimeout(function(){addClickHandlersToTabs()}, 800)
+    console.log('content script loaded');
 }
 
 /**
