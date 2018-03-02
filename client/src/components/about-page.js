@@ -120,6 +120,75 @@ class AboutPage extends Component {
 								</div>
 								<div className="team-member">
 									<div className="team-member-name">
+										<p>Kelcey Lorenzo</p>
+									</div>
+									<div className="team-member-links-container">
+										<div className="team-member-link">
+											<a href="https://github.com/m13kelore/" target="_blank">
+												<i className="fab fa-github" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="http://www.kelceylorenzo.com/" target="_blank">
+												<i className="fas fa-address-card" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="https://www.linkedin.com/in/kelcey-lorenzo/" target="_blank">
+												<i className="fab fa-linkedin" />
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="second-row">
+								<div className="team-member">
+									<div className="team-member-name">
+										<p>Nick Quan</p>
+									</div>
+									<div className="team-member-links-container">
+										<div className="team-member-link">
+											<a href="https://github.com/nickkquan" target="_blank">
+												<i className="fab fa-github" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="http://nickquan.com/" target="_blank">
+												<i className="fas fa-address-card" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="https://www.linkedin.com/in/nick-quan/" target="_blank">
+												<i className="fab fa-linkedin" />
+											</a>
+										</div>
+									</div>
+								</div>
+								<div className="team-member">
+									<div className="team-member-name">
+										<p>James Kirsch</p>
+									</div>
+									<div className="team-member-links-container">
+										<div className="team-member-link">
+											<a href="https://github.com/jkirsch-LF " target="_blank">
+												<i className="fab fa-github" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="http://jkirsch.tech/" target="_blank">
+												<i className="fas fa-address-card" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="https://www.linkedin.com/in/jameskirsch/" target="_blank">
+												<i className="fab fa-linkedin" />
+											</a>
+										</div>
+									</div>
+								</div>
+
+								<div className="team-member">
+									<div className="team-member-name">
 										<p>Henry Moon</p>
 									</div>
 									<div className="team-member-links-container">
@@ -144,75 +213,8 @@ class AboutPage extends Component {
 									</div>
 								</div>
 							</div>
-							<div className="second-row">
-								<div className="team-member">
-									<div className="team-member-name">
-										<p>James Kirsch</p>
-									</div>
-									<div className="team-member-links-container">
-										<div className="team-member-link">
-											<a href="https://github.com/jkirsch-LF " target="_blank">
-												<i className="fab fa-github" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="http://jkirsch.tech/" target="_blank">
-												<i className="fas fa-address-card" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="https://www.linkedin.com/in/jameskirsch/" target="_blank">
-												<i className="fab fa-linkedin" />
-											</a>
-										</div>
-									</div>
-								</div>
-								<div className="team-member">
-									<div className="team-member-name">
-										<p>Kelcey Lorenzo</p>
-									</div>
-									<div className="team-member-links-container">
-										<div className="team-member-link">
-											<a href="https://github.com/m13kelore/" target="_blank">
-												<i className="fab fa-github" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="http://www.kelceylorenzo.com/" target="_blank">
-												<i className="fas fa-address-card" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="https://www.linkedin.com/in/kelcey-lorenzo/" target="_blank">
-												<i className="fab fa-linkedin" />
-											</a>
-										</div>
-									</div>
-								</div>
-								<div className="team-member">
-									<div className="team-member-name">
-										<p>Nick Quan</p>
-									</div>
-									<div className="team-member-links-container">
-										<div className="team-member-link">
-											<a href="https://github.com/nickkquan" target="_blank">
-												<i className="fab fa-github" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="http://nickquan.com/" target="_blank">
-												<i className="fas fa-address-card" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="https://www.linkedin.com/in/nick-quan/" target="_blank">
-												<i className="fab fa-linkedin" />
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
+
 						<div className="page-switches-container">
 							<div
 								className="page-switches"
