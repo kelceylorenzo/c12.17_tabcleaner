@@ -548,7 +548,7 @@ button:nth-child(4):active {
 }
 
 .main-tab-area {
-	display: flex;
+	/* display: flex; */
 	flex-direction: column;
 	margin-top: 5%;
 	margin-left: 18%;
