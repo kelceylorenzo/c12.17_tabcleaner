@@ -5,11 +5,14 @@ const db = mysql.createConnection(mysqlCredentials);
 module.exports = {
     ensureAuthenticated: function (req, res, next) {
         if (req.user) {
-            console.log('req.user: ', req.user.googleID);
+            console.log('req.user: ', req.user.firstName);
             return next();
         } else {
             console.log('This is the ensureAuthentication saying that the user is not autheticated.');
-            res.redirect('/auth/google');
+            res.send({
+                success: false,
+                message: 'Authentication failed, no user present.'
+            })
         }
     },
     checkIfTableExists: function (req, res, next) {
@@ -25,93 +28,101 @@ module.exports = {
             "favicon VARCHAR(2084) NULL," +
             "screenshot VARCHAR(50000) NULL);";
         db.query(sql, (err, results) => {
-            if (err) throw err;
-            console.log("results", results);
-            next();
+            if (err) {
+                throw err;
+            } else {
+                next();
+            }
         });
     },
-    updateUrlTable: function (databaseTabID, user) {
+    updateUrlTable: function (req) {
+        
+        const { databaseTabID } = req.body;
+        const { user } = req;
 
-        const getActiveTimeQuery = 'SELECT * FROM tabs WHERE databaseTabID = ?';
+        const getActiveTimeQuery = 'SELECT url, activatedTime, ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000) AS currentTime FROM tabs WHERE databaseTabID = ?';
         const getActiveTimeInsert = databaseTabID;
         const getActiveTimeSQL = mysql.format(getActiveTimeQuery, getActiveTimeInsert);
 
         db.query(getActiveTimeSQL, (err, results) => {
-            if(err) throw err;
+            if (err) {
+                console.log(err);
+            } else if (results.length > 0) {
 
-            const { url, activatedTime } = results[0];
+                const { url, activatedTime, currentTime } = results[0];
 
-            let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
-                || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
-                || (url).match(/^(localhost)/);
-            domain = domain[0];
+                let domain = (url).match(/([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/g)
+                    || (url).match(/^(chrome:)[//]{2}[a-zA-Z0-0]*/)
+                    || (url).match(/^(localhost)/);
 
-            let time = new Date();
-            time = time.getTime();
+                if (domain != null) {
+                    domain = domain[0];
 
-            let newActiveTime = time - activatedTime;
+                    let newActiveTime = currentTime - activatedTime;
 
-            const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
-                "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-                "googleID DOUBLE NULL," +
-                "url VARCHAR(200) NULL," +
-                "totalActiveTime INT(20) NULL);";
+                    const createUrlTableSQL = "CREATE TABLE IF NOT EXISTS urls (" +
+                        "databaseUrlID MEDIUMINT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+                        "googleID DOUBLE NULL," +
+                        "url VARCHAR(200) NULL," +
+                        "totalActiveTime INT(20) NULL);";
 
-            db.query(createUrlTableSQL, (err) => {
-                if (err) console.log(err);
+                    db.query(createUrlTableSQL, (err) => {
 
-                const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
-                const activeTimeInsert = [user.googleID, domain];
-                const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
+                        if (err) console.log(err);
 
-                db.query(activeTimeSQL, (err, results) => {
+                        const activeTimeQuery = 'SELECT * FROM urls WHERE googleID=? AND url=?';
+                        const activeTimeInsert = [user.googleID, domain];
+                        const activeTimeSQL = mysql.format(activeTimeQuery, activeTimeInsert);
 
-                    if (results.length > 0) {
-                        newActiveTime = results[0].totalActiveTime + newActiveTime;
-                        const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
-                        const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
-                        const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
-                        db.query(updateActiveTimeSQL, (err) => {
-                            if (err) console.log(err)
-                            console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
-                        });
+                        db.query(activeTimeSQL, (err, results) => {
 
-                    } else {
-                        const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
-                        const insertUrlInsert = [user.googleID, domain, newActiveTime];
-                        const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
-                        db.query(insertUrlSQL, (err, results) => {
-                            if (err) console.log(err);
-                            console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
-                        });
-                    }
-                })
-            })
+                            if (results.length > 0) {
+                                newActiveTime = results[0].totalActiveTime + newActiveTime;
+                                const updateActiveTimeQuery = 'UPDATE urls SET totalActiveTime = ? WHERE databaseUrlID= ?';
+                                const updateActiveTimeInsert = [newActiveTime, results.databaseUrlID];
+                                const updateActiveTimeSQL = mysql.format(updateActiveTimeQuery, updateActiveTimeInsert);
+                                db.query(updateActiveTimeSQL, (err) => {
+                                    if (err) console.log(err);
+                                    else console.log('UPDATED URL in table: domain: ', domain, ', time: ', newActiveTime);
+                                });
+
+                            } else {
+                                const insertUrlQuery = 'INSERT INTO urls (googleID, url, totalActiveTime) VALUES (?, ?, ?)'
+                                const insertUrlInsert = [user.googleID, domain, newActiveTime];
+                                const insertUrlSQL = mysql.format(insertUrlQuery, insertUrlInsert);
+                                db.query(insertUrlSQL, (err, results) => {
+                                    if (err) console.log(err);
+                                    else console.log('CREATED URL in table, domain: ', domain, ', time: ', newActiveTime);
+                                });
+                            }
+                        })
+                    })
+                }
+            }
         })
     },
-    produceOutput: function (err, result, user, location) {
+    produceOutput: function (err, result, location) {
         const output = {
             type: location,
             success: false,
             data: result,
+            code: '503'
         };
         if (err) {
-            output.message = 'Failed to get tab info';
+            output.message = "It's dead Jim.";
         } else {
-            if (result.length > 0) {
+            if (result.affectedRows > 0 || result.length > 0) {
                 output.code = '200';
                 output.success = true;
+                output.message = 'Everything went great.';
             } else {
-                output.code ='404';
+                output.code = '404';
+                output.success = false;
                 output.message = 'No data for user';
             }
         }
-        if(location === 'GET'){
-            console.log(output.success);
-        } else {
-            console.log(output);
-        }
-        
-        return output;  
+        console.log(output);
+        const json_output = JSON.stringify(output);
+        return json_output;
     },
 };

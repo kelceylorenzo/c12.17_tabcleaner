@@ -13,6 +13,8 @@ export default (props) => {
 		backgroundColor: ''
 	};
 
+	let { tabTitle } = props.item;
+
 	let viewClass = {
 		container: 'tab-container',
 		tab: 'tab',
@@ -29,12 +31,16 @@ export default (props) => {
 
 	let inactiveElapsedTime = props.item.currentTime - props.item.deactivatedTime;
 
-	if (inactiveElapsedTime < 10000) {
-		tabStyle.backgroundColor = ''; 
+	if (inactiveElapsedTime < 10000 || props.item.tabTitle === 'Close Your Tabs') {
+		tabStyle.backgroundColor = '';
 	} else if (inactiveElapsedTime < 25000) {
 		tabStyle.backgroundColor = 'rgba(215, 213, 170, 0.5)';
 	} else {
 		tabStyle.backgroundColor = 'rgba(156, 95, 88, 0.5)';
+	}
+
+	if (tabTitle.length > 50) {
+		tabTitle = tabTitle.slice(0, 50) + '...';
 	}
 
 	if (props.viewChange === 'list') {
@@ -58,7 +64,7 @@ export default (props) => {
 			</div>
 
 			<div className={viewClass.tab} style={tabStyle}>
-				<div className={viewClass.title}>{props.item.tabTitle}</div>
+				<div className={viewClass.title}>{tabTitle}</div>
 				<div className={viewClass.tabScreen}>
 					<img src={placeholderImage} alt="" />
 				</div>
@@ -69,10 +75,7 @@ export default (props) => {
 					>
 						<i className="fas fa-external-link-alt" />
 					</div>
-					<div
-						className="tab-utility close-favicon"
-						// onClick={() => props.utilityClick(props.item, 'close')}
-					>
+					<div className="tab-utility close-favicon" onClick={() => setTimeout(props.getNewTabs, 100)}>
 						<i className="fas fa-times" />
 					</div>
 				</div>
