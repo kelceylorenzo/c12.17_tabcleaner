@@ -1036,10 +1036,7 @@ button:nth-child(4):active {
 	}
 
 	/* About Page */
-	.nav-link {
-		margin-left: 5px;
-		font-size: 2em;
-	}
+
 	.about-page-title-container {
 		padding-top: 15%;
 	}
@@ -1100,9 +1097,7 @@ button:nth-child(4):active {
 	}
 
 	/* About Page */
-	.nav-link {
-		font-size: 3vmin;
-	}
+
 	.team-member-name {
 		font-size: 2.8vmin;
 	}
