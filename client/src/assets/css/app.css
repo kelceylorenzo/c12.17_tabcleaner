@@ -960,6 +960,7 @@ button:nth-child(4):active {
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
 	/* Landing Page */
+
 	.login-button-container {
 		flex-direction: column;
 		margin-top: 15%;
@@ -1080,6 +1081,8 @@ button:nth-child(4):active {
 
 /* iPhone 6,7,8 Landscape */
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+	/* Landing Page */
+
 	.next-section-button > p {
 		font-size: 1em;
 	}
@@ -1113,6 +1116,8 @@ button:nth-child(4):active {
 }
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+	/* Landing Page */
+
 	.login-button-container {
 		flex-direction: column;
 		margin-top: 15%;
@@ -1143,6 +1148,8 @@ button:nth-child(4):active {
 /* iPhone X Portrait*/
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
+	/* Landing Page */
+
 	.landing-page-container {
 		width: 80%;
 	}
@@ -1192,6 +1199,8 @@ button:nth-child(4):active {
 		border: 4px solid rgb(86, 135, 132);
 	}
 
+	/* About Page */
+
 	.about-page-title-container {
 		padding-top: 20%;
 	}
@@ -1205,6 +1214,7 @@ button:nth-child(4):active {
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
 	/* Landing Page */
+
 	.logo {
 		width: 40%;
 	}
@@ -1251,6 +1261,8 @@ button:nth-child(4):active {
 /* iPad Portrait*/
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+	/* About Page */
+
 	.about-page-container {
 		flex-direction: column;
 		height: 75%;
@@ -1288,6 +1300,8 @@ button:nth-child(4):active {
 /* iPad Landscape */
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+	/* About Page */
+
 	.about-page-title-container {
 		padding-top: 20%;
 	}
@@ -1304,6 +1318,8 @@ button:nth-child(4):active {
 /* Galaxy S4, S5, Note 3 */
 
 @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+	/* Landing Page */
+
 	.login-button-container {
 		flex-direction: column;
 		margin-top: 15%;
