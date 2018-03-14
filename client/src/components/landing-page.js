@@ -59,9 +59,9 @@ class LandingPage extends Component {
 		let startSelect = view === 'get-started' ? 'home-showcase-selected' : 'home-showcase-notselected';
 		return (
 			<div
-				// onWheel={(event) => {
-				// 	this.handleWheelScroll(event);
-				// }}
+				onWheel={(event) => {
+					this.handleWheelScroll(event);
+				}}
 				className="home-page-container"
 			>
 				<div className="home-showcase-container">
