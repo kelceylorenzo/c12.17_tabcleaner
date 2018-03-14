@@ -7,8 +7,7 @@ import Sort from './main-sort';
 class MainTabArea extends Component {
 	render() {
 		let tabList;
-
-		if (this.props.tabData) {
+		if (this.props.tabData.length > 0) {
 			tabList = this.props.tabData.map((item, index) => {
 				return (
 					<Tab
@@ -26,7 +25,7 @@ class MainTabArea extends Component {
 				<div className="no-tab-data">
 					<i className="no-data-exclamation fas fa-exclamation-circle" />
 					<div className="no-tab-data-title">NO TABS HERE!</div>
-					<div className="no-tab-data-subtitle">Please try again later</div>
+					<div className="no-tab-data-subtitle">Please press refresh or try again later</div>
 				</div>
 			);
 		}
