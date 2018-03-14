@@ -51,6 +51,7 @@ class MainPage extends Component {
 			resp.data.data.map((currentItem) => {
 				return (currentItem.selected = false);
 			});
+
 			this.setState(
 				{
 					...this.state,
@@ -187,36 +188,35 @@ class MainPage extends Component {
 	}
 
 	closeSelectedTabs() {
-		let { selectedTabs, tabsList } = this.state;
-		let selectedIDs = [];
-
-		for (let tab of selectedTabs) {
-			selectedIDs.push(tab.databaseTabID);
-		}
-
-		// for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
-		// 	let tabToDelete = {};
-		// 	tabToDelete['databaseTabID'] = selectedIDs[currentTabIndex];
-		// 	axios.delete('/tabs/database', tabToDelete).then((resp) => {
-		// 		if (resp.data.success) {
-		// 			tabsList = tabsList.splice([tabsList.indexOf(selectedTabs[currentTabIndex])], 1);
-		// 		} else {
-		// 			return;
-		// 		}
-		// 	});
+		// let { selectedTabs, tabsList } = this.state;
+		// let selectedIDs = [];
+		// for (let tab of selectedTabs) {
+		// 	selectedIDs.push(tab.databaseTabID);
 		// }
-
-		tabsList = tabsList.filter(function(tab) {
-			if (selectedIDs.indexOf(tab.databaseTabID) === -1) {
-				return true;
-			}
-			return false;
-		});
-
-		this.getData();
+		// tabsList = tabsList.filter(function(tab) {
+		// 	if (selectedIDs.indexOf(tab.databaseTabID) === -1) {
+		// 		return true;
+		// 	}
+		// 	return false;
+		// });
 		// this.setState({
+		// 	...this.state,
 		// 	tabsList: tabsList
 		// });
+
+		axios.get('/tabs').then((resp) => {
+			resp.data.data.map((currentItem) => {
+				return (currentItem.selected = false);
+			});
+
+			this.setState(
+				{
+					...this.state,
+					tabsList: resp.data.data
+				},
+				() => this.handleSort(this.state.sortType)
+			);
+		});
 	}
 
 	handleUtilityClick(item, selectedType) {

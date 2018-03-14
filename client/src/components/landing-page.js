@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/images/app-logo.png";
 import extensionPicture from "../assets/images/extension-picture.gif";
@@ -33,7 +32,6 @@ class LandingPage extends Component {
 			view: place
 		});
 	}
-
 	render() {
 		let { view } = this.state;
 		let homeSelect = view === "home" ? "home-showcase-selected" : "home-showcase-notselected";
