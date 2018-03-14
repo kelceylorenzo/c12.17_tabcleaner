@@ -954,9 +954,10 @@ button:nth-child(4):active {
 	color: lightgrey;
 }
 
-/* Media Queries */
+/* Media Queries Start Here*/
 
-/* iPhone 6,7,8 */
+/* iPhone 6,7,8 Portrait */
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
 	/* Landing Page */
 	.login-button-container {
@@ -1139,7 +1140,7 @@ button:nth-child(4):active {
 	}
 }
 
-/* iPhone X Portrait  */
+/* iPhone X Portrait*/
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
 	.landing-page-container {
@@ -1190,9 +1191,17 @@ button:nth-child(4):active {
 	.dashboard-picture {
 		border: 4px solid rgb(86, 135, 132);
 	}
+
+	.about-page-title-container {
+		padding-top: 20%;
+	}
+
+	.first-row {
+		height: 60%;
+	}
 }
 
-/* iPhone X Landscape */
+/* iPhone X Landscape*/
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
 	/* Landing Page */
@@ -1239,20 +1248,56 @@ button:nth-child(4):active {
 	}
 }
 
-/* iPhone X Portrait */
+/* iPad Portrait*/
 
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 812px) 
-  and (-webkit-min-device-pixel-ratio: 3)
-  and (orientation: portrait) { 
-
-	.about-page-title-container {
-	padding-top: 20%;
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+	.about-page-container {
+		flex-direction: column;
+		height: 75%;
 	}
 
-	.first-row {
-		height: 60%;
+	.about-page-title-container {
+		padding-top: 12%;
+	}
+
+	.about-page-content-container {
+		width: 75%;
+	}
+
+	.team-picture-container {
+		width: 60%;
+	}
+
+	.team-member-links-container {
+		width: 60%;
+	}
+
+	.team-member-name {
+		font-size: 2vmin;
+	}
+
+	.page-switches {
+		width: 10%;
+	}
+
+	.description {
+		font-size: 1.75vmax;
+	}
+}
+
+/* iPad Landscape */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+	.about-page-title-container {
+		padding-top: 20%;
+	}
+
+	.team-member-name {
+		font-size: 2vmin;
+	}
+
+	.page-switches {
+		width: 10%;
 	}
 }
 
@@ -1285,70 +1330,3 @@ button:nth-child(4):active {
 		font-size: 1em;
 	}
 }
-
-/* iPad */
-
-/* Portrait */
-
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (orientation: portrait) 
-  and (-webkit-min-device-pixel-ratio: 2) {
-	
-	.about-page-container {
-		flex-direction: column;
-		height: 75%;
-	}
-
-	.about-page-title-container {
-		padding-top: 12%;
-	}
-
-	.about-page-content-container {
-		width: 75%;
-	}
-
-	.team-picture-container {
-		width: 60%;
-	}
-
-	.team-member-links-container {
-		width: 60%;
-	}
-
-	.team-member-name {
-		font-size: 2.0vmin
-	}
-
-	.page-switches {
-		width: 10%;
-	}
-
-	.description {
-		font-size: 1.75vmax;
-	}
-}
-
-/* Landscape */
-
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (orientation: landscape) 
-  and (-webkit-min-device-pixel-ratio: 2) {
-	
-	.about-page-title-container {
-		padding-top: 20%;
-	}
-
-	.team-member-name {
-		font-size: 2.0vmin
-	}
-
-	.page-switches {
-		width: 10%;
-	}
-}
-
-
