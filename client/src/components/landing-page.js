@@ -26,19 +26,6 @@ class LandingPage extends Component {
 		});
 	}
 
-	handleExtensionInstall() {
-		console.log("handle installation called ");
-		chrome.webstore.install(
-			"https://chrome.google.com/webstore/detail/nlgenhmcakjpnmgnplkiomeiniklmfkc",
-			function(success) {
-				console.log("installed");
-			},
-			function(error) {
-				console.log("error", error);
-			}
-		);
-	}
-
 	handleScroll(place) {
 		this.refs[place].scrollIntoView({ block: "start", behavior: "smooth" });
 		this.setState({
@@ -108,7 +95,7 @@ class LandingPage extends Component {
 						</a>
 					</div>
 				</div>
-				<div className="next-section-button intro" onClick={this.handleScroll.bind(this, "introduction")}>
+				<div className="next-section-button intro">
 					<p>What is Close Your Tabs?</p>
 				</div>
 
@@ -163,9 +150,13 @@ class LandingPage extends Component {
 						</p>
 					</div>
 					<div className="getting-started-button-container">
-						<div className="getting-started-button" onClick={this.handleExtensionInstall.bind(this)}>
+						<a
+							className="getting-started-button"
+							href="https://chrome.google.com/webstore/detail/nlgenhmcakjpnmgnplkiomeiniklmfkc"
+							target="_blank"
+						>
 							GET THE EXTENSION
-						</div>
+						</a>
 						<a className="getting-started-button" href="/auth/google/">
 							SIGN UP
 						</a>
