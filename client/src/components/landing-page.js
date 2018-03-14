@@ -32,24 +32,6 @@ class LandingPage extends Component {
 			view: place
 		});
 	}
-
-	// handleWheelScroll(scroll) {
-	// 	let pageArray = ["home", "introduction", "extension", "get-started"];
-	// 	let { view } = this.state;
-
-	// 	let currentLocation = pageArray.indexOf(view);
-
-	// 	if (scroll.deltaY >= 12 && scroll.deltaY <= 14 && currentLocation !== 3) {
-	// 		this.refs[pageArray[currentLocation + 1]].scrollIntoView({ behavior: "smooth" });
-	// 		this.handleScroll(pageArray[currentLocation + 1]);
-	// 		scroll.deltaY = 0;
-	// 	} else if (scroll.deltaY > -13 && scroll.deltaY < -10 && currentLocation !== 0) {
-	// 		this.refs[pageArray[currentLocation - 1]].scrollIntoView({ behavior: "smooth" });
-	// 		this.handleScroll(pageArray[currentLocation - 1]);
-	// 		scroll.deltaY = 0;
-	// 	}
-	// }
-
 	render() {
 		let { view } = this.state;
 		let homeSelect = view === "home" ? "home-showcase-selected" : "home-showcase-notselected";
@@ -95,7 +77,7 @@ class LandingPage extends Component {
 						</a>
 					</div>
 				</div>
-				<div className="next-section-button intro">
+				<div className="next-section-button intro" onClick={this.handleScroll.bind(this, "introduction")}>
 					<p>What is Close Your Tabs?</p>
 				</div>
 
@@ -152,7 +134,7 @@ class LandingPage extends Component {
 					<div className="getting-started-button-container">
 						<a
 							className="getting-started-button"
-							href="https://chrome.google.com/webstore/detail/nlgenhmcakjpnmgnplkiomeiniklmfkc"
+							href="https://chrome.google.com/webstore/detail/close-your-tabs/nlgenhmcakjpnmgnplkiomeiniklmfkc"
 							target="_blank"
 						>
 							GET THE EXTENSION
