@@ -7,8 +7,7 @@ import Sort from './main-sort';
 class MainTabArea extends Component {
 	render() {
 		let tabList;
-
-		if (this.props.tabData) {
+		if (this.props.tabData.length > 0) {
 			tabList = this.props.tabData.map((item, index) => {
 				return (
 					<Tab
