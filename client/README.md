@@ -5,6 +5,7 @@
 ## Getting Started
 
 > You can download the accompanying Chrome Extension [here](https://github.com/andreasandpiper/closeyourtabs-chrome-extension) and visit the accompanying web live application [here](http://www.closeyourtabs.com).
+> View the server README [here](https://github.com/m13kelore/c12.17_tabcleaner/)
 
 ### Setup Instructions
 
