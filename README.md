@@ -6,7 +6,7 @@
 | :----------------------------------------------------------: | :-------------------------------------------------------------------: |
 
 
-| ![Dashboard](client/src/assets/images/closeyourtabs3.png) | ![About Page](client/src/assets/images/closeyourtabs2.png) |
+| ![Dashboard](client/src/assets/images/closeyourtabs3.png) | ![About Page](client/src/assets/images/closeyourtabs4.png) |
 | :-------------------------------------------------------: | :--------------------------------------------------------: |
 
 
