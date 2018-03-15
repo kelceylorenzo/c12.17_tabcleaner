@@ -2,6 +2,14 @@
 
 > Close Your Tabs seeks to organize your tabs and display usage of active and inactive tabs in order to improve your productivity.
 
+| ![Landing Page](client/src/assets/images/closeyourtabs1.png) | ![Dashboard & Extension](client/src/assets/images/closeyourtabs2.png) |
+| :----------------------------------------------------------: | :-------------------------------------------------------------------: |
+
+
+| ![Dashboard](client/src/assets/images/closeyourtabs3.png) | ![About Page](client/src/assets/images/closeyourtabs4.png) |
+| :-------------------------------------------------------: | :--------------------------------------------------------: |
+
+
 ## Getting Started
 
 > You can download the accompanying Chrome Extension [here](https://github.com/andreasandpiper/closeyourtabs-chrome-extension) and visit the accompanying web application [here](http://www.closeyourtabs.com).
