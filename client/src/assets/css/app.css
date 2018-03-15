@@ -125,6 +125,8 @@ body {
 	padding: 1%;
 	margin: 0 1%;
 	width: 15%;
+	transition: ease-in-out;
+	transition-duration: 0.2s;
 }
 
 .login-button:hover,
@@ -225,10 +227,56 @@ body {
 	color: white;
 }
 
-.next-section-button.faq-link > a {
+.next-section-button.faq-link a {
 	color: rgb(117, 117, 117);
-	font-size: 1.3em;
+	font-size: 1.1em;
 	text-decoration: none;
+	margin: 0 2%;
+	transition: ease-in-out;
+	transition-duration: 0.2s;
+}
+
+.next-section-button.faq-link a:hover {
+	color: rgb(202, 143, 95);
+}
+
+.faq-link {
+	position: relative;
+}
+
+.back-to-top-container {
+	position: absolute;
+	display: flex;
+	justify-content: space-around;
+	flex-direction: column;
+	align-items: center;
+	bottom: 15%;
+	right: 1%;
+	height: 85%;
+}
+
+.back-to-top-container > .up-arrow,
+.back-to-top-container p {
+	margin: auto;
+	transition: ease-in;
+	transition-duration: 0.2s;
+}
+
+.back-to-top-container > .up-arrow {
+	font-size: 150%;
+	color: rgb(117, 117, 117);
+}
+
+.back-to-top-container p {
+	color: transparent;
+}
+
+.back-to-top-container:hover p {
+	color: rgb(117, 117, 117);
+}
+
+.back-to-top-container:hover .up-arrow {
+	color: rgb(86, 135, 132);
 }
 
 /* Header Styling */
@@ -450,7 +498,7 @@ body {
 	color: rgba(0, 0, 0, 0.8);
 }
 
-.page-switches-container {
+.page-switch-container {
 	width: 100%;
 	height: 10%;
 	display: flex;
@@ -459,13 +507,25 @@ body {
 	color: rgba(87, 87, 87, 0.4);
 }
 
-.page-switches {
-	width: 5%;
+.page-switch {
+	height: 100%;
+	background-color: transparent;
+	border: 2px solid rgba(26, 54, 74, 1);
+	font-size: 1vmax;
+	font-weight: 600;
+	color: rgba(26, 54, 74, 1);
+	transition: ease-in-out;
+	transition-duration: 0.2s;
 }
 
 .page-switch:hover {
-	color: rgba(26, 54, 74, 1);
+	color: white;
 	cursor: pointer;
+	background-color: rgba(26, 54, 74, 1);
+}
+
+.page-switch:focus {
+	outline: none;
 }
 
 /* Main page styling */
@@ -952,4 +1012,386 @@ button:nth-child(4):active {
 
 .notselected {
 	color: lightgrey;
+}
+
+/* Media Queries */
+
+/* iPhone 6,7,8 */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+	/* Landing Page */
+	.login-button-container {
+		flex-direction: column;
+		margin-top: 15%;
+		height: 25%;
+	}
+
+	.login-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 65%;
+		height: 45%;
+		margin: 3%;
+	}
+
+	.home-showcase-container {
+		display: flex;
+		position: absolute;
+		height: 20%;
+		width: 6%;
+	}
+
+	.introduction-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: cener;
+		width: 90%;
+	}
+
+	.introduction-content-container {
+		margin-top: 5%;
+		width: 75%;
+	}
+
+	.landing-page-subtitle {
+		font-size: 3vmax;
+	}
+
+	.landing-page-content {
+		font-size: 2vmax;
+	}
+	.extension-picture {
+		height: 70%;
+		border: 4px solid rgb(86, 135, 132);
+	}
+
+	.dashboard-picture {
+		border: 4px solid rgb(86, 135, 132);
+	}
+
+	.extension-content,
+	.dashboard-content {
+		width: 75%;
+	}
+
+	.extension-dashboard-content {
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 80%;
+		height: 70%;
+	}
+
+	.next-section-button > p {
+		font-size: 1em;
+	}
+
+	.getting-started-button-container {
+		width: 60%;
+	}
+
+	.getting-started-button {
+		width: 100%;
+	}
+
+	/* About Page */
+
+	.about-page-title-container {
+		padding-top: 15%;
+	}
+
+	.about-page-container {
+		flex-direction: column;
+	}
+
+	.about-page-content-container {
+		width: 100%;
+	}
+
+	.team-picture-container {
+		width: 100%;
+		margin-top: 10%;
+	}
+
+	.team-member-name {
+		font-size: 0.9em;
+	}
+
+	.team-member-links-container {
+		font-size: 4.5vmin;
+		height: 100%;
+		width: 60%;
+	}
+
+	.page-switches {
+		width: 10%;
+	}
+
+	.about-content-title {
+		font-size: 4.5vmin;
+	}
+
+	.description {
+		font-size: 1.65vmax;
+	}
+}
+
+/* iPhone 6,7,8 Landscape */
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+	.next-section-button > p {
+		font-size: 1em;
+	}
+
+	.getting-started-button {
+		width: 80%;
+	}
+
+	.next-section-button.faq-link > a {
+		font-size: 1em;
+	}
+
+	.extension-picture,
+	.dashboard-picture {
+		border: 4px solid rgb(86, 135, 132);
+	}
+
+	/* About Page */
+
+	.team-member-name {
+		font-size: 2.8vmin;
+	}
+
+	.page-switches {
+		width: 15%;
+	}
+
+	.description {
+		font-size: 1.35vmax;
+	}
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+	.login-button-container {
+		flex-direction: column;
+		margin-top: 15%;
+		height: 25%;
+	}
+
+	.login-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 65%;
+		height: 45%;
+		margin: 3%;
+	}
+
+	.home-showcase-container {
+		display: flex;
+		position: absolute;
+		height: 20%;
+		width: 6%;
+	}
+
+	.next-section-button > p {
+		font-size: 1em;
+	}
+}
+
+/* iPhone X Portrait  */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
+	.landing-page-container {
+		width: 80%;
+	}
+
+	.logo {
+		width: 40%;
+	}
+
+	.landing-page-title {
+		font-size: 7.5vmin;
+	}
+
+	.login-button-container {
+		flex-direction: column;
+	}
+
+	.login-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 70%;
+		height: 35%;
+		margin: 1.5%;
+	}
+
+	.home-showcase-container {
+		display: flex;
+		position: absolute;
+		height: 20%;
+		width: 6%;
+	}
+
+	.next-section-button > p {
+		font-size: 1em;
+	}
+
+	.landing-page-title-container {
+		width: 85%;
+	}
+
+	.extension-picture {
+		height: 65%;
+	}
+
+	.extension-picture,
+	.dashboard-picture {
+		border: 4px solid rgb(86, 135, 132);
+	}
+}
+
+/* iPhone X Landscape */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
+	/* Landing Page */
+	.logo {
+		width: 40%;
+	}
+
+	.landing-page-title {
+		font-size: 8.5vmin;
+	}
+
+	.next-section-button > p {
+		font-size: 1em;
+	}
+
+	.extension-picture,
+	.dashboard-picture {
+		border: 4px solid rgb(86, 135, 132);
+	}
+
+	.getting-started-button {
+		width: 75%;
+	}
+
+	/* About Page */
+
+	.about-page-title-container {
+		padding-top: 5%;
+	}
+	.team-member {
+		height: 100%;
+	}
+
+	.team-member-name {
+		font-size: 3.5vmin;
+	}
+
+	.team-member-links-container {
+		font-size: 4.5vmin;
+	}
+
+	.page-switches {
+		width: 10%;
+	}
+}
+
+/* iPhone X Portrait */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
+	.about-page-title-container {
+		padding-top: 20%;
+	}
+
+	.first-row {
+		height: 60%;
+	}
+}
+
+/* Galaxy S4, S5, Note 3 */
+
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+	.login-button-container {
+		flex-direction: column;
+		margin-top: 15%;
+		height: 25%;
+	}
+
+	.login-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 65%;
+		height: 45%;
+		margin: 3%;
+	}
+
+	.home-showcase-container {
+		display: flex;
+		position: absolute;
+		height: 20%;
+		width: 6%;
+	}
+
+	.next-section-button > p {
+		font-size: 1em;
+	}
+}
+
+/* iPad */
+
+/* Portrait */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+	.about-page-container {
+		flex-direction: column;
+		height: 75%;
+	}
+
+	.about-page-title-container {
+		padding-top: 12%;
+	}
+
+	.about-page-content-container {
+		width: 75%;
+	}
+
+	.team-picture-container {
+		width: 60%;
+	}
+
+	.team-member-links-container {
+		width: 60%;
+	}
+
+	.team-member-name {
+		font-size: 2vmin;
+	}
+
+	.page-switches {
+		width: 10%;
+	}
+
+	.description {
+		font-size: 1.75vmax;
+	}
+}
+
+/* Landscape */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+	.about-page-title-container {
+		padding-top: 20%;
+	}
+
+	.team-member-name {
+		font-size: 2vmin;
+	}
+
+	.page-switches {
+		width: 10%;
+	}
 }
