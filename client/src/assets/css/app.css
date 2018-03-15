@@ -125,6 +125,8 @@ body {
 	padding: 1%;
 	margin: 0 1%;
 	width: 15%;
+	transition: ease-in-out;
+	transition-duration: 0.2s;
 }
 
 .login-button:hover,
@@ -225,10 +227,56 @@ body {
 	color: white;
 }
 
-.next-section-button.faq-link > a {
+.next-section-button.faq-link a {
 	color: rgb(117, 117, 117);
-	font-size: 1.3em;
+	font-size: 1.1em;
 	text-decoration: none;
+	margin: 0 2%;
+	transition: ease-in-out;
+	transition-duration: 0.2s;
+}
+
+.next-section-button.faq-link a:hover {
+	color: rgb(202, 143, 95);
+}
+
+.faq-link {
+	position: relative;
+}
+
+.back-to-top-container {
+	position: absolute;
+	display: flex;
+	justify-content: space-around;
+	flex-direction: column;
+	align-items: center;
+	bottom: 15%;
+	right: 1%;
+	height: 85%;
+}
+
+.back-to-top-container > .up-arrow,
+.back-to-top-container p {
+	margin: auto;
+	transition: ease-in;
+	transition-duration: 0.2s;
+}
+
+.back-to-top-container > .up-arrow {
+	font-size: 150%;
+	color: rgb(117, 117, 117);
+}
+
+.back-to-top-container p {
+	color: transparent;
+}
+
+.back-to-top-container:hover p {
+	color: rgb(117, 117, 117);
+}
+
+.back-to-top-container:hover .up-arrow {
+	color: rgb(86, 135, 132);
 }
 
 /* Header Styling */
