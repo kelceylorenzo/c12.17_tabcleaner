@@ -9,15 +9,13 @@ class AboutPage extends Component {
 		super(props);
 		this.state = {
 			descriptionStyling: {
-				display: 'none'
-			},
-			teamLinksStyling: {
 				display: 'flex'
 			},
-			pageOneStyling: {
-				color: 'rgba(26, 54, 74, 1)'
+			teamLinksStyling: {
+				display: 'none'
 			},
-			pageTwoStyling: {}
+			buttonLabel: 'MEET THE TEAM',
+			nextContainer: 'page-two'
 		};
 		this.toggledContainers = this.toggledContainers.bind(this);
 	}
@@ -28,33 +26,25 @@ class AboutPage extends Component {
 			case 'page-one':
 				newState = {
 					descriptionStyling: {
-						display: 'none'
-					},
-					teamLinksStyling: {
 						display: 'flex'
 					},
-					pageOneStyling: {
-						color: 'rgba(26, 54, 74, 1)'
+					teamLinksStyling: {
+						display: 'none'
 					},
-					pageTwoStyling: {
-						color: 'inherit'
-					}
+					buttonLabel: 'MEET THE TEAM',
+					nextContainer: 'page-two'
 				};
 				break;
 			case 'page-two':
 				newState = {
 					descriptionStyling: {
-						display: 'flex'
-					},
-					teamLinksStyling: {
 						display: 'none'
 					},
-					pageOneStyling: {
-						color: 'inherit'
+					teamLinksStyling: {
+						display: 'flex'
 					},
-					pageTwoStyling: {
-						color: 'rgba(26, 54, 74, 1)'
-					}
+					buttonLabel: 'ABOUT CLOSE YOUR TABS',
+					nextContainer: 'page-one'
 				};
 				break;
 			default:
@@ -82,8 +72,8 @@ class AboutPage extends Component {
 						<div className="description-container" style={this.state.descriptionStyling}>
 							<div className="about-content-title">We make tabs work for you.</div>
 							<p className="description">
-								<b>THE IDEA WAS SIMPLE: </b>create a tool that would encourage people to close
-								their tabs. What started off as a simple Chrome extension developed into a full web
+								<b>THE IDEA IS SIMPLE: </b>create a tool that would encourage people to close their
+								tabs. What started off as a simple Chrome extension developed into a full web
 								application with the future of allowing users to take their tabs across browsers
 								and devices. Even as our app grows, we hope to help our users take back control of
 								their tabs.
@@ -120,6 +110,75 @@ class AboutPage extends Component {
 								</div>
 								<div className="team-member">
 									<div className="team-member-name">
+										<p>Kelcey Lorenzo</p>
+									</div>
+									<div className="team-member-links-container">
+										<div className="team-member-link">
+											<a href="https://github.com/m13kelore/" target="_blank">
+												<i className="fab fa-github" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="http://www.kelceylorenzo.com/" target="_blank">
+												<i className="fas fa-address-card" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="https://www.linkedin.com/in/kelcey-lorenzo/" target="_blank">
+												<i className="fab fa-linkedin" />
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="second-row">
+								<div className="team-member">
+									<div className="team-member-name">
+										<p>Nick Quan</p>
+									</div>
+									<div className="team-member-links-container">
+										<div className="team-member-link">
+											<a href="https://github.com/nickkquan" target="_blank">
+												<i className="fab fa-github" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="http://nickquan.com/" target="_blank">
+												<i className="fas fa-address-card" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="https://www.linkedin.com/in/nick-quan/" target="_blank">
+												<i className="fab fa-linkedin" />
+											</a>
+										</div>
+									</div>
+								</div>
+								<div className="team-member">
+									<div className="team-member-name">
+										<p>James Kirsch</p>
+									</div>
+									<div className="team-member-links-container">
+										<div className="team-member-link">
+											<a href="https://github.com/jkirsch-LF " target="_blank">
+												<i className="fab fa-github" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="http://jkirsch.tech/" target="_blank">
+												<i className="fas fa-address-card" />
+											</a>
+										</div>
+										<div className="team-member-link">
+											<a href="https://www.linkedin.com/in/jameskirsch/" target="_blank">
+												<i className="fab fa-linkedin" />
+											</a>
+										</div>
+									</div>
+								</div>
+
+								<div className="team-member">
+									<div className="team-member-name">
 										<p>Henry Moon</p>
 									</div>
 									<div className="team-member-links-container">
@@ -144,90 +203,15 @@ class AboutPage extends Component {
 									</div>
 								</div>
 							</div>
-							<div className="second-row">
-								<div className="team-member">
-									<div className="team-member-name">
-										<p>James Kirsch</p>
-									</div>
-									<div className="team-member-links-container">
-										<div className="team-member-link">
-											<a href="https://github.com/jkirsch-LF " target="_blank">
-												<i className="fab fa-github" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="http://jkirsch.tech/" target="_blank">
-												<i className="fas fa-address-card" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="https://www.linkedin.com/in/jameskirsch/" target="_blank">
-												<i className="fab fa-linkedin" />
-											</a>
-										</div>
-									</div>
-								</div>
-								<div className="team-member">
-									<div className="team-member-name">
-										<p>Kelcey Lorenzo</p>
-									</div>
-									<div className="team-member-links-container">
-										<div className="team-member-link">
-											<a href="https://github.com/m13kelore/" target="_blank">
-												<i className="fab fa-github" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="http://www.kelceylorenzo.com/" target="_blank">
-												<i className="fas fa-address-card" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="https://www.linkedin.com/in/kelcey-lorenzo/" target="_blank">
-												<i className="fab fa-linkedin" />
-											</a>
-										</div>
-									</div>
-								</div>
-								<div className="team-member">
-									<div className="team-member-name">
-										<p>Nick Quan</p>
-									</div>
-									<div className="team-member-links-container">
-										<div className="team-member-link">
-											<a href="https://github.com/nickkquan" target="_blank">
-												<i className="fab fa-github" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="http://nickquan.com/" target="_blank">
-												<i className="fas fa-address-card" />
-											</a>
-										</div>
-										<div className="team-member-link">
-											<a href="https://www.linkedin.com/in/nick-quan/" target="_blank">
-												<i className="fab fa-linkedin" />
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
-						<div className="page-switches-container">
-							<div
-								className="page-switches"
-								style={this.state.pageOneStyling}
-								onClick={() => this.toggledContainers('page-one')}
+
+						<div className="page-switch-container">
+							<button
+								className="page-switch"
+								onClick={() => this.toggledContainers(this.state.nextContainer)}
 							>
-								<i className="fas fa-circle page-switch" />
-							</div>
-							<div
-								className="page-switches"
-								style={this.state.pageTwoStyling}
-								onClick={() => this.toggledContainers('page-two')}
-							>
-								<i className="fas fa-circle page-switch" />
-							</div>
+								{this.state.buttonLabel}
+							</button>
 						</div>
 					</div>
 				</div>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../assets/images/app-logo.png';
 import extensionPicture from '../assets/images/extension-picture.gif';
@@ -33,24 +32,6 @@ class LandingPage extends Component {
 			view: place
 		});
 	}
-
-	handleWheelScroll(scroll) {
-		let pageArray = ['home', 'introduction', 'extension', 'get-started'];
-		let { view } = this.state;
-
-		let currentLocation = pageArray.indexOf(view);
-
-		if (scroll.deltaY >= 12 && scroll.deltaY <= 14 && currentLocation !== 3) {
-			this.refs[pageArray[currentLocation + 1]].scrollIntoView({ behavior: 'smooth' });
-			this.handleScroll(pageArray[currentLocation + 1]);
-			scroll.deltaY = 0;
-		} else if (scroll.deltaY > -13 && scroll.deltaY < -10 && currentLocation !== 0) {
-			this.refs[pageArray[currentLocation - 1]].scrollIntoView({ behavior: 'smooth' });
-			this.handleScroll(pageArray[currentLocation - 1]);
-			scroll.deltaY = 0;
-		}
-	}
-
 	render() {
 		let { view } = this.state;
 		let homeSelect = view === 'home' ? 'home-showcase-selected' : 'home-showcase-notselected';
@@ -58,13 +39,8 @@ class LandingPage extends Component {
 		let extensionSelect = view === 'extension' ? 'home-showcase-selected' : 'home-showcase-notselected';
 		let startSelect = view === 'get-started' ? 'home-showcase-selected' : 'home-showcase-notselected';
 		return (
-			<div
-				onWheel={(event) => {
-					this.handleWheelScroll(event);
-				}}
-				className="home-page-container"
-			>
-				<div className="home-showcase-container">
+			<div className="home-page-container">
+				{/* <div className="home-showcase-container">
 					<div className="home-showcase" onClick={this.handleScroll.bind(this, 'home')}>
 						<span className={homeSelect}>
 							<i className="showcase fas fa-circle" />
@@ -85,7 +61,7 @@ class LandingPage extends Component {
 							<i className="showcase fas fa-circle" />
 						</span>
 					</div>
-				</div>
+				</div> */}
 				<div className="landing-page-container" ref={'home'}>
 					<div className="landing-page-title-container">
 						<img className="logo" src={logo} alt="" />{' '}
@@ -158,7 +134,11 @@ class LandingPage extends Component {
 						</p>
 					</div>
 					<div className="getting-started-button-container">
-						<a className="getting-started-button" href="">
+						<a
+							className="getting-started-button"
+							href="https://chrome.google.com/webstore/detail/close-your-tabs/nlgenhmcakjpnmgnplkiomeiniklmfkc"
+							target="_blank"
+						>
 							GET THE EXTENSION
 						</a>
 						<a className="getting-started-button" href="/auth/google/">
@@ -171,6 +151,11 @@ class LandingPage extends Component {
 				</div>
 				<div className="next-section-button faq-link">
 					<a href="/faq">Still have questions? Visit our FAQ.</a>
+					<a href="/about">Meet the Tabs Team.</a>
+					<div className="back-to-top-container" onClick={this.handleScroll.bind(this, 'home')}>
+						<i className="up-arrow fas fa-chevron-circle-up" />
+						<p>Back To Top</p>
+					</div>
 				</div>
 			</div>
 		);
