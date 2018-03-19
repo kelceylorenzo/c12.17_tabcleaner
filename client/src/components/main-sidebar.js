@@ -13,7 +13,7 @@ class Sidebar extends Component {
 						setTimeout(this.props.closeTab, 500);
 					}}
 				>
-					CLOSE/DELETE
+					CLOSE
 				</button>
 				<button className="button" onClick={this.props.selectAll}>
 					SELECT ALL
