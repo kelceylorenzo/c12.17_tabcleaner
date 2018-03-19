@@ -1,17 +1,17 @@
 @font-face {
-	font-family: 'LemonMilk';
-	src: url('../fonts/LemonMilk.otf');
+	font-family: "LemonMilk";
+	src: url("../fonts/LemonMilk.otf");
 }
 body {
 	margin: 0;
-	font-family: 'Lato', sans-serif;
+	font-family: "Lato", sans-serif;
 }
 
 .app {
 	height: 100vh;
 	width: 100vw;
 	overflow-x: hidden;
-	background-image: url('../images/background-texture.png');
+	background-image: url("../images/background-texture.png");
 }
 
 * {
@@ -83,7 +83,7 @@ body {
 }
 
 .landing-page-title {
-	font-family: 'LemonMilk', sans-serif;
+	font-family: "LemonMilk", sans-serif;
 	color: rgba(0, 0, 0, 0.6);
 	font-size: 10vmin;
 	margin: auto;
@@ -180,24 +180,23 @@ body {
 .dashboard-picture {
 	width: 100%;
 	margin: auto;
-	/* height: 95%; */
 	border: 9px solid rgb(86, 135, 132);
 }
 
 .extension-picture {
 	margin: auto;
-	height: 80%;
+	width: 70%;
 	border: 9px solid rgb(86, 135, 132);
 }
 
 .getting-started-button-container {
-	width: 40%;
+	width: 60%;
 	display: flex;
 	flex-direction: column;
 }
 
 .getting-started-button {
-	width: 50%;
+	width: 75%;
 	margin: 1% auto;
 	padding: 3%;
 }
@@ -231,13 +230,19 @@ body {
 	color: rgb(117, 117, 117);
 	font-size: 1.1em;
 	text-decoration: none;
-	margin: 0 2%;
+	margin: .5%;
 	transition: ease-in-out;
 	transition-duration: 0.2s;
 }
 
 .next-section-button.faq-link a:hover {
 	color: rgb(202, 143, 95);
+}
+
+.next-section-button.faq-link {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .faq-link {
@@ -385,7 +390,7 @@ body {
 .about-page-title {
 	margin: auto;
 	font-size: 8vmin;
-	font-family: 'LemonMilk';
+	font-family: "LemonMilk";
 }
 
 .about-page-container {
@@ -964,7 +969,7 @@ button:nth-child(4):active {
 .faq-page-container {
 	padding-top: 8%;
 	margin: 0 20%;
-	font-family: 'Lato', sans-serif;
+	font-family: "Lato", sans-serif;
 }
 
 .faq-page-container h1 {
@@ -1031,7 +1036,7 @@ button:nth-child(4):active {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 65%;
+		width: 100%;
 		height: 45%;
 		margin: 3%;
 	}
@@ -1095,6 +1100,14 @@ button:nth-child(4):active {
 
 	.getting-started-button {
 		width: 100%;
+	}
+	.next-section-button.faq-link a {
+		font-size: 0.65em;
+		margin: 0 1%;
+	}
+
+	.back-to-top-container > .up-arrow {
+		font-size: 100%;
 	}
 
 	/* About Page */
@@ -1359,7 +1372,7 @@ button:nth-child(4):active {
 /* iPad Landscape */
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
-		/* About Page */
+	/* About Page */
 	.about-page-title-container {
 		padding-top: 20%;
 	}
