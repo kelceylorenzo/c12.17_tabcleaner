@@ -230,7 +230,7 @@ body {
 	color: rgb(117, 117, 117);
 	font-size: 1.1em;
 	text-decoration: none;
-	margin: .5%;
+	margin: 0.5%;
 	transition: ease-in-out;
 	transition-duration: 0.2s;
 }
@@ -570,8 +570,7 @@ body {
 
 .side-bar-container > button {
 	font-weight: 600;
-	font-size: 1vmax;
-	/* font-size: 0.8em; */
+	font-size: 1.5vmin;
 	height: 15%;
 	width: 75%;
 	cursor: pointer;
@@ -613,8 +612,6 @@ button:nth-child(4):active {
 }
 
 .main-tab-area {
-	/* display: flex; */
-	/* flex-direction: column; */
 	margin-top: 5%;
 	margin-left: 18%;
 	width: 100%;
@@ -684,7 +681,6 @@ button:nth-child(4):active {
 .tab-view-option {
 	margin: auto;
 	font-size: 1.3vmax;
-	/* font-size: 115%; */
 }
 
 .main-tab-area-window {
@@ -732,11 +728,6 @@ button:nth-child(4):active {
 
 /* List View Styling */
 .list-tab-window {
-	/* display: flex; 
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: flex-start; */
 	width: 95%;
 	height: 100%;
 }
@@ -802,7 +793,6 @@ button:nth-child(4):active {
 	width: 17%;
 	position: relative;
 	border: 3px solid rgba(26, 54, 74, 0.4);
-	/* border-radius: 5%; */
 }
 
 .tab-container:hover {
@@ -968,11 +958,35 @@ button:nth-child(4):active {
 /* FAQ Page Styling */
 .faq-page-container {
 	padding-top: 8%;
-	margin: 0 20%;
+	margin: 0 10%;
 	font-family: "Lato", sans-serif;
 }
 
-.faq-page-container h1 {
+.faq-page-title {
+	text-align: center;
+}
+
+.faq-main-info {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+.faq-stock-image {
+	margin: auto;
+	border: 5px solid rgb(86, 135, 132);
+}
+
+.faq-header {
+	width: 50%;
+	margin: auto;
+}
+
+.faq-info {
+	width: 100%;
+}
+
+/* .faq-page-container h1 {
 	text-align: center;
 }
 
@@ -980,9 +994,15 @@ button:nth-child(4):active {
 	width: 50%;
 }
 
+.faq-header {
+	width: 50%;
+}
+
 .faq-main-info {
 	display: flex;
+	flex-direction: row;
 	align-items: center;
+	width: 100%;
 }
 
 .faq-main-info img,
@@ -1006,7 +1026,9 @@ button:nth-child(4):active {
 
 .faq-page-container p {
 	padding-left: 15px;
-}
+	font-size: 2vmin;
+} */
+
 .icon-color {
 	color: inherit;
 }
@@ -1020,6 +1042,19 @@ button:nth-child(4):active {
 }
 
 /* Media Queries Start Here*/
+
+@media (max-width: 750px) {
+	/* About Page */
+	.faq-main-info {
+		flex-direction: column;
+	}
+	.faq-stock-image {
+		width: 100%;
+	}
+	.faq-header {
+		width: 100%;
+	}
+}
 
 /* iPhone 6,7,8 Portrait */
 
@@ -1150,12 +1185,22 @@ button:nth-child(4):active {
 	.description {
 		font-size: 1.65vmax;
 	}
+
+	/* About Page */
+	.faq-main-info {
+		flex-direction: column;
+	}
+	.faq-stock-image {
+		width: 100%;
+	}
+	.faq-header {
+		width: 100%;
+	}
 }
 
 /* iPhone 6,7,8 Landscape */
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
 	/* Landing Page */
-
 	.next-section-button > p {
 		font-size: 1em;
 	}
@@ -1171,20 +1216,6 @@ button:nth-child(4):active {
 	.extension-picture,
 	.dashboard-picture {
 		border: 4px solid rgb(86, 135, 132);
-	}
-
-	/* About Page */
-
-	.team-member-name {
-		font-size: 2.8vmin;
-	}
-
-	.page-switches {
-		width: 15%;
-	}
-
-	.description {
-		font-size: 1.35vmax;
 	}
 }
 
@@ -1216,8 +1247,21 @@ button:nth-child(4):active {
 	.next-section-button > p {
 		font-size: 1em;
 	}
-}
 
+	/* About Page */
+
+	.team-member-name {
+		font-size: 2.8vmin;
+	}
+
+	.page-switches {
+		width: 15%;
+	}
+
+	.description {
+		font-size: 1.35vmax;
+	}
+}
 /* iPhone X Portrait*/
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
