@@ -7,14 +7,14 @@ class Sidebar extends Component {
 				<button className="button" onClick={this.props.openTab}>
 					OPEN
 				</button>
-				<button
+				{/* <button
 					className="button sidebar-delete"
 					onClick={() => {
 						setTimeout(this.props.closeTab, 500);
 					}}
 				>
 					CLOSE
-				</button>
+				</button> */}
 				<button className="button" onClick={this.props.selectAll}>
 					SELECT ALL
 				</button>
