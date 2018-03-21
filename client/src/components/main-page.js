@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
+import axios from "axios";
 
-import AboutPage from './about-page';
-import Header from './header';
-import MainSidebar from './main-sidebar';
-import MainTabArea from './main-tab-area';
+import AboutPage from "./about-page";
+import Header from "./header";
+import MainSidebar from "./main-sidebar";
+import MainTabArea from "./main-tab-area";
 
-import headerData from './header-data.js';
-import tab from './tab';
+import headerData from "./header-data.js";
+import tab from "./tab";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -16,8 +16,8 @@ class MainPage extends Component {
 		this.state = {
 			tabsList: [],
 			selectedTabs: [],
-			sortType: 'window',
-			viewChange: 'grid'
+			sortType: "window",
+			viewChange: "grid"
 		};
 
 		this.handleIndividualSelect = this.handleIndividualSelect.bind(this);
@@ -37,20 +37,21 @@ class MainPage extends Component {
 	}
 
 	verifyLogIn() {
-		axios.get(`/auth/google/verify`).then((resp) => {
+		axios.get(`/auth/google/verify`).then(resp => {
 			if (resp.data.success) {
 				this.getData();
 			} else {
-				this.props.history.push('/');
+				this.props.history.push("/");
 			}
 		});
 	}
 
 	getData() {
-		axios.get('/tabs').then((resp) => {
-			resp.data.data.map((currentItem) => {
+		axios.get("/tabs").then(resp => {
+			resp.data.data.map(currentItem => {
 				return (currentItem.selected = false);
 			});
+
 			this.setState(
 				{
 					...this.state,
@@ -93,7 +94,7 @@ class MainPage extends Component {
 		let { tabsList } = this.state;
 
 		switch (sortType) {
-			case 'az':
+			case "az":
 				tabsList.sort((a, b) => {
 					let titleA = a.tabTitle;
 					let titleB = b.tabTitle;
@@ -107,7 +108,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'za':
+			case "za":
 				tabsList.sort((a, b) => {
 					let titleA = a.tabTitle;
 					let titleB = b.tabTitle;
@@ -122,7 +123,7 @@ class MainPage extends Component {
 				});
 				break;
 
-			case 'time':
+			case "time":
 				tabsList.sort((a, b) => {
 					let timeA = a.currentTime - a.deactivatedTime;
 					let timeB = b.currentTime - b.deactivatedTime;
@@ -136,7 +137,7 @@ class MainPage extends Component {
 					return 0;
 				});
 				break;
-			case 'window':
+			case "window":
 				let output = {};
 				for (let i = 0; i < tabsList.length; i++) {
 					if (output[tabsList[i].windowID]) {
@@ -180,53 +181,52 @@ class MainPage extends Component {
 		let { selectedTabs } = this.state;
 
 		for (let tab of selectedTabs) {
-			let newTab = window.open(tab.url, '_blank');
+			let newTab = window.open(tab.url, "_blank");
 			newTab.focus();
 		}
 		this.deselectAll();
 	}
 
 	closeSelectedTabs() {
-		let { selectedTabs, tabsList } = this.state;
-		let selectedIDs = [];
-
-		for (let tab of selectedTabs) {
-			selectedIDs.push(tab.databaseTabID);
-		}
-
-		// for (let currentTabIndex = 0; currentTabIndex < selectedTabs.length; currentTabIndex++) {
-		// 	let tabToDelete = {};
-		// 	tabToDelete['databaseTabID'] = selectedIDs[currentTabIndex];
-		// 	axios.delete('/tabs/database', tabToDelete).then((resp) => {
-		// 		if (resp.data.success) {
-		// 			tabsList = tabsList.splice([tabsList.indexOf(selectedTabs[currentTabIndex])], 1);
-		// 		} else {
-		// 			return;
-		// 		}
-		// 	});
+		// let { selectedTabs, tabsList } = this.state;
+		// let selectedIDs = [];
+		// for (let tab of selectedTabs) {
+		// 	selectedIDs.push(tab.databaseTabID);
 		// }
-
-		tabsList = tabsList.filter(function(tab) {
-			if (selectedIDs.indexOf(tab.databaseTabID) === -1) {
-				return true;
-			}
-			return false;
-		});
-
-		this.getData();
+		// tabsList = tabsList.filter(function(tab) {
+		// 	if (selectedIDs.indexOf(tab.databaseTabID) === -1) {
+		// 		return true;
+		// 	}
+		// 	return false;
+		// });
 		// this.setState({
+		// 	...this.state,
 		// 	tabsList: tabsList
 		// });
+
+		axios.get("/tabs").then(resp => {
+			resp.data.data.map(currentItem => {
+				return (currentItem.selected = false);
+			});
+
+			this.setState(
+				{
+					...this.state,
+					tabsList: resp.data.data
+				},
+				() => this.handleSort(this.state.sortType)
+			);
+		});
 	}
 
 	handleUtilityClick(item, selectedType) {
 		switch (selectedType) {
-			case 'open':
+			case "open":
 				item.selected = false;
 				this.handleIndividualSelect(item);
 				this.openSingleTab(item);
 				break;
-			case 'close':
+			case "close":
 				this.closeSingleTab(item);
 				break;
 			default:
@@ -235,7 +235,7 @@ class MainPage extends Component {
 	}
 
 	openSingleTab(item) {
-		let newTab = window.open(item.url, '_blank');
+		let newTab = window.open(item.url, "_blank");
 		newTab.focus();
 	}
 
@@ -254,7 +254,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = true;
 			selectedTabs.push(index);
 		});
@@ -271,7 +271,7 @@ class MainPage extends Component {
 
 		selectedTabs = [];
 
-		tabsList.map((index) => {
+		tabsList.map(index => {
 			index.selected = false;
 		});
 
@@ -291,14 +291,14 @@ class MainPage extends Component {
 					</div>
 					<div className="dashboard">
 						<MainSidebar
-							closeTab={this.closeSelectedTabs}
+							// closeTab={this.closeSelectedTabs}
 							openTab={this.openSelectedTabs}
 							selectAll={this.selectAll}
 							deselectAll={this.deselectAll}
 						/>
 						<MainTabArea
 							select={this.handleIndividualSelect}
-							sort={(sortType) => this.handleSort(sortType)}
+							sort={sortType => this.handleSort(sortType)}
 							sortType={this.state.sortType}
 							tabData={this.state.tabsList}
 							utilityClick={this.handleUtilityClick}
