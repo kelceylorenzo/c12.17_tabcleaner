@@ -7,7 +7,7 @@ import mainPicture from "../assets/images/faq-mainpic.jpg";
 
 export default props => {
 	return (
-		<div>
+		<div className="faq-container">
 			<div className="header-container">
 				<a href="/dashboard" className="back-link-container">
 					<div className="nav-link">BACK</div>

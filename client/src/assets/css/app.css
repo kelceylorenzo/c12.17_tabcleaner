@@ -178,14 +178,16 @@ body {
 }
 
 .dashboard-picture {
-	width: 100%;
+	max-width: 95%;
+	max-height: 70%;
 	margin: auto;
 	border: 9px solid rgb(86, 135, 132);
 }
 
 .extension-picture {
 	margin: auto;
-	width: 70%;
+	max-width: 50%;
+	max-height: 75%;
 	border: 9px solid rgb(86, 135, 132);
 }
 
@@ -226,6 +228,10 @@ body {
 	color: white;
 }
 
+.next-section-button.faq-link {
+	cursor: default;
+}
+
 .next-section-button.faq-link a {
 	color: rgb(117, 117, 117);
 	font-size: 1.1em;
@@ -243,6 +249,16 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+
+.intro-questions-container {
+	width: 100%;
+	text-align: center;
+}
+
+.intro-questions-container > span {
+	color: rgb(117, 117, 117);
+	font-size: 1.1em;
 }
 
 .faq-link {
@@ -265,6 +281,7 @@ body {
 	margin: auto;
 	transition: ease-in;
 	transition-duration: 0.2s;
+	cursor: pointer;
 }
 
 .back-to-top-container > .up-arrow {
@@ -286,10 +303,10 @@ body {
 
 /* Header Styling */
 .header-container {
-	position: fixed;
-	height: 8%;
+	/* position: fixed; */
+	height: 10%;
 	width: 100%;
-	top: 0;
+	/* top: 0; */
 	display: flex;
 	background-color: rgba(26, 54, 74, 1);
 	font-weight: 400;
@@ -379,7 +396,7 @@ body {
 }
 
 .about-page-title-container {
-	padding-top: 8%;
+	padding-top: 2%;
 	width: 100%;
 	height: 7%;
 	justify-content: center;
@@ -416,7 +433,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	margin: auto;
-	width: 40%;
+	width: 45%;
 	height: 60%;
 }
 
@@ -543,7 +560,7 @@ body {
 }
 
 .dashboard-container {
-	height: 90%;
+	height: 100%;
 	width: 100%;
 }
 
@@ -558,7 +575,7 @@ body {
 	justify-content: space-around;
 	align-items: center;
 	position: fixed;
-	margin-top: 12.5%;
+	margin-top: 9.5%;
 	height: 50%;
 	width: 12%;
 	background-color: rgba(26, 54, 74, 1);
@@ -612,7 +629,7 @@ button:nth-child(4):active {
 }
 
 .main-tab-area {
-	margin-top: 5%;
+	/* margin-top: 5%; */
 	margin-left: 18%;
 	width: 100%;
 	height: 100%;
@@ -691,7 +708,7 @@ button:nth-child(4):active {
 
 .tab-window {
 	display: flex;
-	flex-direction: row;
+	/* flex-direction: row; */
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
@@ -720,10 +737,12 @@ button:nth-child(4):active {
 .no-tab-data-title {
 	font-size: 500%;
 	margin: 1%;
+	text-align: center;
 }
 
 .no-tab-data-subtitle {
 	font-size: 200%;
+	text-align: center;
 }
 
 /* List View Styling */
@@ -790,7 +809,7 @@ button:nth-child(4):active {
 	display: flex;
 	margin: 1%;
 	height: 45%;
-	width: 17%;
+	width: 175px;
 	position: relative;
 	border: 3px solid rgba(26, 54, 74, 0.4);
 }
@@ -819,7 +838,6 @@ button:nth-child(4):active {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	width: 100%;
 }
 
 .tab-title {
@@ -830,10 +848,11 @@ button:nth-child(4):active {
 	margin: auto;
 	padding: 0.5%;
 	font-weight: 400;
-	font-size: 1.8vmin;
+	font-size: 1.2vmax;
 	align-items: center;
 	justify-content: center;
-	word-break: break-all;
+	/* word-break: break-all; */
+	overflow-wrap: break-word;
 }
 
 .tab-utilities-container {
@@ -956,8 +975,10 @@ button:nth-child(4):active {
 }
 
 /* FAQ Page Styling */
+.faq-container {
+	height: 100%;
+}
 .faq-page-container {
-	padding-top: 8%;
 	margin: 0 10%;
 	font-family: "Lato", sans-serif;
 }
@@ -979,6 +1000,7 @@ button:nth-child(4):active {
 
 .faq-header {
 	width: 50%;
+	padding-left: 5px;
 	margin: auto;
 }
 
@@ -1043,6 +1065,42 @@ button:nth-child(4):active {
 
 /* Media Queries Start Here*/
 
+@media (max-width: 900px) {
+	.about-page-title-container {
+		padding-top: 1%;
+	}
+
+	.about-page-container {
+		flex-direction: column;
+	}
+
+	.about-page-content-container {
+		width: 100%;
+	}
+
+	.team-picture-container {
+		width: 65%;
+		margin-top: 10%;
+	}
+
+	.description-container {
+		width: 65%;
+	}
+
+	.page-switch-container {
+		height: 20%;
+		margin-bottom: 4%;
+	}
+
+	.team-member-name {
+		font-size: 1em;
+	}
+
+	.team-member-links-container {
+		width: 45%;
+	}
+}
+
 @media (max-width: 750px) {
 	/* About Page */
 	.faq-main-info {
@@ -1104,7 +1162,8 @@ button:nth-child(4):active {
 		font-size: 2vmax;
 	}
 	.extension-picture {
-		height: 70%;
+		max-height: 80%;
+		max-width: 50%;
 		border: 4px solid rgb(86, 135, 132);
 	}
 
@@ -1136,14 +1195,17 @@ button:nth-child(4):active {
 	.getting-started-button {
 		width: 100%;
 	}
+
 	.next-section-button.faq-link a {
 		font-size: 0.65em;
 		margin: 0 1%;
 	}
 
+
 	.back-to-top-container > .up-arrow {
 		font-size: 100%;
 	}
+
 
 	/* About Page */
 
