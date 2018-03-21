@@ -281,6 +281,7 @@ body {
 	margin: auto;
 	transition: ease-in;
 	transition-duration: 0.2s;
+	cursor: pointer;
 }
 
 .back-to-top-container > .up-arrow {
