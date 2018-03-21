@@ -848,11 +848,11 @@ button:nth-child(4):active {
 	margin: auto;
 	padding: 0.5%;
 	font-weight: 400;
-	font-size: 1.2vmax;
+	font-size: 1vmax;
 	align-items: center;
 	justify-content: center;
-	/* word-break: break-all; */
-	overflow-wrap: break-word;
+	word-break: break-word;
+	/* overflow-wrap: break-word; */
 }
 
 .tab-utilities-container {
@@ -1201,11 +1201,9 @@ button:nth-child(4):active {
 		margin: 0 1%;
 	}
 
-
 	.back-to-top-container > .up-arrow {
 		font-size: 100%;
 	}
-
 
 	/* About Page */
 
