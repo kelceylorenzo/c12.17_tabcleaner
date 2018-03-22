@@ -746,6 +746,7 @@ button:nth-child(4):active {
 }
 
 .refresh-modal-link {
+	cursor: pointer;
 	color: rgba(212, 167, 129, 1);
 }
 

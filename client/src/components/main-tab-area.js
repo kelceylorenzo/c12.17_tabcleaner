@@ -27,9 +27,9 @@ class MainTabArea extends Component {
 					<div className="no-tab-data-title">NO TABS HERE!</div>
 					<div className="no-tab-data-subtitle">
 						Please click{" "}
-						<a className="refresh-modal-link" href="/dashboard">
+						<span className="refresh-modal-link" onClick={() => location.reload()}>
 							here
-						</a>{" "}
+						</span>{" "}
 						to refresh or try again later
 					</div>
 				</div>
@@ -77,3 +77,4 @@ class MainTabArea extends Component {
 }
 
 export default MainTabArea;
+	
