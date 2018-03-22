@@ -848,11 +848,11 @@ button:nth-child(4):active {
 	margin: auto;
 	padding: 0.5%;
 	font-weight: 400;
-	font-size: 1vmax;
+	font-size: .75em;
+	/* font-size: 1vmax; */
 	align-items: center;
 	justify-content: center;
 	word-break: break-word;
-	/* overflow-wrap: break-word; */
 }
 
 .tab-utilities-container {
