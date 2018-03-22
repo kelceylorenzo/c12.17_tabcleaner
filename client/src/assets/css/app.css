@@ -179,7 +179,7 @@ body {
 
 .dashboard-picture {
 	max-width: 95%;
-	max-height: 70%;
+	max-height: 60%;
 	margin: auto;
 	border: 9px solid rgb(86, 135, 132);
 }
@@ -745,6 +745,11 @@ button:nth-child(4):active {
 	text-align: center;
 }
 
+.refresh-modal-link {
+	cursor: pointer;
+	color: rgba(212, 167, 129, 1);
+}
+
 /* List View Styling */
 .list-tab-window {
 	width: 95%;
@@ -852,7 +857,6 @@ button:nth-child(4):active {
 	align-items: center;
 	justify-content: center;
 	word-break: break-word;
-	/* overflow-wrap: break-word; */
 }
 
 .tab-utilities-container {
@@ -1008,49 +1012,6 @@ button:nth-child(4):active {
 	width: 100%;
 }
 
-/* .faq-page-container h1 {
-	text-align: center;
-}
-
-.faq-page-container img {
-	width: 50%;
-}
-
-.faq-header {
-	width: 50%;
-}
-
-.faq-main-info {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	width: 100%;
-}
-
-.faq-main-info img,
-.faq-main-info div {
-	display: inline-block;
-	width: 49%;
-	vertical-align: top;
-}
-
-.faq-main-info div {
-	padding: 0 20px;
-}
-
-.faq-main-info div h2 {
-	text-align: center;
-}
-
-.faq-stock-image {
-	border: 5px solid rgb(86, 135, 132);
-}
-
-.faq-page-container p {
-	padding-left: 15px;
-	font-size: 2vmin;
-} */
-
 .icon-color {
 	color: inherit;
 }
@@ -1163,7 +1124,7 @@ button:nth-child(4):active {
 	}
 	.extension-picture {
 		max-height: 80%;
-		max-width: 50%;
+		max-width: 85%;
 		border: 4px solid rgb(86, 135, 132);
 	}
 
