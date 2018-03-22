@@ -853,7 +853,7 @@ button:nth-child(4):active {
 	margin: auto;
 	padding: 0.5%;
 	font-weight: 400;
-	font-size: .75em;
+	font-size: 0.75em;
 	/* font-size: 1vmax; */
 	align-items: center;
 	justify-content: center;
@@ -1026,6 +1026,20 @@ button:nth-child(4):active {
 }
 
 /* Media Queries Start Here*/
+
+@media (max-width: 450px) {
+	.tab-view-menu {
+		width: 20%;
+	}
+	.sort-by-menu {
+		width: 70%;
+	}
+
+	.tab-window {
+		justify-content: center;
+		align-items: center;
+	}
+}
 
 @media (max-width: 900px) {
 	.about-page-title-container {
