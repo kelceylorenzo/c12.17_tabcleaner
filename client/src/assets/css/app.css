@@ -708,7 +708,6 @@ button:nth-child(4):active {
 
 .tab-window {
 	display: flex;
-	/* flex-direction: row; */
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
@@ -1033,6 +1032,23 @@ button:nth-child(4):active {
 	}
 	.sort-by-menu {
 		width: 70%;
+	}
+
+	.side-bar-container {
+		flex-direction: row;
+		position: absolute;
+		bottom: 0;
+		height: 10%;
+		width: 100%;
+	}
+
+	.side-bar-container > button {
+		height: 80%;
+		width: 30%;
+	}
+
+	.main-tab-area {
+		margin-left: 0;
 	}
 
 	.tab-window {
