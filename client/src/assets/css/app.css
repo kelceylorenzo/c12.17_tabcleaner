@@ -1038,6 +1038,7 @@ button:nth-child(4):active {
 		flex-direction: row;
 		position: absolute;
 		bottom: 0;
+		z-index: 1;
 		height: 10%;
 		width: 100%;
 	}
