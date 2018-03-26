@@ -1,17 +1,17 @@
 @font-face {
-	font-family: "LemonMilk";
-	src: url("../fonts/LemonMilk.otf");
+	font-family: 'LemonMilk';
+	src: url('../fonts/LemonMilk.otf');
 }
 body {
 	margin: 0;
-	font-family: "Lato", sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 .app {
 	height: 100vh;
 	width: 100vw;
 	overflow-x: hidden;
-	background-image: url("../images/background-texture.png");
+	background-image: url('../images/background-texture.png');
 }
 
 * {
@@ -83,7 +83,7 @@ body {
 }
 
 .landing-page-title {
-	font-family: "LemonMilk", sans-serif;
+	font-family: 'LemonMilk', sans-serif;
 	color: rgba(0, 0, 0, 0.6);
 	font-size: 10vmin;
 	margin: auto;
@@ -179,7 +179,7 @@ body {
 
 .dashboard-picture {
 	max-width: 95%;
-	max-height: 70%;
+	max-height: 60%;
 	margin: auto;
 	border: 9px solid rgb(86, 135, 132);
 }
@@ -407,7 +407,7 @@ body {
 .about-page-title {
 	margin: auto;
 	font-size: 8vmin;
-	font-family: "LemonMilk";
+	font-family: 'LemonMilk';
 }
 
 .about-page-container {
@@ -708,7 +708,6 @@ button:nth-child(4):active {
 
 .tab-window {
 	display: flex;
-	/* flex-direction: row; */
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
@@ -743,6 +742,11 @@ button:nth-child(4):active {
 .no-tab-data-subtitle {
 	font-size: 200%;
 	text-align: center;
+}
+
+.refresh-modal-link {
+	cursor: pointer;
+	color: rgba(212, 167, 129, 1);
 }
 
 /* List View Styling */
@@ -848,11 +852,11 @@ button:nth-child(4):active {
 	margin: auto;
 	padding: 0.5%;
 	font-weight: 400;
-	font-size: 1vmax;
+	font-size: 0.75em;
+	/* font-size: 1vmax; */
 	align-items: center;
 	justify-content: center;
 	word-break: break-word;
-	/* overflow-wrap: break-word; */
 }
 
 .tab-utilities-container {
@@ -980,7 +984,7 @@ button:nth-child(4):active {
 }
 .faq-page-container {
 	margin: 0 10%;
-	font-family: "Lato", sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 .faq-page-title {
@@ -1006,50 +1010,8 @@ button:nth-child(4):active {
 
 .faq-info {
 	width: 100%;
+	padding: 4% 0;
 }
-
-/* .faq-page-container h1 {
-	text-align: center;
-}
-
-.faq-page-container img {
-	width: 50%;
-}
-
-.faq-header {
-	width: 50%;
-}
-
-.faq-main-info {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	width: 100%;
-}
-
-.faq-main-info img,
-.faq-main-info div {
-	display: inline-block;
-	width: 49%;
-	vertical-align: top;
-}
-
-.faq-main-info div {
-	padding: 0 20px;
-}
-
-.faq-main-info div h2 {
-	text-align: center;
-}
-
-.faq-stock-image {
-	border: 5px solid rgb(86, 135, 132);
-}
-
-.faq-page-container p {
-	padding-left: 15px;
-	font-size: 2vmin;
-} */
 
 .icon-color {
 	color: inherit;
@@ -1064,6 +1026,38 @@ button:nth-child(4):active {
 }
 
 /* Media Queries Start Here*/
+
+@media (max-width: 450px) {
+	.tab-view-menu {
+		width: 20%;
+	}
+	.sort-by-menu {
+		width: 70%;
+	}
+
+	.side-bar-container {
+		flex-direction: row;
+		position: absolute;
+		bottom: 0;
+		z-index: 1;
+		height: 10%;
+		width: 100%;
+	}
+
+	.side-bar-container > button {
+		height: 80%;
+		width: 30%;
+	}
+
+	.main-tab-area {
+		margin-left: 0;
+	}
+
+	.tab-window {
+		justify-content: center;
+		align-items: center;
+	}
+}
 
 @media (max-width: 900px) {
 	.about-page-title-container {
@@ -1163,7 +1157,7 @@ button:nth-child(4):active {
 	}
 	.extension-picture {
 		max-height: 80%;
-		max-width: 50%;
+		max-width: 85%;
 		border: 4px solid rgb(86, 135, 132);
 	}
 

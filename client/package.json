@@ -24,7 +24,7 @@
 	"license": "ISC",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Learning-Fuze/react_starter.git"
+		"url": "https://github.com/m13kelore/c12.17_tabcleaner"
 	},
 	"dependencies": {
 		"axios": "^0.17.1",

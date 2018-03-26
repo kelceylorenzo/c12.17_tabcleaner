@@ -29,11 +29,17 @@ export default (props) => {
 		selectClass = 'tab-selected';
 	}
 
+	// let greenTime = 1200000;
+	// let redTime = 3600000;
+
+	let greenTime = 10000;
+	let redTime = 25000;
+
 	let inactiveElapsedTime = props.item.currentTime - props.item.deactivatedTime;
 
-	if (inactiveElapsedTime < 10000 || props.item.tabTitle === 'Close Your Tabs') {
+	if (inactiveElapsedTime < greenTime || props.item.tabTitle === 'Close Your Tabs') {
 		tabStyle.backgroundColor = '';
-	} else if (inactiveElapsedTime < 25000) {
+	} else if (inactiveElapsedTime >= greenTime && inactiveElapsedTime < redTime) {
 		tabStyle.backgroundColor = 'rgba(215, 213, 170, 0.5)';
 	} else {
 		tabStyle.backgroundColor = 'rgba(156, 95, 88, 0.5)';
