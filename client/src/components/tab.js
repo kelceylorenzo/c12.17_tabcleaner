@@ -81,9 +81,9 @@ export default (props) => {
 					>
 						<i className="fas fa-external-link-alt" />
 					</div>
-					<div className="tab-utility close-favicon" onClick={() => setTimeout(props.getNewTabs, 100)}>
+					{/* <div className="tab-utility close-favicon" onClick={() => setTimeout(props.getNewTabs, 100)}>
 						<i className="fas fa-times" />
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</div>
