@@ -1039,14 +1039,15 @@ button:nth-child(4):active {
 		flex-direction: row;
 		position: absolute;
 		bottom: 0;
-		z-index: 1;
+		z-index: 5;
 		height: 10%;
 		width: 100%;
 	}
 
 	.side-bar-container > button {
 		height: 80%;
-		width: 30%;
+		width: 23%;
+		font-size: 2vmin;
 	}
 
 	.main-tab-area {
