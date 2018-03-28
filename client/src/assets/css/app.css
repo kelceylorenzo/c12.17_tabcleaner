@@ -577,7 +577,7 @@ body {
 	position: fixed;
 	margin-top: 9.5%;
 	height: 50%;
-	width: 12%;
+	width: 13%;
 	background-color: rgba(26, 54, 74, 1);
 	border-radius: 0px 8px 8px 0px;
 	border-top: 6px solid rgb(212, 167, 129);
@@ -589,8 +589,9 @@ body {
 	font-weight: 600;
 	font-size: 1.5vmin;
 	height: 15%;
-	width: 75%;
+	width: 80%;
 	cursor: pointer;
+	text-align: center;
 	background-color: rgba(255, 255, 255, 0.9);
 	color: rgba(26, 54, 74, 1);
 	margin: auto;
@@ -1027,7 +1028,7 @@ button:nth-child(4):active {
 
 /* Media Queries Start Here*/
 
-@media (max-width: 450px) {
+@media (max-width: 525px) {
 	.tab-view-menu {
 		width: 20%;
 	}
@@ -1036,18 +1037,21 @@ button:nth-child(4):active {
 	}
 
 	.side-bar-container {
+		display:none;
+		/* margin-top: 0;
 		flex-direction: row;
 		position: absolute;
 		bottom: 0;
-		z-index: 1;
+		z-index: 5;
 		height: 10%;
-		width: 100%;
+		width: 100%; */
 	}
 
-	.side-bar-container > button {
+	/* .side-bar-container > button {
 		height: 80%;
-		width: 30%;
-	}
+		width: 23%;
+		font-size: 2vmin;
+	} */
 
 	.main-tab-area {
 		margin-left: 0;
